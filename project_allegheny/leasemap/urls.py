@@ -14,5 +14,6 @@ urlpatterns = [
     path('get_matches', views.get_matches, name='get_matches'),
     path('get_wellsc', views.get_wellsc, name='get_wellsc'),
     path('get_wellsu', views.get_wellsu, name='get_wellsu'),
+    path('cachecheck', views.cachecheck, name='cachecheck'),
 
 ]

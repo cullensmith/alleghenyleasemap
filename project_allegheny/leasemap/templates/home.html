@@ -1067,6 +1067,27 @@
 
         }
 
+
+        // Function to fetch GeoJSON data from a view
+        function cachecheck() {
+            $.ajax({
+                url: '/leasemap/cachecheck', // Replace with your view URL
+                method: 'GET',
+                success: function(data) {
+                    console.log('start check')
+                    console.log(data)
+                    console.log('ran cachechecker')
+
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.error(error);
+                }
+            });
+
+        };
+        cachecheck();
+
         // Function to fetch GeoJSON data from a view
         function getMask() {
             $.ajax({

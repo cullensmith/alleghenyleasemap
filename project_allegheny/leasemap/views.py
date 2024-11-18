@@ -70,6 +70,28 @@ def polygon_geojson_view(request):
 
     return JsonResponse(geojson_collection, safe=False)
 
+def cachecheck(request):
+    # Define a unique cache key for GeoJSON data.
+    # cache_key = 'geojson_data'  # Simple cache key; change if you have parameters
+
+    # Check if the GeoJSON data is already cached
+    geojson_check = cache.get('polygons_geojson')
+
+    if geojson_check:
+        # Cache hit: Data is available in the cache
+        chk = {"output":"cache exists"}
+        # logger.debug('used the cache')  # Log message for cache hit
+    else:
+        chk = {"output":"no apparent cache"}
+
+        # Cache miss: Data is not available, so regenerate it
+        # geojson_data = MyGeoData.get_geojson()  # Replace with your actual method to get GeoJSON data
+        # cache.set(cache_key, geojson_data, timeout=60*15)  # Cache for 15 minutes
+        # logger.debug('recreated geojson')  # Log message for cache miss
+
+    # Return the cached (or freshly generated) GeoJSON data as a JsonResponse
+    return JsonResponse(chk, safe=False)
+
 def get_wellsc(request):
     pts = Wells_C.objects.all()  # Query all polygons
     features = []
