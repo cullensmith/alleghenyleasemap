@@ -129,7 +129,7 @@ STATICFILES_DIRS = [
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # For in-memory caching
-        'LOCATION': 'unique-allegparcels',  # This is an identifier for the cache
+        'LOCATION': 'unique-snowflake',  # This is an identifier for the cache
     }
 }
 

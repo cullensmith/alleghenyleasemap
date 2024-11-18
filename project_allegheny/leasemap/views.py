@@ -35,7 +35,9 @@ def getMask(request):
 
 def polygon_geojson_view(request):
     # Try to get the cached response
-    cached_data = cache.get('polygons_geojson')
+    cache_key = 'polygons_geojson'
+    cached_data = cache.get(cache_key)
+
     if cached_data:
         # print(f'found the cache: {time.time()-start_time}')
         print('resorting to the cache')
@@ -64,9 +66,9 @@ def polygon_geojson_view(request):
     }
     # print(geojson_collection)
     print('requested polygons')
-    cache.set('polygons_geojson', geojson_collection, timeout=60*1440)  # Cache for 15 minutes
+    cache.set(cache_key, geojson_collection, timeout=60*1440)  # Cache for 15 minutes
 
-    return JsonResponse(geojson_collection)
+    return JsonResponse(geojson_collection, safe=False)
 
 def get_wellsc(request):
     pts = Wells_C.objects.all()  # Query all polygons
