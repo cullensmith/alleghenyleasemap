@@ -1127,7 +1127,18 @@
                         debug: 0,
                         style: geojsonStyle
                     };
-                    vectorTileLayer = L.geoJson.vt(data, options).addTo(map);
+                    {% comment %} vectorTileLayer = L.geoJson.vt(data, options).addTo(map); {% endcomment %}
+                    vectorTileLayer = L.geoJSON(data, { 
+                        style: geojsonStyle,
+
+                        onEachFeature: function (feature, layer) {
+                            
+                            layer.on('click', function() {
+                                console.log(feature.properties); // Log properties of the clicked feature
+                                getMatches(feature.properties);
+                                });
+                        }
+                    }).addTo(map)
                     console.log('added the polygons');
 
                     console.log('made it to here')
@@ -1248,8 +1259,8 @@
                     console.log('Filtered GeoJSON data received:', data);
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     var geojsonStyle = {
-                        fillColor:"#0000ff",
-                        color: "#000",
+                        fillColor:"#0287D4",
+                        color: "#025687",
                         weight: 1,
                         opacity: 1,
                         fillOpacity: 0.5,

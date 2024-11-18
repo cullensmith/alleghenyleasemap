@@ -7,6 +7,7 @@ from .models import PolygonModel
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.models.functions import Substr
+from django.core.cache import cache
 
 from django.db.models import Q
 import json 
@@ -33,6 +34,14 @@ def getMask(request):
 
 
 def polygon_geojson_view(request):
+    # Try to get the cached response
+    cached_data = cache.get('polygons_geojson')
+    if cached_data:
+        # print(f'found the cache: {time.time()-start_time}')
+        print('resorting to the cache')
+        return JsonResponse(cached_data, safe=False)
+
+
     polygons = PolygonModel.objects.all()  # Query all polygons
     features = []
     for i,polygon in enumerate(polygons):
@@ -55,6 +64,8 @@ def polygon_geojson_view(request):
     }
     # print(geojson_collection)
     print('requested polygons')
+    cache.set('polygons_geojson', geojson_collection, timeout=60*1440)  # Cache for 15 minutes
+
     return JsonResponse(geojson_collection)
 
 def get_wellsc(request):
