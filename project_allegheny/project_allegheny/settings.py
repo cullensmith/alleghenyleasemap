@@ -126,6 +126,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # For in-memory caching
+        'LOCATION': 'unique-allegparcels',  # This is an identifier for the cache
+    }
+}
 
 MEDIA_URL = 'media/'
 
