@@ -43,32 +43,32 @@ def polygon_geojson_view(request):
         print('resorting to the cache')
         return JsonResponse(cached_data, safe=False)
 
+    else:
+        polygons = PolygonModel.objects.all()  # Query all polygons
+        features = []
+        for i,polygon in enumerate(polygons):
+            # if i > 5:
+            #     break
+            # Parse GeoJSON text from the geomjson field
+            geojson_data = polygon.geomjson
+            # Add GeoJSON feature to the list
+            feature = dict()
+            feature['type'] = "Feature"
+            feature['properties'] = polygon.pin
+            feature['geometry'] = ast.literal_eval(geojson_data)
+            features.append(feature)
+            # print('so we got here')
+            
+        # Create GeoJSON FeatureCollection
+        geojson_collection = {
+            "type": "FeatureCollection",
+            "features": features
+        }
+        # print(geojson_collection)
+        print('requested polygons')
+        cache.set(cache_key, geojson_collection, timeout=60*1440)  # Cache for 1440 minutes
 
-    polygons = PolygonModel.objects.all()  # Query all polygons
-    features = []
-    for i,polygon in enumerate(polygons):
-        # if i > 5:
-        #     break
-        # Parse GeoJSON text from the geomjson field
-        geojson_data = polygon.geomjson
-        # Add GeoJSON feature to the list
-        feature = dict()
-        feature['type'] = "Feature"
-        feature['properties'] = polygon.pin
-        feature['geometry'] = ast.literal_eval(geojson_data)
-        features.append(feature)
-        # print('so we got here')
-        
-    # Create GeoJSON FeatureCollection
-    geojson_collection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-    # print(geojson_collection)
-    print('requested polygons')
-    cache.set(cache_key, geojson_collection, timeout=60*1440)  # Cache for 15 minutes
-
-    return JsonResponse(geojson_collection, safe=False)
+        return JsonResponse(geojson_collection, safe=False)
 
 def cachecheck(request):
     # Define a unique cache key for GeoJSON data.
