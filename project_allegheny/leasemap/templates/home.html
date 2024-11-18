@@ -1132,7 +1132,7 @@
                 url: '/leasemap/polygon_geojson_view', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
-                    console.log('GeoJSON data received:', data);
+                    console.log('GeoJSON data received:');
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     var geojsonStyle = {
                         fillColor:"#ff6802",
@@ -1191,7 +1191,9 @@
                 url: '/leasemap/get_wellsu', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
-                    console.log('conventional data received:', data);
+                    console.log('conventional data received:');
+                    {% comment %} console.log('conventional data received:', data); {% endcomment %}
+
                     // Add GeoJSON layer to the map
 
                     unc = L.geoJSON(data, {
@@ -1336,7 +1338,9 @@
                     pin: p
                 },
                 success: function(data) {
-                    console.log('GeoJSON data received:', data);
+                    console.log('GeoJSON data received:');
+                    {% comment %} console.log('GeoJSON data received:', data); {% endcomment %}
+
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     console.log('got the records');
                     document.getElementById("parcelid").innerText = data.features[0]['pin'];
