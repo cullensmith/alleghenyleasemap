@@ -1235,7 +1235,9 @@
                 url: '/leasemap/get_wellsc', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
-                    console.log('conventional data received:', data);
+                    console.log('conventional data received:');
+                    {% comment %} console.log('conventional data received:', data); {% endcomment %}
+
                     // Add GeoJSON layer to the map
 
                     con = L.geoJSON(data, {
@@ -1279,7 +1281,8 @@
                     zoning: z
                 },
                 success: function(data) {
-                    console.log('Filtered GeoJSON data received:', data);
+                    console.log('Filtered GeoJSON data received:');
+                    {% comment %} console.log('Filtered GeoJSON data received:', data); {% endcomment %}
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     var geojsonStyle = {
                         fillColor:"#0287D4",
