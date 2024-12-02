@@ -126,22 +126,23 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/dev/shm/django_cache',  # Cache location in shared memory
-        'OPTIONS': {
-            # 'MAX_ENTRIES': 1000,  # Maximum number of cache entries
-        },
-    }
-}
 
 # CACHES = {
 #     'default': {
-#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # For in-memory caching
-#         'LOCATION': 'unique-snowflake',  # This is an identifier for the cache
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/dev/shm/django_cache',  # Cache location in shared memory
+#         'OPTIONS': {
+#             # 'MAX_ENTRIES': 1000,  # Maximum number of cache entries
+#         },
 #     }
 # }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # For in-memory caching
+        'LOCATION': 'unique-snowflake',  # This is an identifier for the cache
+    }
+}
 
 # CACHES = {
 #     'default': {

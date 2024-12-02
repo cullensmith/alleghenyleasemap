@@ -17,8 +17,14 @@
     {% comment %} <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> {% endcomment %}
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    {% comment %} local copy  {% endcomment %}
+    <link rel="stylesheet" href="../static/css/ControlGeocoder.css" />
+    <script src="../static/js/ControlGeocoder.js"></script>
+    {% comment %} online version {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" /> {% endcomment %}
+    {% comment %} <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> {% endcomment %}
+
     <!-- geojson vt  -->
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
     <script src="https://unpkg.com/leaflet-geojson-vt@1.1.0/src/leaflet-geojson-vt.js"></script>
@@ -191,7 +197,7 @@
 
 
         .r_filter h4 {
-            cursor: pointer;
+            cursor: default;
             margin-bottom: 5px;
             {% comment %} color: #fff; {% endcomment %}
             position: relative;
@@ -206,7 +212,7 @@
         }
 
         .r_filter h2 {
-            cursor: pointer;
+            cursor: default;
             {% comment %} margin-bottom: 5px; {% endcomment %}
             {% comment %} color: #000; {% endcomment %}
             position: relative;
@@ -379,7 +385,17 @@
             background-color: #025687;
             color: white;
             border: none;
+            border-radius: 5px; /* Rounded corners */
+
             padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .reset-button {
+            background-color: #31322e;
+            color: white;
+            border: none;
+            padding: 1px 5px;
             cursor: pointer;
             font-size: 16px;
         }
@@ -432,6 +448,10 @@
                         <br>
                         <br>
                         <h2>Filters</h2>
+                        <div class="ab-button-container">
+                            <button class="apply-button" id="applyButton" >Apply Selections</button>
+                            <button class="reset-button" id="resetButton" >Reset</button>
+                        </div>
                         <!-- Date filter -->
                         <div class="filter">
                             <h4 onclick="toggleFilter('date')">Date</h4>
@@ -799,9 +819,9 @@
 
                             </div>
                         </div>
-                        <br>
+                        {% comment %} <br> {% endcomment %}
                         <!-- Button to apply filters -->
-                        <button class="apply-button" id="applyButton" >Apply Filters</button>
+                        {% comment %} <button class="apply-button" id="applyButton" >Apply Filters</button> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -810,7 +830,7 @@
             </div>
             <div class="deets">
                 <div id="projectlogo">
-                    <img src="../static/images/allegheny-lease-mapping-project.png" alt="PrjLogo" width="260" height="50">
+                    <img src="../static/images/allegheny-lease-mapping-project_crop.png" alt="PrjLogo" width="260" height="50">
                 </div> 
                 <div id="rightside">
                     <div class="r_filter">
@@ -3663,6 +3683,29 @@
             
             getFilteredGeoJSONData(a,c,md,sd,zs);
 
+        });
+
+        document.getElementById('resetButton').addEventListener('click', function() {
+            var checkboxes = document.querySelectorAll('.company-content input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
+            var checkboxes = document.querySelectorAll('.record-type-content input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
+            var checkboxes = document.querySelectorAll('.zoning-content input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
+            var checkboxes = document.querySelectorAll('.school-district-content input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
+            var checkboxes = document.querySelectorAll('.municipality-content input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
         });
 
     </script>
