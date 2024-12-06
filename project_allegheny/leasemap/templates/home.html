@@ -36,6 +36,58 @@
             width: 100%;
             {% comment %} float: right; {% endcomment %}
         }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Fade-out transition for the loading container */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 3s ease-out;
+        }
+
+        #loading-container {
+            transition: opacity 3s ease-out;
+        }
+        {% comment %} .loading-text {
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: normal;
+        } {% endcomment %}
+        .checkmark {
+            font-size: 30px;
+            color: green;
+        }
+        {% comment %} .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+          }
+          
+        /* Safari */
+        @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+        }
+          
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        } {% endcomment %}
         .container {
             display: flex;
             flex-direction: column;
@@ -408,6 +460,10 @@
             margin: 0 auto; /* Center the container */
             text-align: center; /* Center the text inside the container */
         )
+
+
+
+
     </style>
 </head>
 <body>
@@ -819,7 +875,32 @@
 
                             </div>
                         </div>
-                        {% comment %} <br> {% endcomment %}
+                        <br>
+                        {% comment %} <div>
+                            <p>above</p>
+                        </div>
+                        <div class="loader"></div>
+                        <div>
+                            <p>below</p>
+                        </div> {% endcomment %}
+                        <div id="loading-container">
+                            <strong>Loading Layers</strong>
+                            <div id="con-status">
+                                Conventional Wells... <span class="spinner" id="spinner_con"></span>
+                                <span id='con-status-done'></span>
+                            </div>
+                            <div id="unc-status">
+                                Unconventional Wells... <span class="spinner" id="spinner_unc"></span>
+                                <span id='unc-status-done'></span>
+                            </div>
+                            <div id="poly-status">
+                                Parcels... <span class="spinner" id="spinner_poly"></span>
+                                <span id='poly-status-done'></span>
+                            </div>
+                            {% comment %} <div id="done-status" style="display: none;">
+                                <strong>Done!</strong>
+                            </div> {% endcomment %}
+                        </div>
                         <!-- Button to apply filters -->
                         {% comment %} <button class="apply-button" id="applyButton" >Apply Filters</button> {% endcomment %}
                     </div>
@@ -830,8 +911,15 @@
             </div>
             <div class="deets">
                 <div id="projectlogo">
-                    <img src="../static/images/allegheny-lease-mapping-project.png" alt="PrjLogo" width="260" height="50">
+                    <img src="../static/images/allegheny-lease-mapping-project_crop.png" alt="PrjLogo" width="260" height="50">
                 </div> 
+                {% comment %} <div>
+                    <p>above</p>
+                </div>
+                <div class="loader"></div>
+                <div>
+                    <p>below</p>
+                </div> {% endcomment %}
                 <div id="rightside">
                     <div class="r_filter">
                         <h2>Parcel Details</h2>
@@ -905,6 +993,26 @@
     <script>
 
         // Initialize Leaflet map
+
+        const spinner_con = document.getElementById('spinner_con');
+        const spinner_unc = document.getElementById('spinner_unc');
+        const spinner_poly = document.getElementById('spinner_poly');
+        const polyText = document.getElementById('poly-status-done');
+        const uncText = document.getElementById('unc-status-done');
+        const conText = document.getElementById('con-status-done');
+        const loadingContainer = document.getElementById('loading-container');
+
+
+        const checkmarku = document.createElement('span');
+        checkmarku.className = 'checkmark';
+        checkmarku.innerHTML = '&#10004;';  // Checkmark symbol
+        const checkmarkc = document.createElement('span');
+        checkmarkc.className = 'checkmark';
+        checkmarkc.innerHTML = '&#10004;';  // Checkmark symbol
+        const checkmarkp = document.createElement('span');
+        checkmarkp.className = 'checkmark';
+        checkmarkp.innerHTML = '&#10004;';  // Checkmark symbol
+
         var map = L.map('map').setView([40.4406, -79.9959], 11);
         
         map.setMinZoom(10);
@@ -1155,7 +1263,10 @@
                 url: '/leasemap/polygon_geojson_view', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
+
+                    spinner_poly.style.display = 'block';
                     console.log('GeoJSON data received:');
+
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     var geojsonStyle = {
                         fillColor:"#ff6802",
@@ -1184,8 +1295,17 @@
                         }
                     }).addTo(map)
                     console.log('added the polygons');
+                    spinner_poly.style.display = 'none';
+                    polyText.innerHTML = '';
+                    polyText.appendChild(checkmarkp);
 
+                    map.removeLayer(con)
+                    con.addTo(map)
+                    map.removeLayer(unc)
+                    unc.addTo(map)
                     console.log('made it to here')
+                    // Add fade-out class to the container
+                    loadingContainer.classList.add('fade-out');
 
                 },
                 error: function(xhr, status, error) {
@@ -1214,6 +1334,8 @@
                 url: '/leasemap/get_wellsu', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
+                    spinner_unc.style.display = 'block';
+
                     console.log('conventional data received:');
                     {% comment %} console.log('conventional data received:', data); {% endcomment %}
 
@@ -1230,8 +1352,12 @@
                         }
                     }).addTo(map);
                     console.log('added the polygons');
-
+                    spinner_unc.style.display = 'none';
+                    uncText.innerHTML = '';
+                    uncText.appendChild(checkmarku);
                     console.log('made it to here')
+                    getGeoJSONData();
+
 
                 },
                 error: function(xhr, status, error) {
@@ -1258,6 +1384,9 @@
                 url: '/leasemap/get_wellsc', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
+                    
+                    spinner_con.style.display = 'block';
+
                     console.log('conventional data received:');
                     {% comment %} console.log('conventional data received:', data); {% endcomment %}
 
@@ -1273,9 +1402,13 @@
                             }
                         }
                     }).addTo(map);
-                    console.log('added the polygons');
+                    console.log('added the uncs');
+                    spinner_con.style.display = 'none';
+                    conText.innerHTML = '';
+                    conText.appendChild(checkmarkc);
 
                     console.log('made it to here')
+                    getwellsu();
 
                 },
                 error: function(xhr, status, error) {
@@ -1284,11 +1417,14 @@
                 }
             });
 
-            }
+        }
+
         // Call the functions to fetch GeoJSON data
-        getGeoJSONData();
         getwellsc();
-        getwellsu();
+        {% comment %} getwellsu(); {% endcomment %}
+        {% comment %} getGeoJSONData(); {% endcomment %}
+
+
 
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(a,c,md,sd,zs) {
