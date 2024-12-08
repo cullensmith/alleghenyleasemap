@@ -12,6 +12,20 @@ class PolygonModel(models.Model):
         managed = False  # This model does not have a database table as it's a view
         db_table = 'allegheny_polygons'  # Replace 'your_polygon_table' with your actual table name
 
+class PolygonShort(models.Model):
+    # Define fields according to your database schema
+    pin = models.CharField()
+    geomjson = models.CharField()
+    # field_2 = models.CharField(max_length=100)
+    # field_5 = models.CharField(max_length=100)
+    # propertycity = models.CharField(max_length=100)
+    def __str__(self):
+        return self.pin
+    class Meta:
+        managed = False  # This model does not have a database table as it's a view
+        db_table = 'allegheny_polys_short'  # Replace 'your_polygon_table' with your actual table name
+
+
 class Parcels(models.Model):
     doc_num = models.CharField(max_length=100)
     company = models.CharField(max_length=100)

@@ -3,7 +3,7 @@ from .models import Wells_C
 from .models import Wells_U
 from .models import Parcels
 from .models import Points
-from .models import PolygonModel
+from .models import PolygonModel, PolygonShort
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.models.functions import Substr
@@ -44,7 +44,7 @@ def polygon_geojson_view(request):
         return JsonResponse(cached_data, safe=False)
 
     else:
-        polygons = PolygonModel.objects.all()  # Query all polygons
+        polygons = PolygonShort.objects.all()  # Query all polygons
         features = []
         for i,polygon in enumerate(polygons):
             # if i > 5:
