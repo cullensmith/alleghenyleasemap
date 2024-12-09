@@ -1352,7 +1352,7 @@
                             return createYellowCircleMarker(latlng);
                         },
                         onEachFeature: function (feature, layer) {
-                            layer.bindPopup("<strong>Well Info</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties);
+                            layer.bindPopup("<strong>Well Info</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
 
                         }
                     }).addTo(map);
@@ -1402,7 +1402,7 @@
                             return createGreenCircleMarker(latlng);
                         },
                         onEachFeature: function (feature, layer) {
-                           layer.bindPopup("<strong>Well Info</strong><br>Type: Conventional<br>Permit Num: "+feature.properties);
+                           layer.bindPopup("<strong>Well Info</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
                             
                         }
                     }).addTo(map);
