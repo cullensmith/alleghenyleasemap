@@ -189,12 +189,12 @@ def filteredparcels(request):
         # states.append(h.upper())
         # states.append(h.lower())
         zoning.append(h.upper())
-    print(f"company--{len(cl)}->{cl}")
-    print(f"muni--{len(md)}->{md}")
-    print(f"school--{len(sd)}->{sd}")
-    print(f"zoning--{len(zoning)}->{zoning}")
+    # print(f"company--{len(cl)}->{cl}")
+    # print(f"muni--{len(md)}->{md}")
+    # print(f"school--{len(sd)}->{sd}")
+    # print(f"zoning--{len(zoning)}->{zoning}")
 
-    print(f"zoning--{len(zoning)}->{zoning}")
+    # print(f"zoning--{len(zoning)}->{zoning}")
     filter_kwargs = dict()
     filter_kwargs.update({'agmt_type__in':a})
     filter_kwargs.update({'company__in':cl})
@@ -202,10 +202,10 @@ def filteredparcels(request):
     filter_kwargs.update({'schooldesc__in':sd})
     filter_kwargs.update({'classdesc__in':zoning})
     polygons = Parcels.objects.filter(**filter_kwargs)
-    print('here there are')
-    print(polygons)
-    print('we get any?')
-    print(len(set(polygons)))
+    # print('here there are')
+    # print(polygons)
+    # print('we get any?')
+    # print(len(set(polygons)))
     features = []
 
 
@@ -290,7 +290,7 @@ def parcels(request):
             'geometry': polygon.geomjson
         }
         polygons_data.append(polygon_data)
-    print('got the parcel data')
+    print('got the parcel data from the "parcels" function')
     geojson = {
         "type": "FeatureCollection",
         "features": [
@@ -306,11 +306,6 @@ def parcels(request):
 
     mapdata = json.dumps(geojson)
     return JsonResponse(mapdata, safe=False)
-
-
-
-
-
 
 def coordints(request):
     c = request.GET.getlist('coords[]')

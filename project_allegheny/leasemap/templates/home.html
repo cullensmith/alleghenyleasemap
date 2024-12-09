@@ -265,6 +265,8 @@
 
         .r_filter h2 {
             cursor: default;
+            text-align: center; 
+
             {% comment %} margin-bottom: 5px; {% endcomment %}
             {% comment %} color: #000; {% endcomment %}
             position: relative;
@@ -329,7 +331,7 @@
         .dropdown button {
             {% comment %} height: 25px; {% endcomment %}
             height: 3%;
-            width: 125px;
+            width: 150px;
             font-family: Arial;
             background-color: #151515;
             color: white;
@@ -341,7 +343,7 @@
         }
         .dropdown-content {
             display: none;
-            width: 180px;
+            width: 200px;
             padding: 20px;
             color: black;
             font-family: Arial;
@@ -364,17 +366,18 @@
         .dropdown-content a:hover {
             background-color: #bcbcbc;
         }
-        .dropdown button::after {
+        {% comment %} arrow for the basemap and layer dropdowns {% endcomment %}
+        {% comment %} .dropdown button::after {
             content: '';
             position: absolute;
-            right: 10px;
+            right: 0px;
             top: 25%;
             transform: translateY(-50%);
             border: solid white;
             border-width: 0 2px 2px 0;
             padding: 3px;
             transform: rotate(45deg);
-        }
+        } {% endcomment %}
 
 
         .hdropdown {
@@ -471,7 +474,7 @@
         <div class="top">
             <header>
                 <div class="dropdown">
-                    <button>Basemap</button>
+                    <button>Basemaps</button>
                     <div class="dropdown-content">
                         <label><input type="radio" name="basemap" value="osm" checked>OpenStreetMap</label><br>
                         <label><input type="radio" name="basemap" value="satellite">Satellite Imagery</label><br>
@@ -480,12 +483,12 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button>Layers</button>
+                    <button>Layers + Legend</button>
                     <div class="dropdown-content">
-                        <label><input type="checkbox" id="layer0" checked>Conventional Wells</label><br>
-                        <label><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>
-                        <label><input type="checkbox" id="layer2" checked>Filtered Parcels</label><br>
-                        <label><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer0" checked>Conventional Wells</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>
+                        <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" checked>Filtered Parcels</label><br>
+                        <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br>
                     </div>
                 </div>
             </header>
@@ -505,7 +508,7 @@
                         <br>
                         <h2>Filters</h2>
                         <div class="ab-button-container">
-                            <button class="apply-button" id="applyButton" >Apply Selections</button>
+                            <button class="apply-button" id="applyButton" >Apply Selection</button>
                             <button class="reset-button" id="resetButton" >Reset</button>
                         </div>
                         <!-- Date filter -->
@@ -524,69 +527,69 @@
                             <div class="filter-content record-type-content">
                                 <button onclick="checkAll('record-type')">Check All</button>
                                 <button onclick="uncheckAll('record-type')">Uncheck All</button>
-                                <input type="checkbox" id="agmt0" value="ADDENDUM OIL & GAS" checked> <label for="agmt0">ADDENDUM OIL & GAS</label><br>
-                                <input type="checkbox" id="agmt1" value="ADDENDUM RIGHT OF WAY" checked> <label for="agmt1">ADDENDUM RIGHT OF WAY</label><br>
-                                <input type="checkbox" id="agmt2" value="AFFIDAVIT" checked> <label for="agmt2">AFFIDAVIT</label><br>
-                                <input type="checkbox" id="agmt3" value="AGREEMENT" checked> <label for="agmt3">AGREEMENT</label><br>
-                                <input type="checkbox" id="agmt4" value="AM RATIFICATION" checked> <label for="agmt4">AM RATIFICATION</label><br>
-                                <input type="checkbox" id="agmt5" value="AMEND ASGMT OIL & GAS" checked> <label for="agmt5">AMEND ASGMT OIL & GAS</label><br>
-                                <input type="checkbox" id="agmt6" value="AMEND DECLARATION" checked> <label for="agmt6">AMEND DECLARATION</label><br>
-                                <input type="checkbox" id="agmt7" value="AMEND LEASE" checked> <label for="agmt7">AMEND LEASE</label><br>
-                                <input type="checkbox" id="agmt8" value="AMEND O & G" checked> <label for="agmt8">AMEND O & G</label><br>
-                                <input type="checkbox" id="agmt9" value="AMEND R OF W" checked> <label for="agmt9">AMEND R OF W</label><br>
-                                <input type="checkbox" id="agmt10" value="AMEND RIGHT OF WAY" checked> <label for="agmt10">AMEND RIGHT OF WAY</label><br>
-                                <input type="checkbox" id="agmt11" value="AMENDMENT AGREEMENT" checked> <label for="agmt11">AMENDMENT AGREEMENT</label><br>
-                                <input type="checkbox" id="agmt12" value="ASGMT AGRT" checked> <label for="agmt12">ASGMT AGRT</label><br>
-                                <input type="checkbox" id="agmt13" value="ASGMT BILL OF SALE" checked> <label for="agmt13">ASGMT BILL OF SALE</label><br>
-                                <input type="checkbox" id="agmt14" value="ASGMT INTEREST" checked> <label for="agmt14">ASGMT INTEREST</label><br>
-                                <input type="checkbox" id="agmt15" value="ASGMT LEASE" checked> <label for="agmt15">ASGMT LEASE</label><br>
-                                <input type="checkbox" id="agmt16" value="ASGMT LEASES RENTS" checked> <label for="agmt16">ASGMT LEASES RENTS</label><br>
-                                <input type="checkbox" id="agmt17" value="ASGMT O & G" checked> <label for="agmt17">ASGMT O & G</label><br>
-                                <input type="checkbox" id="agmt18" value="ASGMT RIGHT OF WAY" checked> <label for="agmt18">ASGMT RIGHT OF WAY</label><br>
-                                <input type="checkbox" id="agmt19" value="ASGMT ROYALTY INTEREST" checked> <label for="agmt19">ASGMT ROYALTY INTEREST</label><br>
-                                <input type="checkbox" id="agmt20" value="ASGMT SALE AGRT" checked> <label for="agmt20">ASGMT SALE AGRT</label><br>
-                                <input type="checkbox" id="agmt21" value="BILL OF SALE" checked> <label for="agmt21">BILL OF SALE</label><br>
-                                <input type="checkbox" id="agmt22" value="CONSENT TO LEASE" checked> <label for="agmt22">CONSENT TO LEASE</label><br>
-                                <input type="checkbox" id="agmt23" value="DECL COVT & C" checked> <label for="agmt23">DECL COVT & C</label><br>
-                                <input type="checkbox" id="agmt24" value="DECL COVT COND REST" checked> <label for="agmt24">DECL COVT COND REST</label><br>
-                                <input type="checkbox" id="agmt25" value="DECL TAK" checked> <label for="agmt25">DECL TAK</label><br>
-                                <input type="checkbox" id="agmt26" value="DECLARATION" checked> <label for="agmt26">DECLARATION</label><br>
-                                <input type="checkbox" id="agmt27" value="DEED" checked> <label for="agmt27">DEED</label><br>
-                                <input type="checkbox" id="agmt28" value="DESIGNATION" checked> <label for="agmt28">DESIGNATION</label><br>
-                                <input type="checkbox" id="agmt29" value="EASEMENT" checked> <label for="agmt29">EASEMENT</label><br>
-                                <input type="checkbox" id="agmt30" value="error in recording" checked> <label for="agmt30">error in recording</label><br>
-                                <input type="checkbox" id="agmt31" value="LEASE" checked> <label for="agmt31">LEASE</label><br>
-                                <input type="checkbox" id="agmt32" value="LEASE EXT AGRT" checked> <label for="agmt32">LEASE EXT AGRT</label><br>
-                                <input type="checkbox" id="agmt33" value="LICENSE" checked> <label for="agmt33">LICENSE</label><br>
-                                <input type="checkbox" id="agmt34" value="MEMORANDUM" checked> <label for="agmt34">MEMORANDUM</label><br>
-                                <input type="checkbox" id="agmt35" value="MODIFICATION OF OIL & GAS" checked> <label for="agmt35">MODIFICATION OF OIL & GAS</label><br>
-                                <input type="checkbox" id="agmt36" value="NOTICE CONDMN" checked> <label for="agmt36">NOTICE CONDMN</label><br>
-                                <input type="checkbox" id="agmt37" value="NOTICE EXTENSION LEASE" checked> <label for="agmt37">NOTICE EXTENSION LEASE</label><br>
-                                <input type="checkbox" id="agmt38" value="NOTICE OF INTEREST" checked> <label for="agmt38">NOTICE OF INTEREST</label><br>
-                                <input type="checkbox" id="agmt39" value="O & G" checked> <label for="agmt39">O & G</label><br>
-                                <input type="checkbox" id="agmt40" value="O OF C" checked> <label for="agmt40">O OF C</label><br>
-                                <input type="checkbox" id="agmt41" value="PARTIAL ASGMT OIL & GAS" checked> <label for="agmt41">PARTIAL ASGMT OIL & GAS</label><br>
-                                <input type="checkbox" id="agmt42" value="PARTIAL ASSIGNMENT WELLS" checked> <label for="agmt42">PARTIAL ASSIGNMENT WELLS</label><br>
-                                <input type="checkbox" id="agmt43" value="PARTIAL DEED RELEASE" checked> <label for="agmt43">PARTIAL DEED RELEASE</label><br>
-                                <input type="checkbox" id="agmt44" value="PERMIT" checked> <label for="agmt44">PERMIT</label><br>
-                                <input type="checkbox" id="agmt45" value="R OF W" checked> <label for="agmt45">R OF W</label><br>
-                                <input type="checkbox" id="agmt46" value="RATIFICATION" checked> <label for="agmt46">RATIFICATION</label><br>
-                                <input type="checkbox" id="agmt47" value="RATIFY O & G" checked> <label for="agmt47">RATIFY O & G</label><br>
-                                <input type="checkbox" id="agmt48" value="REGULATE GRANT" checked> <label for="agmt48">REGULATE GRANT</label><br>
-                                <input type="checkbox" id="agmt49" value="REL O & G" checked> <label for="agmt49">REL O & G</label><br>
-                                <input type="checkbox" id="agmt50" value="REL RIGHTS" checked> <label for="agmt50">REL RIGHTS</label><br>
-                                <input type="checkbox" id="agmt51" value="RELEASE" checked> <label for="agmt51">RELEASE</label><br>
-                                <input type="checkbox" id="agmt52" value="RELEASE LEASE" checked> <label for="agmt52">RELEASE LEASE</label><br>
-                                <input type="checkbox" id="agmt53" value="RELEASE OIL & GAS LEASE" checked> <label for="agmt53">RELEASE OIL & GAS LEASE</label><br>
-                                <input type="checkbox" id="agmt54" value="RELEASE R OF W" checked> <label for="agmt54">RELEASE R OF W</label><br>
-                                <input type="checkbox" id="agmt55" value="SHERIFF DEED" checked> <label for="agmt55">SHERIFF DEED</label><br>
-                                <input type="checkbox" id="agmt56" value="SUB OIL & GAS" checked> <label for="agmt56">SUB OIL & GAS</label><br>
-                                <input type="checkbox" id="agmt57" value="SURR O & G" checked> <label for="agmt57">SURR O & G</label><br>
-                                <input type="checkbox" id="agmt58" value="SURRENDER LEASE" checked> <label for="agmt58">SURRENDER LEASE</label><br>
-                                <input type="checkbox" id="agmt59" value="TERM LEASE" checked> <label for="agmt59">TERM LEASE</label><br>
-                                <input type="checkbox" id="agmt60" value="TERM O & G" checked> <label for="agmt60">TERM O & G</label><br>
-                                <input type="checkbox" id="agmt61" value="TERM RIGHT OF WAY" checked> <label for="agmt61">TERM RIGHT OF WAY</label><br>
-                                <input type="checkbox" id="agmt62" value="UNIT OPERATION" checked> <label for="agmt62">UNIT OPERATION</label><br>                                
+                                <input type="checkbox" id="agmt0" value="ADDENDUM OIL & GAS" unchecked> <label for="agmt0">ADDENDUM OIL & GAS</label><br>
+                                <input type="checkbox" id="agmt1" value="ADDENDUM RIGHT OF WAY" unchecked> <label for="agmt1">ADDENDUM RIGHT OF WAY</label><br>
+                                <input type="checkbox" id="agmt2" value="AFFIDAVIT" unchecked> <label for="agmt2">AFFIDAVIT</label><br>
+                                <input type="checkbox" id="agmt3" value="AGREEMENT" unchecked> <label for="agmt3">AGREEMENT</label><br>
+                                <input type="checkbox" id="agmt4" value="AM RATIFICATION" unchecked> <label for="agmt4">AM RATIFICATION</label><br>
+                                <input type="checkbox" id="agmt5" value="AMEND ASGMT OIL & GAS" unchecked> <label for="agmt5">AMEND ASGMT OIL & GAS</label><br>
+                                <input type="checkbox" id="agmt6" value="AMEND DECLARATION" unchecked> <label for="agmt6">AMEND DECLARATION</label><br>
+                                <input type="checkbox" id="agmt7" value="AMEND LEASE" unchecked> <label for="agmt7">AMEND LEASE</label><br>
+                                <input type="checkbox" id="agmt8" value="AMEND O & G" unchecked> <label for="agmt8">AMEND O & G</label><br>
+                                <input type="checkbox" id="agmt9" value="AMEND R OF W" unchecked> <label for="agmt9">AMEND R OF W</label><br>
+                                <input type="checkbox" id="agmt10" value="AMEND RIGHT OF WAY" unchecked> <label for="agmt10">AMEND RIGHT OF WAY</label><br>
+                                <input type="checkbox" id="agmt11" value="AMENDMENT AGREEMENT" unchecked> <label for="agmt11">AMENDMENT AGREEMENT</label><br>
+                                <input type="checkbox" id="agmt12" value="ASGMT AGRT" unchecked> <label for="agmt12">ASGMT AGRT</label><br>
+                                <input type="checkbox" id="agmt13" value="ASGMT BILL OF SALE" unchecked> <label for="agmt13">ASGMT BILL OF SALE</label><br>
+                                <input type="checkbox" id="agmt14" value="ASGMT INTEREST" unchecked> <label for="agmt14">ASGMT INTEREST</label><br>
+                                <input type="checkbox" id="agmt15" value="ASGMT LEASE" unchecked> <label for="agmt15">ASGMT LEASE</label><br>
+                                <input type="checkbox" id="agmt16" value="ASGMT LEASES RENTS" unchecked> <label for="agmt16">ASGMT LEASES RENTS</label><br>
+                                <input type="checkbox" id="agmt17" value="ASGMT O & G" unchecked> <label for="agmt17">ASGMT O & G</label><br>
+                                <input type="checkbox" id="agmt18" value="ASGMT RIGHT OF WAY" unchecked> <label for="agmt18">ASGMT RIGHT OF WAY</label><br>
+                                <input type="checkbox" id="agmt19" value="ASGMT ROYALTY INTEREST" unchecked> <label for="agmt19">ASGMT ROYALTY INTEREST</label><br>
+                                <input type="checkbox" id="agmt20" value="ASGMT SALE AGRT" unchecked> <label for="agmt20">ASGMT SALE AGRT</label><br>
+                                <input type="checkbox" id="agmt21" value="BILL OF SALE" unchecked> <label for="agmt21">BILL OF SALE</label><br>
+                                <input type="checkbox" id="agmt22" value="CONSENT TO LEASE" unchecked> <label for="agmt22">CONSENT TO LEASE</label><br>
+                                <input type="checkbox" id="agmt23" value="DECL COVT & C" unchecked> <label for="agmt23">DECL COVT & C</label><br>
+                                <input type="checkbox" id="agmt24" value="DECL COVT COND REST" unchecked> <label for="agmt24">DECL COVT COND REST</label><br>
+                                <input type="checkbox" id="agmt25" value="DECL TAK" unchecked> <label for="agmt25">DECL TAK</label><br>
+                                <input type="checkbox" id="agmt26" value="DECLARATION" unchecked> <label for="agmt26">DECLARATION</label><br>
+                                <input type="checkbox" id="agmt27" value="DEED" unchecked> <label for="agmt27">DEED</label><br>
+                                <input type="checkbox" id="agmt28" value="DESIGNATION" unchecked> <label for="agmt28">DESIGNATION</label><br>
+                                <input type="checkbox" id="agmt29" value="EASEMENT" unchecked> <label for="agmt29">EASEMENT</label><br>
+                                <input type="checkbox" id="agmt30" value="error in recording" unchecked> <label for="agmt30">error in recording</label><br>
+                                <input type="checkbox" id="agmt31" value="LEASE" unchecked> <label for="agmt31">LEASE</label><br>
+                                <input type="checkbox" id="agmt32" value="LEASE EXT AGRT" unchecked> <label for="agmt32">LEASE EXT AGRT</label><br>
+                                <input type="checkbox" id="agmt33" value="LICENSE" unchecked> <label for="agmt33">LICENSE</label><br>
+                                <input type="checkbox" id="agmt34" value="MEMORANDUM" unchecked> <label for="agmt34">MEMORANDUM</label><br>
+                                <input type="checkbox" id="agmt35" value="MODIFICATION OF OIL & GAS" unchecked> <label for="agmt35">MODIFICATION OF OIL & GAS</label><br>
+                                <input type="checkbox" id="agmt36" value="NOTICE CONDMN" unchecked> <label for="agmt36">NOTICE CONDMN</label><br>
+                                <input type="checkbox" id="agmt37" value="NOTICE EXTENSION LEASE" unchecked> <label for="agmt37">NOTICE EXTENSION LEASE</label><br>
+                                <input type="checkbox" id="agmt38" value="NOTICE OF INTEREST" unchecked> <label for="agmt38">NOTICE OF INTEREST</label><br>
+                                <input type="checkbox" id="agmt39" value="O & G" unchecked> <label for="agmt39">O & G</label><br>
+                                <input type="checkbox" id="agmt40" value="O OF C" unchecked> <label for="agmt40">O OF C</label><br>
+                                <input type="checkbox" id="agmt41" value="PARTIAL ASGMT OIL & GAS" unchecked> <label for="agmt41">PARTIAL ASGMT OIL & GAS</label><br>
+                                <input type="checkbox" id="agmt42" value="PARTIAL ASSIGNMENT WELLS" unchecked> <label for="agmt42">PARTIAL ASSIGNMENT WELLS</label><br>
+                                <input type="checkbox" id="agmt43" value="PARTIAL DEED RELEASE" unchecked> <label for="agmt43">PARTIAL DEED RELEASE</label><br>
+                                <input type="checkbox" id="agmt44" value="PERMIT" unchecked> <label for="agmt44">PERMIT</label><br>
+                                <input type="checkbox" id="agmt45" value="R OF W" unchecked> <label for="agmt45">R OF W</label><br>
+                                <input type="checkbox" id="agmt46" value="RATIFICATION" unchecked> <label for="agmt46">RATIFICATION</label><br>
+                                <input type="checkbox" id="agmt47" value="RATIFY O & G" unchecked> <label for="agmt47">RATIFY O & G</label><br>
+                                <input type="checkbox" id="agmt48" value="REGULATE GRANT" unchecked> <label for="agmt48">REGULATE GRANT</label><br>
+                                <input type="checkbox" id="agmt49" value="REL O & G" unchecked> <label for="agmt49">REL O & G</label><br>
+                                <input type="checkbox" id="agmt50" value="REL RIGHTS" unchecked> <label for="agmt50">REL RIGHTS</label><br>
+                                <input type="checkbox" id="agmt51" value="RELEASE" unchecked> <label for="agmt51">RELEASE</label><br>
+                                <input type="checkbox" id="agmt52" value="RELEASE LEASE" unchecked> <label for="agmt52">RELEASE LEASE</label><br>
+                                <input type="checkbox" id="agmt53" value="RELEASE OIL & GAS LEASE" unchecked> <label for="agmt53">RELEASE OIL & GAS LEASE</label><br>
+                                <input type="checkbox" id="agmt54" value="RELEASE R OF W" unchecked> <label for="agmt54">RELEASE R OF W</label><br>
+                                <input type="checkbox" id="agmt55" value="SHERIFF DEED" unchecked> <label for="agmt55">SHERIFF DEED</label><br>
+                                <input type="checkbox" id="agmt56" value="SUB OIL & GAS" unchecked> <label for="agmt56">SUB OIL & GAS</label><br>
+                                <input type="checkbox" id="agmt57" value="SURR O & G" unchecked> <label for="agmt57">SURR O & G</label><br>
+                                <input type="checkbox" id="agmt58" value="SURRENDER LEASE" unchecked> <label for="agmt58">SURRENDER LEASE</label><br>
+                                <input type="checkbox" id="agmt59" value="TERM LEASE" unchecked> <label for="agmt59">TERM LEASE</label><br>
+                                <input type="checkbox" id="agmt60" value="TERM O & G" unchecked> <label for="agmt60">TERM O & G</label><br>
+                                <input type="checkbox" id="agmt61" value="TERM RIGHT OF WAY" unchecked> <label for="agmt61">TERM RIGHT OF WAY</label><br>
+                                <input type="checkbox" id="agmt62" value="UNIT OPERATION" unchecked> <label for="agmt62">UNIT OPERATION</label><br>                                
                             </div>
                         </div>
                         <!-- Company filter -->
@@ -595,49 +598,49 @@
                             <div class="filter-content company-content">
                                 <button onclick="checkAll('company')">Check All</button>
                                 <button onclick="uncheckAll('company')">Uncheck All</button>
-                                <input type="checkbox" id="company0" value="All American" checked> <label for="company0">All American</label><br>
-                                <input type="checkbox" id="company1" value="Atlas" checked> <label for="company1">Atlas</label><br>
-                                <input type="checkbox" id="company2" value="Baron Group" checked> <label for="company2">Baron Group</label><br>
-                                <input type="checkbox" id="company3" value="Bittinger Drilling" checked> <label for="company3">Bittinger Drilling</label><br>
-                                <input type="checkbox" id="company4" value="BLX" checked> <label for="company4">BLX</label><br>
-                                <input type="checkbox" id="company5" value="Bow & Arrow" checked> <label for="company5">Bow & Arrow</label><br>
-                                <input type="checkbox" id="company6" value="Carnegie Natural Gas" checked> <label for="company6">Carnegie Natural Gas</label><br>
-                                <input type="checkbox" id="company7" value="Carter Oil & Gas" checked> <label for="company7">Carter Oil & Gas</label><br>
-                                <input type="checkbox" id="company8" value="Chesapeake" checked> <label for="company8">Chesapeake</label><br>
-                                <input type="checkbox" id="company9" value="CNX" checked> <label for="company9">CNX</label><br>
-                                <input type="checkbox" id="company10" value="Columbia Gas" checked> <label for="company10">Columbia Gas</label><br>
-                                <input type="checkbox" id="company11" value="Cone Gathering" checked> <label for="company11">Cone Gathering</label><br>
-                                <input type="checkbox" id="company12" value="Consol" checked> <label for="company12">Consol</label><br>
-                                <input type="checkbox" id="company13" value="Dale Property Services" checked> <label for="company13">Dale Property Services</label><br>
-                                <input type="checkbox" id="company14" value="Dominion" checked> <label for="company14">Dominion</label><br>
-                                <input type="checkbox" id="company15" value="Dorso" checked> <label for="company15">Dorso</label><br>
-                                <input type="checkbox" id="company16" value="EQT" checked> <label for="company16">EQT</label><br>
-                                <input type="checkbox" id="company17" value="Equitrans" checked> <label for="company17">Equitrans</label><br>
-                                <input type="checkbox" id="company18" value="Everest Exploration" checked> <label for="company18">Everest Exploration</label><br>
-                                <input type="checkbox" id="company19" value="Great Lakes Energy" checked> <label for="company19">Great Lakes Energy</label><br>
-                                <input type="checkbox" id="company20" value="H&M Holdings" checked> <label for="company20">H&M Holdings</label><br>
-                                <input type="checkbox" id="company21" value="Huntley & Huntley" checked> <label for="company21">Huntley & Huntley</label><br>
-                                <input type="checkbox" id="company22" value="JJ Oil & Gas" checked> <label for="company22">JJ Oil & Gas</label><br>
-                                <input type="checkbox" id="company23" value="Kriebel" checked> <label for="company23">Kriebel</label><br>
-                                <input type="checkbox" id="company24" value="Marco Drilling" checked> <label for="company24">Marco Drilling</label><br>
-                                <input type="checkbox" id="company25" value="MarkWest" checked> <label for="company25">MarkWest</label><br>
-                                <input type="checkbox" id="company26" value="Natural Energy" checked> <label for="company26">Natural Energy</label><br>
-                                <input type="checkbox" id="company27" value="Noble Energy" checked> <label for="company27">Noble Energy</label><br>
-                                <input type="checkbox" id="company28" value="Oil & Gas Mgmt" checked> <label for="company28">Oil & Gas Mgmt</label><br>
-                                <input type="checkbox" id="company29" value="Patriot Exploration" checked> <label for="company29">Patriot Exploration</label><br>
-                                <input type="checkbox" id="company30" value="Penneco" checked> <label for="company30">Penneco</label><br>
-                                <input type="checkbox" id="company31" value="Peoples Natural Gas" checked> <label for="company31">Peoples Natural Gas</label><br>
-                                <input type="checkbox" id="company32" value="Phillips" checked> <label for="company32">Phillips</label><br>
-                                <input type="checkbox" id="company33" value="Principle Energy Resources" checked> <label for="company33">Principle Energy Resources</label><br>
-                                <input type="checkbox" id="company34" value="Range Resources" checked> <label for="company34">Range Resources</label><br>
-                                <input type="checkbox" id="company35" value="Rice Drilling" checked> <label for="company35">Rice Drilling</label><br>
-                                <input type="checkbox" id="company36" value="Shell" checked> <label for="company36">Shell</label><br>
-                                <input type="checkbox" id="company37" value="Statoil USA" checked> <label for="company37">Statoil USA</label><br>
-                                <input type="checkbox" id="company38" value="Sunoco" checked> <label for="company38">Sunoco</label><br>
-                                <input type="checkbox" id="company39" value="Sylvan Energy" checked> <label for="company39">Sylvan Energy</label><br>
-                                <input type="checkbox" id="company40" value="Turm Oil" checked> <label for="company40">Turm Oil</label><br>
-                                <input type="checkbox" id="company41" value="Wadwell Group" checked> <label for="company41">Wadwell Group</label><br>
-                                <input type="checkbox" id="company42" value="XTO Energy" checked> <label for="company42">XTO Energy</label><br>                                
+                                <input type="checkbox" id="company0" value="All American" unchecked> <label for="company0">All American</label><br>
+                                <input type="checkbox" id="company1" value="Atlas" unchecked> <label for="company1">Atlas</label><br>
+                                <input type="checkbox" id="company2" value="Baron Group" unchecked> <label for="company2">Baron Group</label><br>
+                                <input type="checkbox" id="company3" value="Bittinger Drilling" unchecked> <label for="company3">Bittinger Drilling</label><br>
+                                <input type="checkbox" id="company4" value="BLX" unchecked> <label for="company4">BLX</label><br>
+                                <input type="checkbox" id="company5" value="Bow & Arrow" unchecked> <label for="company5">Bow & Arrow</label><br>
+                                <input type="checkbox" id="company6" value="Carnegie Natural Gas" unchecked> <label for="company6">Carnegie Natural Gas</label><br>
+                                <input type="checkbox" id="company7" value="Carter Oil & Gas" unchecked> <label for="company7">Carter Oil & Gas</label><br>
+                                <input type="checkbox" id="company8" value="Chesapeake" unchecked> <label for="company8">Chesapeake</label><br>
+                                <input type="checkbox" id="company9" value="CNX" unchecked> <label for="company9">CNX</label><br>
+                                <input type="checkbox" id="company10" value="Columbia Gas" unchecked> <label for="company10">Columbia Gas</label><br>
+                                <input type="checkbox" id="company11" value="Cone Gathering" unchecked> <label for="company11">Cone Gathering</label><br>
+                                <input type="checkbox" id="company12" value="Consol" unchecked> <label for="company12">Consol</label><br>
+                                <input type="checkbox" id="company13" value="Dale Property Services" unchecked> <label for="company13">Dale Property Services</label><br>
+                                <input type="checkbox" id="company14" value="Dominion" unchecked> <label for="company14">Dominion</label><br>
+                                <input type="checkbox" id="company15" value="Dorso" unchecked> <label for="company15">Dorso</label><br>
+                                <input type="checkbox" id="company16" value="EQT" unchecked> <label for="company16">EQT</label><br>
+                                <input type="checkbox" id="company17" value="Equitrans" unchecked> <label for="company17">Equitrans</label><br>
+                                <input type="checkbox" id="company18" value="Everest Exploration" unchecked> <label for="company18">Everest Exploration</label><br>
+                                <input type="checkbox" id="company19" value="Great Lakes Energy" unchecked> <label for="company19">Great Lakes Energy</label><br>
+                                <input type="checkbox" id="company20" value="H&M Holdings" unchecked> <label for="company20">H&M Holdings</label><br>
+                                <input type="checkbox" id="company21" value="Huntley & Huntley" unchecked> <label for="company21">Huntley & Huntley</label><br>
+                                <input type="checkbox" id="company22" value="JJ Oil & Gas" unchecked> <label for="company22">JJ Oil & Gas</label><br>
+                                <input type="checkbox" id="company23" value="Kriebel" unchecked> <label for="company23">Kriebel</label><br>
+                                <input type="checkbox" id="company24" value="Marco Drilling" unchecked> <label for="company24">Marco Drilling</label><br>
+                                <input type="checkbox" id="company25" value="MarkWest" unchecked> <label for="company25">MarkWest</label><br>
+                                <input type="checkbox" id="company26" value="Natural Energy" unchecked> <label for="company26">Natural Energy</label><br>
+                                <input type="checkbox" id="company27" value="Noble Energy" unchecked> <label for="company27">Noble Energy</label><br>
+                                <input type="checkbox" id="company28" value="Oil & Gas Mgmt" unchecked> <label for="company28">Oil & Gas Mgmt</label><br>
+                                <input type="checkbox" id="company29" value="Patriot Exploration" unchecked> <label for="company29">Patriot Exploration</label><br>
+                                <input type="checkbox" id="company30" value="Penneco" unchecked> <label for="company30">Penneco</label><br>
+                                <input type="checkbox" id="company31" value="Peoples Natural Gas" unchecked> <label for="company31">Peoples Natural Gas</label><br>
+                                <input type="checkbox" id="company32" value="Phillips" unchecked> <label for="company32">Phillips</label><br>
+                                <input type="checkbox" id="company33" value="Principle Energy Resources" unchecked> <label for="company33">Principle Energy Resources</label><br>
+                                <input type="checkbox" id="company34" value="Range Resources" unchecked> <label for="company34">Range Resources</label><br>
+                                <input type="checkbox" id="company35" value="Rice Drilling" unchecked> <label for="company35">Rice Drilling</label><br>
+                                <input type="checkbox" id="company36" value="Shell" unchecked> <label for="company36">Shell</label><br>
+                                <input type="checkbox" id="company37" value="Statoil USA" unchecked> <label for="company37">Statoil USA</label><br>
+                                <input type="checkbox" id="company38" value="Sunoco" unchecked> <label for="company38">Sunoco</label><br>
+                                <input type="checkbox" id="company39" value="Sylvan Energy" unchecked> <label for="company39">Sylvan Energy</label><br>
+                                <input type="checkbox" id="company40" value="Turm Oil" unchecked> <label for="company40">Turm Oil</label><br>
+                                <input type="checkbox" id="company41" value="Wadwell Group" unchecked> <label for="company41">Wadwell Group</label><br>
+                                <input type="checkbox" id="company42" value="XTO Energy" unchecked> <label for="company42">XTO Energy</label><br>                                
                             </div>
                         </div>
                         <!-- Municipality filter -->
@@ -646,161 +649,161 @@
                             <div class="filter-content municipality-content">
                                 <button onclick="checkAll('municipality')">Check All</button>
                                 <button onclick="uncheckAll('municipality')">Uncheck All</button><br>
-                                <input type="checkbox" id="muni0" value="10th Ward -  McKEESPORT" checked> <label for="muni0">10th Ward -  McKEESPORT</label><br>
-                                <input type="checkbox" id="muni1" value="10th Ward - PITTSBURGH" checked> <label for="muni1">10th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni2" value="11th Ward - PITTSBURGH" checked> <label for="muni2">11th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni3" value="11th Ward  - McKEESPORT" checked> <label for="muni3">11th Ward  - McKEESPORT</label><br>
-                                <input type="checkbox" id="muni4" value="12th Ward - PITTSBURGH" checked> <label for="muni4">12th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni5" value="12th Ward  - McKEESPORT" checked> <label for="muni5">12th Ward  - McKEESPORT</label><br>
-                                <input type="checkbox" id="muni6" value="13th Ward - PITTSBURGH" checked> <label for="muni6">13th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni7" value="14th Ward - PITTSBURGH" checked> <label for="muni7">14th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni8" value="15th Ward - PITTSBURGH" checked> <label for="muni8">15th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni9" value="16th Ward - PITTSBURGH" checked> <label for="muni9">16th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni10" value="17th Ward - PITTSBURGH" checked> <label for="muni10">17th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni11" value="18th Ward - PITTSBURGH" checked> <label for="muni11">18th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni12" value="19th Ward - PITTSBURGH" checked> <label for="muni12">19th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni13" value="1st Ward - CLAIRTON" checked> <label for="muni13">1st Ward - CLAIRTON</label><br>
-                                <input type="checkbox" id="muni14" value="20th Ward - PITTSBURGH" checked> <label for="muni14">20th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni15" value="21st Ward - PITTSBURGH" checked> <label for="muni15">21st Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni16" value="22nd Ward - PITTSBURGH" checked> <label for="muni16">22nd Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni17" value="23rd Ward - PITTSBURGH" checked> <label for="muni17">23rd Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni18" value="24th Ward - PITTSBURGH" checked> <label for="muni18">24th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni19" value="25th Ward - PITTSBURGH" checked> <label for="muni19">25th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni20" value="27th Ward - PITTSBURGH" checked> <label for="muni20">27th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni21" value="28th Ward - PITTSBURGH" checked> <label for="muni21">28th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni22" value="29th Ward - PITTSBURGH" checked> <label for="muni22">29th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni23" value="2nd Ward - CLAIRTON" checked> <label for="muni23">2nd Ward - CLAIRTON</label><br>
-                                <input type="checkbox" id="muni24" value="2nd Ward - PITTSBURGH" checked> <label for="muni24">2nd Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni25" value="2nd Ward  - DUQUESNE" checked> <label for="muni25">2nd Ward  - DUQUESNE</label><br>
-                                <input type="checkbox" id="muni26" value="31st Ward - PITTSBURGH" checked> <label for="muni26">31st Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni27" value="32nd Ward - PITTSBURGH" checked> <label for="muni27">32nd Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni28" value="3rd Ward  - DUQUESNE" checked> <label for="muni28">3rd Ward  - DUQUESNE</label><br>
-                                <input type="checkbox" id="muni29" value="4th Ward - McKEESPORT " checked> <label for="muni29">4th Ward - McKEESPORT </label><br>
-                                <input type="checkbox" id="muni30" value="4th Ward - PITTSBURGH" checked> <label for="muni30">4th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni31" value="5th Ward - PITTSBURGH" checked> <label for="muni31">5th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni32" value="6th Ward - PITTSBURGH" checked> <label for="muni32">6th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni33" value="6th Ward  - McKEESPORT" checked> <label for="muni33">6th Ward  - McKEESPORT</label><br>
-                                <input type="checkbox" id="muni34" value="7th Ward - PITTSBURGH" checked> <label for="muni34">7th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni35" value="7th Ward  - McKEESPORT" checked> <label for="muni35">7th Ward  - McKEESPORT</label><br>
-                                <input type="checkbox" id="muni36" value="8th Ward - PITTSBURGH" checked> <label for="muni36">8th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni37" value="8th Ward  - McKEESPORT" checked> <label for="muni37">8th Ward  - McKEESPORT</label><br>
-                                <input type="checkbox" id="muni38" value="9th Ward - PITTSBURGH" checked> <label for="muni38">9th Ward - PITTSBURGH</label><br>
-                                <input type="checkbox" id="muni39" value="9th Ward  -  McKEESPORT" checked> <label for="muni39">9th Ward  -  McKEESPORT</label><br>
-                                <input type="checkbox" id="muni40" value="Aleppo  " checked> <label for="muni40">Aleppo  </label><br>
-                                <input type="checkbox" id="muni41" value="Aspinwall  " checked> <label for="muni41">Aspinwall  </label><br>
-                                <input type="checkbox" id="muni42" value="Avalon  " checked> <label for="muni42">Avalon  </label><br>
-                                <input type="checkbox" id="muni43" value="Baldwin Boro  " checked> <label for="muni43">Baldwin Boro  </label><br>
-                                <input type="checkbox" id="muni44" value="Bell Acres  " checked> <label for="muni44">Bell Acres  </label><br>
-                                <input type="checkbox" id="muni45" value="Bellevue  " checked> <label for="muni45">Bellevue  </label><br>
-                                <input type="checkbox" id="muni46" value="Ben Avon  " checked> <label for="muni46">Ben Avon  </label><br>
-                                <input type="checkbox" id="muni47" value="Bethel Park  " checked> <label for="muni47">Bethel Park  </label><br>
-                                <input type="checkbox" id="muni48" value="Blawnox  " checked> <label for="muni48">Blawnox  </label><br>
-                                <input type="checkbox" id="muni49" value="Brackenridge  " checked> <label for="muni49">Brackenridge  </label><br>
-                                <input type="checkbox" id="muni50" value="Braddock  " checked> <label for="muni50">Braddock  </label><br>
-                                <input type="checkbox" id="muni51" value="Braddock Hills  " checked> <label for="muni51">Braddock Hills  </label><br>
-                                <input type="checkbox" id="muni52" value="Brentwood" checked> <label for="muni52">Brentwood</label><br>
-                                <input type="checkbox" id="muni53" value="Carnegie  " checked> <label for="muni53">Carnegie  </label><br>
-                                <input type="checkbox" id="muni54" value="Castle Shannon  " checked> <label for="muni54">Castle Shannon  </label><br>
-                                <input type="checkbox" id="muni55" value="Cheswick  " checked> <label for="muni55">Cheswick  </label><br>
-                                <input type="checkbox" id="muni56" value="Churchill  " checked> <label for="muni56">Churchill  </label><br>
-                                <input type="checkbox" id="muni57" value="Collier  " checked> <label for="muni57">Collier  </label><br>
-                                <input type="checkbox" id="muni58" value="Coraopolis  " checked> <label for="muni58">Coraopolis  </label><br>
-                                <input type="checkbox" id="muni59" value="Crafton  " checked> <label for="muni59">Crafton  </label><br>
-                                <input type="checkbox" id="muni60" value="Crescent  " checked> <label for="muni60">Crescent  </label><br>
-                                <input type="checkbox" id="muni61" value="Dravosburg  " checked> <label for="muni61">Dravosburg  </label><br>
-                                <input type="checkbox" id="muni62" value="East Deer  " checked> <label for="muni62">East Deer  </label><br>
-                                <input type="checkbox" id="muni63" value="East McKeesport  " checked> <label for="muni63">East McKeesport  </label><br>
-                                <input type="checkbox" id="muni64" value="East Pittsburgh  " checked> <label for="muni64">East Pittsburgh  </label><br>
-                                <input type="checkbox" id="muni65" value="Edgewood  " checked> <label for="muni65">Edgewood  </label><br>
-                                <input type="checkbox" id="muni66" value="Edgeworth  " checked> <label for="muni66">Edgeworth  </label><br>
-                                <input type="checkbox" id="muni67" value="Elizabeth Boro  " checked> <label for="muni67">Elizabeth Boro  </label><br>
-                                <input type="checkbox" id="muni68" value="Elizabeth Twp  " checked> <label for="muni68">Elizabeth Twp  </label><br>
-                                <input type="checkbox" id="muni69" value="Emsworth  " checked> <label for="muni69">Emsworth  </label><br>
-                                <input type="checkbox" id="muni70" value="Etna  " checked> <label for="muni70">Etna  </label><br>
-                                <input type="checkbox" id="muni71" value="Fawn  " checked> <label for="muni71">Fawn  </label><br>
-                                <input type="checkbox" id="muni72" value="Findlay  " checked> <label for="muni72">Findlay  </label><br>
-                                <input type="checkbox" id="muni73" value="Forest Hills  " checked> <label for="muni73">Forest Hills  </label><br>
-                                <input type="checkbox" id="muni74" value="Forward  " checked> <label for="muni74">Forward  </label><br>
-                                <input type="checkbox" id="muni75" value="Fox Chapel  " checked> <label for="muni75">Fox Chapel  </label><br>
-                                <input type="checkbox" id="muni76" value="Franklin Park " checked> <label for="muni76">Franklin Park </label><br>
-                                <input type="checkbox" id="muni77" value="Frazer  " checked> <label for="muni77">Frazer  </label><br>
-                                <input type="checkbox" id="muni78" value="Glassport  " checked> <label for="muni78">Glassport  </label><br>
-                                <input type="checkbox" id="muni79" value="Glen Osborne" checked> <label for="muni79">Glen Osborne</label><br>
-                                <input type="checkbox" id="muni80" value="Glenfield  " checked> <label for="muni80">Glenfield  </label><br>
-                                <input type="checkbox" id="muni81" value="Greentree  " checked> <label for="muni81">Greentree  </label><br>
-                                <input type="checkbox" id="muni82" value="Hampton  " checked> <label for="muni82">Hampton  </label><br>
-                                <input type="checkbox" id="muni83" value="Harmar  " checked> <label for="muni83">Harmar  </label><br>
-                                <input type="checkbox" id="muni84" value="Harrison  " checked> <label for="muni84">Harrison  </label><br>
-                                <input type="checkbox" id="muni85" value="Haysville  " checked> <label for="muni85">Haysville  </label><br>
-                                <input type="checkbox" id="muni86" value="Heidelberg  " checked> <label for="muni86">Heidelberg  </label><br>
-                                <input type="checkbox" id="muni87" value="Homestead  " checked> <label for="muni87">Homestead  </label><br>
-                                <input type="checkbox" id="muni88" value="Indiana  " checked> <label for="muni88">Indiana  </label><br>
-                                <input type="checkbox" id="muni89" value="Ingram  " checked> <label for="muni89">Ingram  </label><br>
-                                <input type="checkbox" id="muni90" value="Jefferson Hills" checked> <label for="muni90">Jefferson Hills</label><br>
-                                <input type="checkbox" id="muni91" value="Kennedy  " checked> <label for="muni91">Kennedy  </label><br>
-                                <input type="checkbox" id="muni92" value="Kilbuck  " checked> <label for="muni92">Kilbuck  </label><br>
-                                <input type="checkbox" id="muni93" value="Leetsdale  " checked> <label for="muni93">Leetsdale  </label><br>
-                                <input type="checkbox" id="muni94" value="Liberty  " checked> <label for="muni94">Liberty  </label><br>
-                                <input type="checkbox" id="muni95" value="Lincoln  " checked> <label for="muni95">Lincoln  </label><br>
-                                <input type="checkbox" id="muni96" value="Marshall  " checked> <label for="muni96">Marshall  </label><br>
-                                <input type="checkbox" id="muni97" value="McCandless  " checked> <label for="muni97">McCandless  </label><br>
-                                <input type="checkbox" id="muni98" value="McDonald  " checked> <label for="muni98">McDonald  </label><br>
-                                <input type="checkbox" id="muni99" value="McKees Rocks  " checked> <label for="muni99">McKees Rocks  </label><br>
-                                <input type="checkbox" id="muni100" value="Millvale  " checked> <label for="muni100">Millvale  </label><br>
-                                <input type="checkbox" id="muni101" value="Monroeville  " checked> <label for="muni101">Monroeville  </label><br>
-                                <input type="checkbox" id="muni102" value="Moon  " checked> <label for="muni102">Moon  </label><br>
-                                <input type="checkbox" id="muni103" value="Mt. Oliver  " checked> <label for="muni103">Mt. Oliver  </label><br>
-                                <input type="checkbox" id="muni104" value="Mt.Lebanon  " checked> <label for="muni104">Mt.Lebanon  </label><br>
-                                <input type="checkbox" id="muni105" value="Munhall  " checked> <label for="muni105">Munhall  </label><br>
-                                <input type="checkbox" id="muni106" value="Neville  " checked> <label for="muni106">Neville  </label><br>
-                                <input type="checkbox" id="muni107" value="North Braddock  " checked> <label for="muni107">North Braddock  </label><br>
-                                <input type="checkbox" id="muni108" value="North Fayette  " checked> <label for="muni108">North Fayette  </label><br>
-                                <input type="checkbox" id="muni109" value="North Versailles  " checked> <label for="muni109">North Versailles  </label><br>
-                                <input type="checkbox" id="muni110" value="O''Hara  " checked> <label for="muni110">O''Hara  </label><br>
-                                <input type="checkbox" id="muni111" value="Oakdale  " checked> <label for="muni111">Oakdale  </label><br>
-                                <input type="checkbox" id="muni112" value="Oakmont  " checked> <label for="muni112">Oakmont  </label><br>
-                                <input type="checkbox" id="muni113" value="Ohio  " checked> <label for="muni113">Ohio  </label><br>
-                                <input type="checkbox" id="muni114" value="Penn Hills  " checked> <label for="muni114">Penn Hills  </label><br>
-                                <input type="checkbox" id="muni115" value="Pine  " checked> <label for="muni115">Pine  </label><br>
-                                <input type="checkbox" id="muni116" value="Pitcairn  " checked> <label for="muni116">Pitcairn  </label><br>
-                                <input type="checkbox" id="muni117" value="Pleasant Hills  " checked> <label for="muni117">Pleasant Hills  </label><br>
-                                <input type="checkbox" id="muni118" value="Plum  " checked> <label for="muni118">Plum  </label><br>
-                                <input type="checkbox" id="muni119" value="Port Vue  " checked> <label for="muni119">Port Vue  </label><br>
-                                <input type="checkbox" id="muni120" value="Rankin  " checked> <label for="muni120">Rankin  </label><br>
-                                <input type="checkbox" id="muni121" value="Reserve  " checked> <label for="muni121">Reserve  </label><br>
-                                <input type="checkbox" id="muni122" value="Richland  " checked> <label for="muni122">Richland  </label><br>
-                                <input type="checkbox" id="muni123" value="Robinson  " checked> <label for="muni123">Robinson  </label><br>
-                                <input type="checkbox" id="muni124" value="Ross  " checked> <label for="muni124">Ross  </label><br>
-                                <input type="checkbox" id="muni125" value="Rosslyn Farms  " checked> <label for="muni125">Rosslyn Farms  </label><br>
-                                <input type="checkbox" id="muni126" value="Scott  " checked> <label for="muni126">Scott  </label><br>
-                                <input type="checkbox" id="muni127" value="Sewickley  " checked> <label for="muni127">Sewickley  </label><br>
-                                <input type="checkbox" id="muni128" value="Sewickley Heights  " checked> <label for="muni128">Sewickley Heights  </label><br>
-                                <input type="checkbox" id="muni129" value="Shaler  " checked> <label for="muni129">Shaler  </label><br>
-                                <input type="checkbox" id="muni130" value="Sharpsburg  " checked> <label for="muni130">Sharpsburg  </label><br>
-                                <input type="checkbox" id="muni131" value="South Fayette  " checked> <label for="muni131">South Fayette  </label><br>
-                                <input type="checkbox" id="muni132" value="South Park  " checked> <label for="muni132">South Park  </label><br>
-                                <input type="checkbox" id="muni133" value="South Versailles  " checked> <label for="muni133">South Versailles  </label><br>
-                                <input type="checkbox" id="muni134" value="Springdale Boro  " checked> <label for="muni134">Springdale Boro  </label><br>
-                                <input type="checkbox" id="muni135" value="Springdale Twp  " checked> <label for="muni135">Springdale Twp  </label><br>
-                                <input type="checkbox" id="muni136" value="Stowe  " checked> <label for="muni136">Stowe  </label><br>
-                                <input type="checkbox" id="muni137" value="Swissvale  " checked> <label for="muni137">Swissvale  </label><br>
-                                <input type="checkbox" id="muni138" value="Tarentum  " checked> <label for="muni138">Tarentum  </label><br>
-                                <input type="checkbox" id="muni139" value="Thornburg  " checked> <label for="muni139">Thornburg  </label><br>
-                                <input type="checkbox" id="muni140" value="Trafford  " checked> <label for="muni140">Trafford  </label><br>
-                                <input type="checkbox" id="muni141" value="Turtle Creek  " checked> <label for="muni141">Turtle Creek  </label><br>
-                                <input type="checkbox" id="muni142" value="Upper St. Clair  " checked> <label for="muni142">Upper St. Clair  </label><br>
-                                <input type="checkbox" id="muni143" value="Versailles  " checked> <label for="muni143">Versailles  </label><br>
-                                <input type="checkbox" id="muni144" value="Wall  " checked> <label for="muni144">Wall  </label><br>
-                                <input type="checkbox" id="muni145" value="West Deer  " checked> <label for="muni145">West Deer  </label><br>
-                                <input type="checkbox" id="muni146" value="West Elizabeth  " checked> <label for="muni146">West Elizabeth  </label><br>
-                                <input type="checkbox" id="muni147" value="West Homestead  " checked> <label for="muni147">West Homestead  </label><br>
-                                <input type="checkbox" id="muni148" value="West Mifflin  " checked> <label for="muni148">West Mifflin  </label><br>
-                                <input type="checkbox" id="muni149" value="Whitaker  " checked> <label for="muni149">Whitaker  </label><br>
-                                <input type="checkbox" id="muni150" value="White Oak  " checked> <label for="muni150">White Oak  </label><br>
-                                <input type="checkbox" id="muni151" value="Whitehall  " checked> <label for="muni151">Whitehall  </label><br>
-                                <input type="checkbox" id="muni152" value="Wilkins " checked> <label for="muni152">Wilkins </label><br>
-                                <input type="checkbox" id="muni153" value="Wilkinsburg  " checked> <label for="muni153">Wilkinsburg  </label><br>
-                                <input type="checkbox" id="muni154" value="Wilmerding  " checked> <label for="muni154">Wilmerding  </label><br>
+                                <input type="checkbox" id="muni0" value="10th Ward -  McKEESPORT" unchecked> <label for="muni0">10th Ward -  McKEESPORT</label><br>
+                                <input type="checkbox" id="muni1" value="10th Ward - PITTSBURGH" unchecked> <label for="muni1">10th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni2" value="11th Ward - PITTSBURGH" unchecked> <label for="muni2">11th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni3" value="11th Ward  - McKEESPORT" unchecked> <label for="muni3">11th Ward  - McKEESPORT</label><br>
+                                <input type="checkbox" id="muni4" value="12th Ward - PITTSBURGH" unchecked> <label for="muni4">12th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni5" value="12th Ward  - McKEESPORT" unchecked> <label for="muni5">12th Ward  - McKEESPORT</label><br>
+                                <input type="checkbox" id="muni6" value="13th Ward - PITTSBURGH" unchecked> <label for="muni6">13th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni7" value="14th Ward - PITTSBURGH" unchecked> <label for="muni7">14th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni8" value="15th Ward - PITTSBURGH" unchecked> <label for="muni8">15th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni9" value="16th Ward - PITTSBURGH" unchecked> <label for="muni9">16th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni10" value="17th Ward - PITTSBURGH" unchecked> <label for="muni10">17th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni11" value="18th Ward - PITTSBURGH" unchecked> <label for="muni11">18th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni12" value="19th Ward - PITTSBURGH" unchecked> <label for="muni12">19th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni13" value="1st Ward - CLAIRTON" unchecked> <label for="muni13">1st Ward - CLAIRTON</label><br>
+                                <input type="checkbox" id="muni14" value="20th Ward - PITTSBURGH" unchecked> <label for="muni14">20th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni15" value="21st Ward - PITTSBURGH" unchecked> <label for="muni15">21st Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni16" value="22nd Ward - PITTSBURGH" unchecked> <label for="muni16">22nd Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni17" value="23rd Ward - PITTSBURGH" unchecked> <label for="muni17">23rd Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni18" value="24th Ward - PITTSBURGH" unchecked> <label for="muni18">24th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni19" value="25th Ward - PITTSBURGH" unchecked> <label for="muni19">25th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni20" value="27th Ward - PITTSBURGH" unchecked> <label for="muni20">27th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni21" value="28th Ward - PITTSBURGH" unchecked> <label for="muni21">28th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni22" value="29th Ward - PITTSBURGH" unchecked> <label for="muni22">29th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni23" value="2nd Ward - CLAIRTON" unchecked> <label for="muni23">2nd Ward - CLAIRTON</label><br>
+                                <input type="checkbox" id="muni24" value="2nd Ward - PITTSBURGH" unchecked> <label for="muni24">2nd Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni25" value="2nd Ward  - DUQUESNE" unchecked> <label for="muni25">2nd Ward  - DUQUESNE</label><br>
+                                <input type="checkbox" id="muni26" value="31st Ward - PITTSBURGH" unchecked> <label for="muni26">31st Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni27" value="32nd Ward - PITTSBURGH" unchecked> <label for="muni27">32nd Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni28" value="3rd Ward  - DUQUESNE" unchecked> <label for="muni28">3rd Ward  - DUQUESNE</label><br>
+                                <input type="checkbox" id="muni29" value="4th Ward - McKEESPORT " unchecked> <label for="muni29">4th Ward - McKEESPORT </label><br>
+                                <input type="checkbox" id="muni30" value="4th Ward - PITTSBURGH" unchecked> <label for="muni30">4th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni31" value="5th Ward - PITTSBURGH" unchecked> <label for="muni31">5th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni32" value="6th Ward - PITTSBURGH" unchecked> <label for="muni32">6th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni33" value="6th Ward  - McKEESPORT" unchecked> <label for="muni33">6th Ward  - McKEESPORT</label><br>
+                                <input type="checkbox" id="muni34" value="7th Ward - PITTSBURGH" unchecked> <label for="muni34">7th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni35" value="7th Ward  - McKEESPORT" unchecked> <label for="muni35">7th Ward  - McKEESPORT</label><br>
+                                <input type="checkbox" id="muni36" value="8th Ward - PITTSBURGH" unchecked> <label for="muni36">8th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni37" value="8th Ward  - McKEESPORT" unchecked> <label for="muni37">8th Ward  - McKEESPORT</label><br>
+                                <input type="checkbox" id="muni38" value="9th Ward - PITTSBURGH" unchecked> <label for="muni38">9th Ward - PITTSBURGH</label><br>
+                                <input type="checkbox" id="muni39" value="9th Ward  -  McKEESPORT" unchecked> <label for="muni39">9th Ward  -  McKEESPORT</label><br>
+                                <input type="checkbox" id="muni40" value="Aleppo  " unchecked> <label for="muni40">Aleppo  </label><br>
+                                <input type="checkbox" id="muni41" value="Aspinwall  " unchecked> <label for="muni41">Aspinwall  </label><br>
+                                <input type="checkbox" id="muni42" value="Avalon  " unchecked> <label for="muni42">Avalon  </label><br>
+                                <input type="checkbox" id="muni43" value="Baldwin Boro  " unchecked> <label for="muni43">Baldwin Boro  </label><br>
+                                <input type="checkbox" id="muni44" value="Bell Acres  " unchecked> <label for="muni44">Bell Acres  </label><br>
+                                <input type="checkbox" id="muni45" value="Bellevue  " unchecked> <label for="muni45">Bellevue  </label><br>
+                                <input type="checkbox" id="muni46" value="Ben Avon  " unchecked> <label for="muni46">Ben Avon  </label><br>
+                                <input type="checkbox" id="muni47" value="Bethel Park  " unchecked> <label for="muni47">Bethel Park  </label><br>
+                                <input type="checkbox" id="muni48" value="Blawnox  " unchecked> <label for="muni48">Blawnox  </label><br>
+                                <input type="checkbox" id="muni49" value="Brackenridge  " unchecked> <label for="muni49">Brackenridge  </label><br>
+                                <input type="checkbox" id="muni50" value="Braddock  " unchecked> <label for="muni50">Braddock  </label><br>
+                                <input type="checkbox" id="muni51" value="Braddock Hills  " unchecked> <label for="muni51">Braddock Hills  </label><br>
+                                <input type="checkbox" id="muni52" value="Brentwood" unchecked> <label for="muni52">Brentwood</label><br>
+                                <input type="checkbox" id="muni53" value="Carnegie  " unchecked> <label for="muni53">Carnegie  </label><br>
+                                <input type="checkbox" id="muni54" value="Castle Shannon  " unchecked> <label for="muni54">Castle Shannon  </label><br>
+                                <input type="checkbox" id="muni55" value="Cheswick  " unchecked> <label for="muni55">Cheswick  </label><br>
+                                <input type="checkbox" id="muni56" value="Churchill  " unchecked> <label for="muni56">Churchill  </label><br>
+                                <input type="checkbox" id="muni57" value="Collier  " unchecked> <label for="muni57">Collier  </label><br>
+                                <input type="checkbox" id="muni58" value="Coraopolis  " unchecked> <label for="muni58">Coraopolis  </label><br>
+                                <input type="checkbox" id="muni59" value="Crafton  " unchecked> <label for="muni59">Crafton  </label><br>
+                                <input type="checkbox" id="muni60" value="Crescent  " unchecked> <label for="muni60">Crescent  </label><br>
+                                <input type="checkbox" id="muni61" value="Dravosburg  " unchecked> <label for="muni61">Dravosburg  </label><br>
+                                <input type="checkbox" id="muni62" value="East Deer  " unchecked> <label for="muni62">East Deer  </label><br>
+                                <input type="checkbox" id="muni63" value="East McKeesport  " unchecked> <label for="muni63">East McKeesport  </label><br>
+                                <input type="checkbox" id="muni64" value="East Pittsburgh  " unchecked> <label for="muni64">East Pittsburgh  </label><br>
+                                <input type="checkbox" id="muni65" value="Edgewood  " unchecked> <label for="muni65">Edgewood  </label><br>
+                                <input type="checkbox" id="muni66" value="Edgeworth  " unchecked> <label for="muni66">Edgeworth  </label><br>
+                                <input type="checkbox" id="muni67" value="Elizabeth Boro  " unchecked> <label for="muni67">Elizabeth Boro  </label><br>
+                                <input type="checkbox" id="muni68" value="Elizabeth Twp  " unchecked> <label for="muni68">Elizabeth Twp  </label><br>
+                                <input type="checkbox" id="muni69" value="Emsworth  " unchecked> <label for="muni69">Emsworth  </label><br>
+                                <input type="checkbox" id="muni70" value="Etna  " unchecked> <label for="muni70">Etna  </label><br>
+                                <input type="checkbox" id="muni71" value="Fawn  " unchecked> <label for="muni71">Fawn  </label><br>
+                                <input type="checkbox" id="muni72" value="Findlay  " unchecked> <label for="muni72">Findlay  </label><br>
+                                <input type="checkbox" id="muni73" value="Forest Hills  " unchecked> <label for="muni73">Forest Hills  </label><br>
+                                <input type="checkbox" id="muni74" value="Forward  " unchecked> <label for="muni74">Forward  </label><br>
+                                <input type="checkbox" id="muni75" value="Fox Chapel  " unchecked> <label for="muni75">Fox Chapel  </label><br>
+                                <input type="checkbox" id="muni76" value="Franklin Park " unchecked> <label for="muni76">Franklin Park </label><br>
+                                <input type="checkbox" id="muni77" value="Frazer  " unchecked> <label for="muni77">Frazer  </label><br>
+                                <input type="checkbox" id="muni78" value="Glassport  " unchecked> <label for="muni78">Glassport  </label><br>
+                                <input type="checkbox" id="muni79" value="Glen Osborne" unchecked> <label for="muni79">Glen Osborne</label><br>
+                                <input type="checkbox" id="muni80" value="Glenfield  " unchecked> <label for="muni80">Glenfield  </label><br>
+                                <input type="checkbox" id="muni81" value="Greentree  " unchecked> <label for="muni81">Greentree  </label><br>
+                                <input type="checkbox" id="muni82" value="Hampton  " unchecked> <label for="muni82">Hampton  </label><br>
+                                <input type="checkbox" id="muni83" value="Harmar  " unchecked> <label for="muni83">Harmar  </label><br>
+                                <input type="checkbox" id="muni84" value="Harrison  " unchecked> <label for="muni84">Harrison  </label><br>
+                                <input type="checkbox" id="muni85" value="Haysville  " unchecked> <label for="muni85">Haysville  </label><br>
+                                <input type="checkbox" id="muni86" value="Heidelberg  " unchecked> <label for="muni86">Heidelberg  </label><br>
+                                <input type="checkbox" id="muni87" value="Homestead  " unchecked> <label for="muni87">Homestead  </label><br>
+                                <input type="checkbox" id="muni88" value="Indiana  " unchecked> <label for="muni88">Indiana  </label><br>
+                                <input type="checkbox" id="muni89" value="Ingram  " unchecked> <label for="muni89">Ingram  </label><br>
+                                <input type="checkbox" id="muni90" value="Jefferson Hills" unchecked> <label for="muni90">Jefferson Hills</label><br>
+                                <input type="checkbox" id="muni91" value="Kennedy  " unchecked> <label for="muni91">Kennedy  </label><br>
+                                <input type="checkbox" id="muni92" value="Kilbuck  " unchecked> <label for="muni92">Kilbuck  </label><br>
+                                <input type="checkbox" id="muni93" value="Leetsdale  " unchecked> <label for="muni93">Leetsdale  </label><br>
+                                <input type="checkbox" id="muni94" value="Liberty  " unchecked> <label for="muni94">Liberty  </label><br>
+                                <input type="checkbox" id="muni95" value="Lincoln  " unchecked> <label for="muni95">Lincoln  </label><br>
+                                <input type="checkbox" id="muni96" value="Marshall  " unchecked> <label for="muni96">Marshall  </label><br>
+                                <input type="checkbox" id="muni97" value="McCandless  " unchecked> <label for="muni97">McCandless  </label><br>
+                                <input type="checkbox" id="muni98" value="McDonald  " unchecked> <label for="muni98">McDonald  </label><br>
+                                <input type="checkbox" id="muni99" value="McKees Rocks  " unchecked> <label for="muni99">McKees Rocks  </label><br>
+                                <input type="checkbox" id="muni100" value="Millvale  " unchecked> <label for="muni100">Millvale  </label><br>
+                                <input type="checkbox" id="muni101" value="Monroeville  " unchecked> <label for="muni101">Monroeville  </label><br>
+                                <input type="checkbox" id="muni102" value="Moon  " unchecked> <label for="muni102">Moon  </label><br>
+                                <input type="checkbox" id="muni103" value="Mt. Oliver  " unchecked> <label for="muni103">Mt. Oliver  </label><br>
+                                <input type="checkbox" id="muni104" value="Mt.Lebanon  " unchecked> <label for="muni104">Mt.Lebanon  </label><br>
+                                <input type="checkbox" id="muni105" value="Munhall  " unchecked> <label for="muni105">Munhall  </label><br>
+                                <input type="checkbox" id="muni106" value="Neville  " unchecked> <label for="muni106">Neville  </label><br>
+                                <input type="checkbox" id="muni107" value="North Braddock  " unchecked> <label for="muni107">North Braddock  </label><br>
+                                <input type="checkbox" id="muni108" value="North Fayette  " unchecked> <label for="muni108">North Fayette  </label><br>
+                                <input type="checkbox" id="muni109" value="North Versailles  " unchecked> <label for="muni109">North Versailles  </label><br>
+                                <input type="checkbox" id="muni110" value="O''Hara  " unchecked> <label for="muni110">O''Hara  </label><br>
+                                <input type="checkbox" id="muni111" value="Oakdale  " unchecked> <label for="muni111">Oakdale  </label><br>
+                                <input type="checkbox" id="muni112" value="Oakmont  " unchecked> <label for="muni112">Oakmont  </label><br>
+                                <input type="checkbox" id="muni113" value="Ohio  " unchecked> <label for="muni113">Ohio  </label><br>
+                                <input type="checkbox" id="muni114" value="Penn Hills  " unchecked> <label for="muni114">Penn Hills  </label><br>
+                                <input type="checkbox" id="muni115" value="Pine  " unchecked> <label for="muni115">Pine  </label><br>
+                                <input type="checkbox" id="muni116" value="Pitcairn  " unchecked> <label for="muni116">Pitcairn  </label><br>
+                                <input type="checkbox" id="muni117" value="Pleasant Hills  " unchecked> <label for="muni117">Pleasant Hills  </label><br>
+                                <input type="checkbox" id="muni118" value="Plum  " unchecked> <label for="muni118">Plum  </label><br>
+                                <input type="checkbox" id="muni119" value="Port Vue  " unchecked> <label for="muni119">Port Vue  </label><br>
+                                <input type="checkbox" id="muni120" value="Rankin  " unchecked> <label for="muni120">Rankin  </label><br>
+                                <input type="checkbox" id="muni121" value="Reserve  " unchecked> <label for="muni121">Reserve  </label><br>
+                                <input type="checkbox" id="muni122" value="Richland  " unchecked> <label for="muni122">Richland  </label><br>
+                                <input type="checkbox" id="muni123" value="Robinson  " unchecked> <label for="muni123">Robinson  </label><br>
+                                <input type="checkbox" id="muni124" value="Ross  " unchecked> <label for="muni124">Ross  </label><br>
+                                <input type="checkbox" id="muni125" value="Rosslyn Farms  " unchecked> <label for="muni125">Rosslyn Farms  </label><br>
+                                <input type="checkbox" id="muni126" value="Scott  " unchecked> <label for="muni126">Scott  </label><br>
+                                <input type="checkbox" id="muni127" value="Sewickley  " unchecked> <label for="muni127">Sewickley  </label><br>
+                                <input type="checkbox" id="muni128" value="Sewickley Heights  " unchecked> <label for="muni128">Sewickley Heights  </label><br>
+                                <input type="checkbox" id="muni129" value="Shaler  " unchecked> <label for="muni129">Shaler  </label><br>
+                                <input type="checkbox" id="muni130" value="Sharpsburg  " unchecked> <label for="muni130">Sharpsburg  </label><br>
+                                <input type="checkbox" id="muni131" value="South Fayette  " unchecked> <label for="muni131">South Fayette  </label><br>
+                                <input type="checkbox" id="muni132" value="South Park  " unchecked> <label for="muni132">South Park  </label><br>
+                                <input type="checkbox" id="muni133" value="South Versailles  " unchecked> <label for="muni133">South Versailles  </label><br>
+                                <input type="checkbox" id="muni134" value="Springdale Boro  " unchecked> <label for="muni134">Springdale Boro  </label><br>
+                                <input type="checkbox" id="muni135" value="Springdale Twp  " unchecked> <label for="muni135">Springdale Twp  </label><br>
+                                <input type="checkbox" id="muni136" value="Stowe  " unchecked> <label for="muni136">Stowe  </label><br>
+                                <input type="checkbox" id="muni137" value="Swissvale  " unchecked> <label for="muni137">Swissvale  </label><br>
+                                <input type="checkbox" id="muni138" value="Tarentum  " unchecked> <label for="muni138">Tarentum  </label><br>
+                                <input type="checkbox" id="muni139" value="Thornburg  " unchecked> <label for="muni139">Thornburg  </label><br>
+                                <input type="checkbox" id="muni140" value="Trafford  " unchecked> <label for="muni140">Trafford  </label><br>
+                                <input type="checkbox" id="muni141" value="Turtle Creek  " unchecked> <label for="muni141">Turtle Creek  </label><br>
+                                <input type="checkbox" id="muni142" value="Upper St. Clair  " unchecked> <label for="muni142">Upper St. Clair  </label><br>
+                                <input type="checkbox" id="muni143" value="Versailles  " unchecked> <label for="muni143">Versailles  </label><br>
+                                <input type="checkbox" id="muni144" value="Wall  " unchecked> <label for="muni144">Wall  </label><br>
+                                <input type="checkbox" id="muni145" value="West Deer  " unchecked> <label for="muni145">West Deer  </label><br>
+                                <input type="checkbox" id="muni146" value="West Elizabeth  " unchecked> <label for="muni146">West Elizabeth  </label><br>
+                                <input type="checkbox" id="muni147" value="West Homestead  " unchecked> <label for="muni147">West Homestead  </label><br>
+                                <input type="checkbox" id="muni148" value="West Mifflin  " unchecked> <label for="muni148">West Mifflin  </label><br>
+                                <input type="checkbox" id="muni149" value="Whitaker  " unchecked> <label for="muni149">Whitaker  </label><br>
+                                <input type="checkbox" id="muni150" value="White Oak  " unchecked> <label for="muni150">White Oak  </label><br>
+                                <input type="checkbox" id="muni151" value="Whitehall  " unchecked> <label for="muni151">Whitehall  </label><br>
+                                <input type="checkbox" id="muni152" value="Wilkins " unchecked> <label for="muni152">Wilkins </label><br>
+                                <input type="checkbox" id="muni153" value="Wilkinsburg  " unchecked> <label for="muni153">Wilkinsburg  </label><br>
+                                <input type="checkbox" id="muni154" value="Wilmerding  " unchecked> <label for="muni154">Wilmerding  </label><br>
 
                             </div>
                         </div>
@@ -810,52 +813,52 @@
                             <div class="filter-content school-district-content">
                                 <button onclick="checkAll('school-district')">Check All</button>
                                 <button onclick="uncheckAll('school-district')">Uncheck All</button><br>
-                                <input type="checkbox" id="school-district0" value="Allegheny Valley" checked> <label for="school-district0">Allegheny Valley</label><br>
-                                <input type="checkbox" id="school-district1" value="Avonworth" checked> <label for="school-district1">Avonworth</label><br>
-                                <input type="checkbox" id="school-district2" value="Baldwin Whitehall" checked> <label for="school-district2">Baldwin Whitehall</label><br>
-                                <input type="checkbox" id="school-district3" value="Bethel Park" checked> <label for="school-district3">Bethel Park</label><br>
-                                <input type="checkbox" id="school-district4" value="Brentwood Boro" checked> <label for="school-district4">Brentwood Boro</label><br>
-                                <input type="checkbox" id="school-district5" value="Carlynton" checked> <label for="school-district5">Carlynton</label><br>
-                                <input type="checkbox" id="school-district6" value="Chartiers Valley" checked> <label for="school-district6">Chartiers Valley</label><br>
-                                <input type="checkbox" id="school-district7" value="Clairton City" checked> <label for="school-district7">Clairton City</label><br>
-                                <input type="checkbox" id="school-district8" value="Cornell" checked> <label for="school-district8">Cornell</label><br>
-                                <input type="checkbox" id="school-district9" value="Deer Lakes" checked> <label for="school-district9">Deer Lakes</label><br>
-                                <input type="checkbox" id="school-district10" value="Duquesne City" checked> <label for="school-district10">Duquesne City</label><br>
-                                <input type="checkbox" id="school-district11" value="East Allegheny" checked> <label for="school-district11">East Allegheny</label><br>
-                                <input type="checkbox" id="school-district12" value="Elizabeth Forward" checked> <label for="school-district12">Elizabeth Forward</label><br>
-                                <input type="checkbox" id="school-district13" value="Fort Cherry" checked> <label for="school-district13">Fort Cherry</label><br>
-                                <input type="checkbox" id="school-district14" value="Fox Chapel Area" checked> <label for="school-district14">Fox Chapel Area</label><br>
-                                <input type="checkbox" id="school-district15" value="Gateway" checked> <label for="school-district15">Gateway</label><br>
-                                <input type="checkbox" id="school-district16" value="Hampton Township" checked> <label for="school-district16">Hampton Township</label><br>
-                                <input type="checkbox" id="school-district17" value="Highlands" checked> <label for="school-district17">Highlands</label><br>
-                                <input type="checkbox" id="school-district18" value="Keystone Oaks" checked> <label for="school-district18">Keystone Oaks</label><br>
-                                <input type="checkbox" id="school-district19" value="McKeesport Area" checked> <label for="school-district19">McKeesport Area</label><br>
-                                <input type="checkbox" id="school-district20" value="Montour" checked> <label for="school-district20">Montour</label><br>
-                                <input type="checkbox" id="school-district21" value="Moon Area" checked> <label for="school-district21">Moon Area</label><br>
-                                <input type="checkbox" id="school-district22" value="Mt Lebanon" checked> <label for="school-district22">Mt Lebanon</label><br>
-                                <input type="checkbox" id="school-district23" value="North Allegheny" checked> <label for="school-district23">North Allegheny</label><br>
-                                <input type="checkbox" id="school-district24" value="North Hills" checked> <label for="school-district24">North Hills</label><br>
-                                <input type="checkbox" id="school-district25" value="Northgate" checked> <label for="school-district25">Northgate</label><br>
-                                <input type="checkbox" id="school-district26" value="Norwin" checked> <label for="school-district26">Norwin</label><br>
-                                <input type="checkbox" id="school-district27" value="Penn-Trafford" checked> <label for="school-district27">Penn-Trafford</label><br>
-                                <input type="checkbox" id="school-district28" value="Penn Hills Twp" checked> <label for="school-district28">Penn Hills Twp</label><br>
-                                <input type="checkbox" id="school-district29" value="Pine-Richland" checked> <label for="school-district29">Pine-Richland</label><br>
-                                <input type="checkbox" id="school-district30" value="Pittsburgh" checked> <label for="school-district30">Pittsburgh</label><br>
-                                <input type="checkbox" id="school-district31" value="Plum Boro" checked> <label for="school-district31">Plum Boro</label><br>
-                                <input type="checkbox" id="school-district32" value="Quaker Valley" checked> <label for="school-district32">Quaker Valley</label><br>
-                                <input type="checkbox" id="school-district33" value="Riverview" checked> <label for="school-district33">Riverview</label><br>
-                                <input type="checkbox" id="school-district34" value="Shaler Area" checked> <label for="school-district34">Shaler Area</label><br>
-                                <input type="checkbox" id="school-district35" value="South Allegheny" checked> <label for="school-district35">South Allegheny</label><br>
-                                <input type="checkbox" id="school-district36" value="South Fayette Twp" checked> <label for="school-district36">South Fayette Twp</label><br>
-                                <input type="checkbox" id="school-district37" value="South Park" checked> <label for="school-district37">South Park</label><br>
-                                <input type="checkbox" id="school-district38" value="Steel Valley" checked> <label for="school-district38">Steel Valley</label><br>
-                                <input type="checkbox" id="school-district39" value="Sto-Rox" checked> <label for="school-district39">Sto-Rox</label><br>
-                                <input type="checkbox" id="school-district40" value="Upper St Clair" checked> <label for="school-district40">Upper St Clair</label><br>
-                                <input type="checkbox" id="school-district41" value="West Allegheny" checked> <label for="school-district41">West Allegheny</label><br>
-                                <input type="checkbox" id="school-district42" value="West Jefferson Hills" checked> <label for="school-district42">West Jefferson Hills</label><br>
-                                <input type="checkbox" id="school-district43" value="West Mifflin Area" checked> <label for="school-district43">West Mifflin Area</label><br>
-                                <input type="checkbox" id="school-district44" value="Wilkinsburg Boro" checked> <label for="school-district44">Wilkinsburg Boro</label><br>
-                                <input type="checkbox" id="school-district45" value="Woodland Hills" checked> <label for="school-district45">Woodland Hills</label><br>
+                                <input type="checkbox" id="school-district0" value="Allegheny Valley" unchecked> <label for="school-district0">Allegheny Valley</label><br>
+                                <input type="checkbox" id="school-district1" value="Avonworth" unchecked> <label for="school-district1">Avonworth</label><br>
+                                <input type="checkbox" id="school-district2" value="Baldwin Whitehall" unchecked> <label for="school-district2">Baldwin Whitehall</label><br>
+                                <input type="checkbox" id="school-district3" value="Bethel Park" unchecked> <label for="school-district3">Bethel Park</label><br>
+                                <input type="checkbox" id="school-district4" value="Brentwood Boro" unchecked> <label for="school-district4">Brentwood Boro</label><br>
+                                <input type="checkbox" id="school-district5" value="Carlynton" unchecked> <label for="school-district5">Carlynton</label><br>
+                                <input type="checkbox" id="school-district6" value="Chartiers Valley" unchecked> <label for="school-district6">Chartiers Valley</label><br>
+                                <input type="checkbox" id="school-district7" value="Clairton City" unchecked> <label for="school-district7">Clairton City</label><br>
+                                <input type="checkbox" id="school-district8" value="Cornell" unchecked> <label for="school-district8">Cornell</label><br>
+                                <input type="checkbox" id="school-district9" value="Deer Lakes" unchecked> <label for="school-district9">Deer Lakes</label><br>
+                                <input type="checkbox" id="school-district10" value="Duquesne City" unchecked> <label for="school-district10">Duquesne City</label><br>
+                                <input type="checkbox" id="school-district11" value="East Allegheny" unchecked> <label for="school-district11">East Allegheny</label><br>
+                                <input type="checkbox" id="school-district12" value="Elizabeth Forward" unchecked> <label for="school-district12">Elizabeth Forward</label><br>
+                                <input type="checkbox" id="school-district13" value="Fort Cherry" unchecked> <label for="school-district13">Fort Cherry</label><br>
+                                <input type="checkbox" id="school-district14" value="Fox Chapel Area" unchecked> <label for="school-district14">Fox Chapel Area</label><br>
+                                <input type="checkbox" id="school-district15" value="Gateway" unchecked> <label for="school-district15">Gateway</label><br>
+                                <input type="checkbox" id="school-district16" value="Hampton Township" unchecked> <label for="school-district16">Hampton Township</label><br>
+                                <input type="checkbox" id="school-district17" value="Highlands" unchecked> <label for="school-district17">Highlands</label><br>
+                                <input type="checkbox" id="school-district18" value="Keystone Oaks" unchecked> <label for="school-district18">Keystone Oaks</label><br>
+                                <input type="checkbox" id="school-district19" value="McKeesport Area" unchecked> <label for="school-district19">McKeesport Area</label><br>
+                                <input type="checkbox" id="school-district20" value="Montour" unchecked> <label for="school-district20">Montour</label><br>
+                                <input type="checkbox" id="school-district21" value="Moon Area" unchecked> <label for="school-district21">Moon Area</label><br>
+                                <input type="checkbox" id="school-district22" value="Mt Lebanon" unchecked> <label for="school-district22">Mt Lebanon</label><br>
+                                <input type="checkbox" id="school-district23" value="North Allegheny" unchecked> <label for="school-district23">North Allegheny</label><br>
+                                <input type="checkbox" id="school-district24" value="North Hills" unchecked> <label for="school-district24">North Hills</label><br>
+                                <input type="checkbox" id="school-district25" value="Northgate" unchecked> <label for="school-district25">Northgate</label><br>
+                                <input type="checkbox" id="school-district26" value="Norwin" unchecked> <label for="school-district26">Norwin</label><br>
+                                <input type="checkbox" id="school-district27" value="Penn-Trafford" unchecked> <label for="school-district27">Penn-Trafford</label><br>
+                                <input type="checkbox" id="school-district28" value="Penn Hills Twp" unchecked> <label for="school-district28">Penn Hills Twp</label><br>
+                                <input type="checkbox" id="school-district29" value="Pine-Richland" unchecked> <label for="school-district29">Pine-Richland</label><br>
+                                <input type="checkbox" id="school-district30" value="Pittsburgh" unchecked> <label for="school-district30">Pittsburgh</label><br>
+                                <input type="checkbox" id="school-district31" value="Plum Boro" unchecked> <label for="school-district31">Plum Boro</label><br>
+                                <input type="checkbox" id="school-district32" value="Quaker Valley" unchecked> <label for="school-district32">Quaker Valley</label><br>
+                                <input type="checkbox" id="school-district33" value="Riverview" unchecked> <label for="school-district33">Riverview</label><br>
+                                <input type="checkbox" id="school-district34" value="Shaler Area" unchecked> <label for="school-district34">Shaler Area</label><br>
+                                <input type="checkbox" id="school-district35" value="South Allegheny" unchecked> <label for="school-district35">South Allegheny</label><br>
+                                <input type="checkbox" id="school-district36" value="South Fayette Twp" unchecked> <label for="school-district36">South Fayette Twp</label><br>
+                                <input type="checkbox" id="school-district37" value="South Park" unchecked> <label for="school-district37">South Park</label><br>
+                                <input type="checkbox" id="school-district38" value="Steel Valley" unchecked> <label for="school-district38">Steel Valley</label><br>
+                                <input type="checkbox" id="school-district39" value="Sto-Rox" unchecked> <label for="school-district39">Sto-Rox</label><br>
+                                <input type="checkbox" id="school-district40" value="Upper St Clair" unchecked> <label for="school-district40">Upper St Clair</label><br>
+                                <input type="checkbox" id="school-district41" value="West Allegheny" unchecked> <label for="school-district41">West Allegheny</label><br>
+                                <input type="checkbox" id="school-district42" value="West Jefferson Hills" unchecked> <label for="school-district42">West Jefferson Hills</label><br>
+                                <input type="checkbox" id="school-district43" value="West Mifflin Area" unchecked> <label for="school-district43">West Mifflin Area</label><br>
+                                <input type="checkbox" id="school-district44" value="Wilkinsburg Boro" unchecked> <label for="school-district44">Wilkinsburg Boro</label><br>
+                                <input type="checkbox" id="school-district45" value="Woodland Hills" unchecked> <label for="school-district45">Woodland Hills</label><br>
 
                             </div>
                         </div>
@@ -865,13 +868,13 @@
                             <div class="filter-content zoning-content">
                                 <button onclick="checkAll('zoning')">Check All</button>
                                 <button onclick="uncheckAll('zoning')">Uncheck All</button><br>
-                                <input type='checkbox' id='zoning0' value='Agricultural' checked> <label for='zoning0'>Agricultural</label><br>
-                                <input type='checkbox' id='zoning1' value='Commercial' checked> <label for='zoning1'>Commercial</label><br>
-                                <input type='checkbox' id='zoning2' value='Government' checked> <label for='zoning2'>Government</label><br>
-                                <input type='checkbox' id='zoning3' value='Industrial' checked> <label for='zoning3'>Industrial</label><br>
-                                <input type='checkbox' id='zoning4' value='Other' checked> <label for='zoning4'>Other</label><br>
-                                <input type='checkbox' id='zoning5' value='Residential' checked> <label for='zoning5'>Residential</label><br>
-                                <input type='checkbox' id='zoning6' value='Utilities' checked> <label for='zoning6'>Utilities</label><br>
+                                <input type='checkbox' id='zoning0' value='Agricultural' unchecked> <label for='zoning0'>Agricultural</label><br>
+                                <input type='checkbox' id='zoning1' value='Commercial' unchecked> <label for='zoning1'>Commercial</label><br>
+                                <input type='checkbox' id='zoning2' value='Government' unchecked> <label for='zoning2'>Government</label><br>
+                                <input type='checkbox' id='zoning3' value='Industrial' unchecked> <label for='zoning3'>Industrial</label><br>
+                                <input type='checkbox' id='zoning4' value='Other' unchecked> <label for='zoning4'>Other</label><br>
+                                <input type='checkbox' id='zoning5' value='Residential' unchecked> <label for='zoning5'>Residential</label><br>
+                                <input type='checkbox' id='zoning6' value='Utilities' unchecked> <label for='zoning6'>Utilities</label><br>
 
                             </div>
                         </div>
@@ -1457,15 +1460,8 @@
                         debug: 0,
                         style: geojsonStyle
                     }; 
-                    {% comment %} map.removeLayer(vectorTileLayerF); {% endcomment %}
-                    {% comment %} vectorTileLayerF = L.geoJson.vt(data, options).addTo(map); {% endcomment %}
                     console.log('added the filtered polygons');
                     
-                    {% comment %} const geojsonStyle = {
-                        color: 'green',        // Stroke color
-                        fillColor: 'red',      // Fill color
-                        fillOpacity: 0.5       // Fill opacity
-                    }; {% endcomment %}
                     geojsonLayer = L.geoJSON(data, { 
                         style: geojsonStyle,
 
@@ -1479,11 +1475,14 @@
                     }).addTo(map);
                     console.log('made it to here')
                     document.body.style.cursor = "default";
+                    document.getElementById('applyButton').innerHTML = 'Apply Selection'
 
                 },
                 error: function(xhr, status, error) {
                     // Handle error
                     console.error(error);
+                    document.getElementById('applyButton').innerHTML = 'Apply Selection'
+
                 }
             });
 
@@ -1610,6 +1609,9 @@
 
         document.getElementById('applyButton').addEventListener('click', function() {
             document.body.style.cursor = "wait";
+            document.getElementById('applyButton').innerHTML = 'Please Wait...'
+                    // Function to uncheck all checkboxes in a filter group
+            document.getElementById('layer3').checked = false;
             map.removeLayer(geojsonLayer);
             map.removeLayer(vectorTileLayer);
             // Get the checkbox element
