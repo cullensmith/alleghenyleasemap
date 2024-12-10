@@ -994,6 +994,12 @@
                         <p id="market_value">----------</p>
                     </div>
                     <div class="r_filter">
+                        <h4>Current Ownership</h4>
+                    </div>
+                    <div class="r_filter_resp">
+                        <a id="ownership">----------</p>
+                    </div>
+                    <div class="r_filter">
                         <h4 onclick="toggleFilter('zoning1')">History</h4>
                         {% comment %} <div class="r_filter-content zoning1-content">
                             <div class="hdropdown">
@@ -1564,6 +1570,8 @@
                     document.getElementById("land_use").innerText = data.features[0]['usedesc']; 
                     document.getElementById("acreage").innerText = data.features[0]['calcacreag']; 
                     document.getElementById("market_value").innerText = '$'+data.features[0]['fairmarkettotal']; 
+                    changeToLink(data.features[0]['pin'])
+                    
                     displayData(data);
                     showSelection(data.features[0]['geometry']);
                     
@@ -1575,6 +1583,18 @@
                 }
             });
         }
+
+        function changeToLink(pid) {
+            // Get the div with the id 'ownership'
+            var div = document.getElementById('ownership');
+            var link = document.createElement('a');
+            link.href = 'https://www2.alleghenycounty.us/RealEstate/Sales.aspx?ParcelID='+pid+'&SearchType=&CurrRow=0&SearchName=&SearchStreet=&SearchNum=&SearchMuni=&SearchParcel=&pin='+pid;
+            link.textContent = 'See Current Ownership';
+            link.target = '_blank'; 
+            div.innerHTML = ''; // Clear the current content of the div
+            div.appendChild(link); // Add the link inside the div
+
+            }
 
         function displayData(data) {
             const container = document.getElementById('dataContainer');
@@ -1703,6 +1723,7 @@
             document.getElementById('acreage').innerText = '----------'
             document.getElementById('market_value').innerText = '----------'
             document.getElementById('dataContainer').innerHTML = '';
+            document.getElementById('ownership').innerHTML = '<p>----------</p>';
         });
         document.getElementById('applyButton').addEventListener('click', function() {
             document.body.style.cursor = "wait";
