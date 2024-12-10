@@ -30,7 +30,10 @@
     <script src="https://unpkg.com/leaflet-geojson-vt@1.1.0/src/leaflet-geojson-vt.js"></script>
     {% comment %} <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js"></script> {% endcomment %}
     {% comment %} <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/slicerWebWorker.js"></script> {% endcomment %}
-        <style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-pattern/dist/leaflet.pattern.css" />
+    <script src="https://unpkg.com/leaflet-pattern/dist/leaflet.pattern.js"></script>
+
+    <style>
         #map { /* Style the map container */
             height: 100%;
             width: 100%;
@@ -1490,6 +1493,36 @@
         }
 
 
+        var geojsonLayer_sel;
+
+        function showSelection(s) {
+            console.log('here is the selected geometry');
+            console.log(s)
+            
+            var geojsonStyle_s = {
+                fillColor:"#fffb01",
+                color: "#fffb01",
+                weight: 4,
+                opacity: 1,
+                fillOpacity: 0.25,
+              };
+            
+            var options_s = {
+                maxZoom: 20,
+                tolerance: 3,
+                debug: 0,
+                style: geojsonStyle_s
+            }; 
+            console.log('added the filtered polygons');
+            if (map.hasLayer(geojsonLayer_sel)) {
+                map.removeLayer(geojsonLayer_sel);
+            };
+            
+            geojsonLayer_sel = L.geoJSON(s, { 
+                style: geojsonStyle_s,
+
+            }).addTo(map);
+        };
 
         // Function to fetch GeoJSON data from a view
         function getMatches(p) {
@@ -1514,6 +1547,7 @@
                     document.getElementById("acreage").innerText = data.features[0]['calcacreag']; 
                     document.getElementById("market_value").innerText = '$'+data.features[0]['fairmarkettotal']; 
                     displayData(data);
+                    showSelection(data.features[0]['geometry']);
 
                 },
                 error: function(xhr, status, error) {
