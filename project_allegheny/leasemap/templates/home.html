@@ -175,6 +175,18 @@
             {% comment %} margin-top: -20px; {% endcomment %}
             {% comment %} padding: 20px; {% endcomment %}
         }
+
+        .clear {
+            display: none;
+            width: 100%;
+            color: white;
+            background-color: #31322e;
+            border: #31322e;
+        }
+        .clear:hover {
+            color: #A3CF5F;
+            cursor: pointer;
+        }
         #sidebar { /* Style the sidebar */
             width: 100%; /* Take 10% of the screen width */
             {% comment %} min-width: 200px; {% endcomment %}
@@ -269,7 +281,7 @@
         .r_filter h2 {
             cursor: default;
             text-align: center; 
-
+            margin-right: 20px;
             {% comment %} margin-bottom: 5px; {% endcomment %}
             {% comment %} color: #000; {% endcomment %}
             position: relative;
@@ -928,7 +940,10 @@
                 </div> {% endcomment %}
                 <div id="rightside">
                     <div class="r_filter">
-                        <h2>Parcel Details</h2>
+                        <h2>PARCEL DETAILS</h2>
+                    </div>
+                    <div>
+                        <button class="clear" id="clear_sel"><strong>CLEAR SELECTION</button>
                     </div>
                     <div class="r_filter">
                         <h4>Parcel ID</h4>
@@ -1526,6 +1541,7 @@
 
         // Function to fetch GeoJSON data from a view
         function getMatches(p) {
+
             $.ajax({
                 url: '/leasemap/get_matches', // Replace with your view URL
                 method: 'GET',
@@ -1535,7 +1551,7 @@
                 success: function(data) {
                     console.log('GeoJSON data received:');
                     {% comment %} console.log('GeoJSON data received:', data); {% endcomment %}
-
+                    document.getElementById('clear_sel').style.display = 'inline';
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     console.log('got the records');
                     document.getElementById("parcelid").innerText = data.features[0]['pin'];
@@ -1548,6 +1564,7 @@
                     document.getElementById("market_value").innerText = '$'+data.features[0]['fairmarkettotal']; 
                     displayData(data);
                     showSelection(data.features[0]['geometry']);
+                    
 
                 },
                 error: function(xhr, status, error) {
@@ -1555,7 +1572,6 @@
                     console.error(error);
                 }
             });
-
         }
 
         function displayData(data) {
@@ -1672,6 +1688,20 @@
             }
         });
 
+        document.getElementById('clear_sel').addEventListener('click', function() {
+            console.log('clicked to clear');
+            document.getElementById('clear_sel').style.display = 'none';
+            map.removeLayer(geojsonLayer_sel);
+            document.getElementById('parcelid').innerText = '----------'
+            document.getElementById('bvp').innerText = '----------'
+            document.getElementById('muni').innerText = '----------'
+            document.getElementById('schdist').innerText = '----------'
+            document.getElementById('zone').innerText = '----------'
+            document.getElementById('land_use').innerText = '----------'
+            document.getElementById('acreage').innerText = '----------'
+            document.getElementById('market_value').innerText = '----------'
+            document.getElementById('dataContainer').innerHTML = '';
+        });
         document.getElementById('applyButton').addEventListener('click', function() {
             document.body.style.cursor = "wait";
             document.getElementById('applyButton').innerHTML = 'Please Wait...'
