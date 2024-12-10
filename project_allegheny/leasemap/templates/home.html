@@ -529,12 +529,12 @@
                         <!-- Date filter -->
                         <div class="filter">
                             <h4 onclick="toggleFilter('date')">Date</h4>
-                            {% comment %} <div class="filter-content date-content">
+                            <div class="filter-content date-content">
                                 <label for="from-date">From:</label>
                                 <input type="date" id="from-date"><br>
                                 <label for="to-date">To:</label>
                                 <input type="date" id="to-date">
-                            </div> {% endcomment %}
+                            </div> 
                         </div>
                         <!-- Record type filter -->
                         <div class="filter">
@@ -1449,12 +1449,14 @@
 
 
         // Function to fetch GeoJSON data from a view
-        function getFilteredGeoJSONData(a,c,md,sd,zs) {
+        function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
             z = zs
             $.ajax({
                 url: '/leasemap/filteredparcels', // Replace with your view URL
                 method: 'GET',
                 data: {
+                    startdate: startdate,
+                    enddate: enddate,
                     agmt: a,
                     company: c,
                     munis: md,
@@ -1709,6 +1711,11 @@
             document.getElementById('layer3').checked = false;
             map.removeLayer(geojsonLayer);
             map.removeLayer(vectorTileLayer);
+            var startdate = document.getElementById('from-date').value;
+            var enddate = document.getElementById('to-date').value;
+
+            console.log('start date:');
+            console.log(startdate.value)
             // Get the checkbox element
             a=''
             var checkbox_a0 = document.getElementById('agmt0');
@@ -3914,7 +3921,7 @@
                 console.log('Checkbox is not checked');
                 };
             
-            getFilteredGeoJSONData(a,c,md,sd,zs);
+            getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs);
 
         });
 

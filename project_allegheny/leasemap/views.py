@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.db.models import Q
 import json 
 import ast
+from datetime import datetime
 
 
 
@@ -147,6 +148,15 @@ def filteredparcels(request):
     print(request)
     print(request.GET.getlist('zoning'))
     print(request.GET.getlist('schools'))
+    print(f"here is the start date -> {request.GET.getlist('startdate')[0]}")
+    # sd_in = request.GET.getlist('startdate')[0]
+
+    # try:
+    #     sd_in = datetime.strptime(sd_in, '%Y-%m-%d')
+    # except ValueError:
+    #     sd_in = datetime.strptime(sd_in, '2000-04-26')
+    # sd_in = '12/01/2016'
+    # ed_in = request.GET.getlist('enddate')[0].split(',')
     agmt_in = request.GET.getlist('agmt')[0].split(',')
     company_in = request.GET.getlist('company')[0].split(',')
     munis_in = request.GET.getlist('munis')[0].split(',')
@@ -196,6 +206,10 @@ def filteredparcels(request):
 
     # print(f"zoning--{len(zoning)}->{zoning}")
     filter_kwargs = dict()
+
+        # Add the date filter to the kwargs
+    # filter_kwargs.update({
+    #     'file_date__gte': sd_in})
     filter_kwargs.update({'agmt_type__in':a})
     filter_kwargs.update({'company__in':cl})
     filter_kwargs.update({'munidesc__in':md})
