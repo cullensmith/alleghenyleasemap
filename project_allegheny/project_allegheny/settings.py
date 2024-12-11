@@ -127,15 +127,15 @@ STATICFILES_DIRS = [
 ]
 
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/dev/shm/django_cache',  # Cache location in shared memory
-        'OPTIONS': {
-            # 'MAX_ENTRIES': 1000,  # Maximum number of cache entries
-        },
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': '/dev/shm/django_cache',  # Cache location in shared memory
+#         'OPTIONS': {
+#             # 'MAX_ENTRIES': 1000,  # Maximum number of cache entries
+#         },
+#     }
+# }
 
 # CACHES = {
 #     'default': {
@@ -143,6 +143,13 @@ CACHES = {
 #         'LOCATION': 'unique-snowflake',  # This is an identifier for the cache
 #     }
 # }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',  # Memcached backend
+        'LOCATION': '127.0.0.1:11211',  # Memcached server location (PythonAnywhere default)
+    }
+}
 
 # CACHES = {
 #     'default': {

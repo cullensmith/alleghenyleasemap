@@ -36,8 +36,8 @@ def getMask(request):
 
 def polygon_geojson_view(request):
     # Try to get the cached response
-    cache_key_5min = 'polygons_geojson'
-    cached_data = cache.get(cache_key_5min)
+    cache_key_12hr = 'polygons_geojson'
+    cached_data = cache.get(cache_key_12hr)
 
     if cached_data:
         # print(f'found the cache: {time.time()-start_time}')
@@ -45,6 +45,7 @@ def polygon_geojson_view(request):
         return JsonResponse(cached_data, safe=False)
 
     else:
+        print('no cache found... rebuilding')
         polygons = PolygonShort.objects.all()  # Query all polygons
         features = []
         for i,polygon in enumerate(polygons):
@@ -67,13 +68,13 @@ def polygon_geojson_view(request):
         }
         # print(geojson_collection)
         print('requested polygons')
-        cache.set(cache_key_5min, geojson_collection, timeout=60*5)  # Cache for 1440 minutes
+        cache.set(cache_key_12hr, geojson_collection, timeout=3600*12)  # Cache for 12 hours
 
         return JsonResponse(geojson_collection, safe=False)
 
 def cachecheck(request):
     # Define a unique cache key for GeoJSON data.
-    # cache_key_5min = 'geojson_data'  # Simple cache key; change if you have parameters
+    # cache_key_12hr = 'geojson_data'  # Simple cache key; change if you have parameters
 
     # Check if the GeoJSON data is already cached
     geojson_check = cache.get('polygons_geojson')
@@ -87,7 +88,7 @@ def cachecheck(request):
 
         # Cache miss: Data is not available, so regenerate it
         # geojson_data = MyGeoData.get_geojson()  # Replace with your actual method to get GeoJSON data
-        # cache.set(cache_key_5min, geojson_data, timeout=60*15)  # Cache for 15 minutes
+        # cache.set(cache_key_12hr, geojson_data, timeout=60*15)  # Cache for 15 minutes
         # logger.debug('recreated geojson')  # Log message for cache miss
 
     # Return the cached (or freshly generated) GeoJSON data as a JsonResponse
