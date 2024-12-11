@@ -67,7 +67,7 @@ def polygon_geojson_view(request):
         }
         # print(geojson_collection)
         print('requested polygons')
-        cache.set(cache_key, geojson_collection, timeout=60*1440)  # Cache for 1440 minutes
+        cache.set(cache_key, geojson_collection, timeout=60*5)  # Cache for 1440 minutes
 
         return JsonResponse(geojson_collection, safe=False)
 
