@@ -4,34 +4,40 @@
     <title>Allegheny Lease Map</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map</title>
+    <title>Allegheny Lease Map</title>
     <!-- Include Leaflet CSS and JavaScript -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
-    <link rel="stylesheet" href="https://cdn.rawgit.com/mapbox/supercluster/v4.0.1/demo/cluster.css" />
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet-src.js" integrity="sha512-IkGU/uDhB9u9F8k+2OsA6XXoowIhOuQL1NTgNZHY1nkURnqEGlDZq3GsfmdJdKFe1k1zOc6YU2K7qY+hF9AodA==" crossorigin=""></script>
-    <script src="https://unpkg.com/supercluster@4.0.1/dist/supercluster.js"></script>
-    {% comment %} <script src="https://code.jquery.com/jquery-1.12.4.js"></script> {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" /> {% endcomment %}
+    {% comment %} <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet-src.js" integrity="sha512-IkGU/uDhB9u9F8k+2OsA6XXoowIhOuQL1NTgNZHY1nkURnqEGlDZq3GsfmdJdKFe1k1zOc6YU2K7qY+hF9AodA==" crossorigin=""></script> {% endcomment %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <!-- for the underscore variable/js function-->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
-
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> {% endcomment %}
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
-    {% comment %} local copy  {% endcomment %}
-    {% comment %} <link rel="stylesheet" href="../static/css/ControlGeocoder.css" /> {% endcomment %}
-    {% comment %} <script src="../static/js/ControlGeocoder.js"></script> {% endcomment %}
-    {% comment %} online version {% endcomment %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-    <!-- geojson vt  -->
+    {% comment %} <!-- geojson vt  -->
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
-    <script src="https://unpkg.com/leaflet-geojson-vt@1.1.0/src/leaflet-geojson-vt.js"></script>
-    {% comment %} <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.js"></script> {% endcomment %}
-    {% comment %} <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/slicerWebWorker.js"></script> {% endcomment %}
-    {% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet-pattern/dist/leaflet.pattern.css" /> {% endcomment %}
-    {% comment %} <script src="https://unpkg.com/leaflet-pattern/dist/leaflet.pattern.js"></script> {% endcomment %}
+    <script src="https://unpkg.com/leaflet-geojson-vt@1.1.0/src/leaflet-geojson-vt.js"></script> {% endcomment %}
+    <!--Start Map Post Content-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-canvas-tile@0.1.0/dist/leaflet-canvas-tile.min.css" />
+    
+    <!-- Omnivore JS (for loading GeoJSON and TopoJSON) -->
+    <!-- geojson-vt-dev (For vector tile processing) -->
+    <script src="https://unpkg.com/geojson-vt/geojson-vt.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script>
+
+    <!-- Leaflet Canvas Tiles -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-canvas-tile@0.1.0/dist/leaflet-canvas-tile.min.js"></script>
+    {% comment %} <script src="../static/scripts/L.CanvasTiles.js.download"></script> {% endcomment %}
+
+
+    <!-- Leaflet PIP (Point in Polygon) -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-pip@0.0.8/dist/leaflet-pip.min.js"></script>
 
     <style>
         #map { /* Style the map container */
@@ -1042,7 +1048,7 @@
 
         var map = L.map('map').setView([40.4406, -79.9959], 11);
         
-        map.setMinZoom(10);
+        map.setMinZoom(5);
         map.setMaxZoom(18);
 
          // Add OpenStreetMap tile layer
@@ -1268,7 +1274,7 @@
                         debug: 0,
                         style: geojsonStyle
                     };
-                    vectorMaskLayer = L.geoJson.vt(data, options).addTo(map);
+                    vectorMaskLayer = L.geoJson(data, options).addTo(map);
                     console.log('added the mask');
 
                     console.log('made it to here')
@@ -1283,8 +1289,131 @@
         }
 
         getMask();
+        var pikeParcels = L.geoJson(null, {
+            onEachFeature: function(feature, layer) {
+              layer.bindPopup(feature.properties.owner)
+            },
+              style: {color:'yellow'}
+          });
+        // Load the TopoJSON file via the static path
+        function getGeoJSONData() {
+            fetch('static/json/og_parcels.geojson')
+                .then(function(response) {
+                    console.log('fetching response')
+                    console.log(response.json)
+                    return response.json();
+                })
+                .then(function(geojsonData) {
+                    // Log the GeoJSON structure to understand its format
+                    console.log('ohio in: ')
+                    console.log(geojsonData);
+                    spinner_poly.style.display = 'block';
+                    console.log('GeoJSON data received:');
 
-        // Function to fetch GeoJSON data from a view
+                    // Convert GeoJSON to vector tiles using leaflet-geojson-vt
+                    var geojsonStyle = {
+                        fillColor:"#ff6802",
+                        color: "#fff",
+                        weight: 1,
+                        opacity: 0.1,
+                        fillOpacity: 0.9,
+                      };
+                    
+                    var options = {
+                        maxZoom: 20,
+                        tolerance: 3,
+                        debug: 0,
+                        style: geojsonStyle
+                    };
+
+                    
+                    vectorTileLayer = L.geoJSON(geojsonData, { 
+                        style: geojsonStyle,
+
+                        onEachFeature: function (feature, layer) {
+                            
+                            layer.on('click', function() {
+                                console.log(feature.properties.pin); // Log properties of the clicked feature
+                                getMatches(feature.properties.pin);
+                                });
+                        }
+                    }).addTo(map)
+                    console.log('added the polygons');
+                    spinner_poly.style.display = 'none';
+                    polyText.innerHTML = '';
+                    polyText.appendChild(checkmarkp);
+
+                    map.removeLayer(con)
+                    con.addTo(map)
+                    map.removeLayer(unc)
+                    unc.addTo(map)
+                    console.log('added ajax lease tiles')
+                    // Add fade-out class to the container
+                    loadingContainer.classList.add('fade-out');
+
+                    
+                                
+                })
+                .catch(function(error) {
+                    console.error('Error loading GeoJSON file:', error);
+                }); 
+            };
+            
+        {% comment %} fetchOhio(); {% endcomment %}
+        {% comment %} function validateGeoJSON(data) {
+            try {
+                if (typeof data === "string") {
+                    const parsedData = JSON.parse(data);
+                    if (parsedData.type && parsedData.features) {
+                        console.log("Valid GeoJSON data:", parsedData);
+                        return parsedData;
+                    } else {
+                        throw new Error("Invalid GeoJSON structure");
+                    }
+                } else if (typeof data === "object" && data !== null) {
+                    if (data.type && data.features) {
+                        console.log("Valid GeoJSON data:", data);
+                        return data;
+                    } else {
+                        throw new Error("Invalid GeoJSON structure");
+                    }
+                } else {
+                    throw new Error("Data is not a valid JSON string or object");
+                }
+            } catch (error) {
+                console.error("Error parsing GeoJSON data:", error);
+                return null;
+            }
+        }
+        
+        // Example of valid GeoJSON data
+        const geojsonData = fetchOhio();
+        
+        const validData = validateGeoJSON(geojsonData);
+        if (validData) {
+            console.log('valid data:')
+            console.log(validData)
+            // Use geojson-vt to convert GeoJSON into vector tiles
+            var geojsonvtInstance = geojsonvt(validData);  // Create vector tiles from GeoJSON data
+
+            // Check if geojson-vt instance is correctly created
+            console.log('here is the geojsonvtInstance')
+            console.log(geojsonvtInstance);
+
+            // Create a vector grid layer from the vector tiles
+            var tileLayer = L.vectorGrid.slicer(geojsonvtInstance, {
+                tileSize: 512,
+                extent: 4096,
+                buffer: 64,
+                debug: 0
+            }).addTo(map);
+        }
+         {% endcomment %}
+
+
+    
+
+        {% comment %} // Function to fetch GeoJSON data from a view
         function getGeoJSONData() {
             $.ajax({
                 url: '/leasemap/polygon_geojson_view', // Replace with your view URL
@@ -1309,7 +1438,8 @@
                         debug: 0,
                         style: geojsonStyle
                     };
-                    {% comment %} vectorTileLayer = L.geoJson.vt(data, options).addTo(map); {% endcomment %}
+
+                    
                     vectorTileLayer = L.geoJSON(data, { 
                         style: geojsonStyle,
 
@@ -1330,7 +1460,7 @@
                     con.addTo(map)
                     map.removeLayer(unc)
                     unc.addTo(map)
-                    console.log('made it to here')
+                    console.log('added ajax lease tiles')
                     // Add fade-out class to the container
                     loadingContainer.classList.add('fade-out');
 
@@ -1341,7 +1471,7 @@
                 }
             });
 
-        }
+        } {% endcomment %}
 
 
 
@@ -1495,8 +1625,8 @@
                         onEachFeature: function (feature, layer) {
                             
                             layer.on('click', function() {
-                                console.log(feature.properties); // Log properties of the clicked feature
-                                getMatches(feature.properties);
+                                console.log(feature.properties.pin); // Log properties of the clicked feature
+                                getMatches(feature.properties.pin);
                                 });
                         }
                     }).addTo(map);
