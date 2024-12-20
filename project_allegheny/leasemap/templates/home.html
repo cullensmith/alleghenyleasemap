@@ -1025,8 +1025,7 @@
 
     <script>
 
-        // Initialize Leaflet map
-
+        // Construct spinners to show that the main map layers are still loading
         const spinner_con = document.getElementById('spinner_con');
         const spinner_unc = document.getElementById('spinner_unc');
         const spinner_poly = document.getElementById('spinner_poly');
@@ -1034,7 +1033,6 @@
         const uncText = document.getElementById('unc-status-done');
         const conText = document.getElementById('con-status-done');
         const loadingContainer = document.getElementById('loading-container');
-
 
         const checkmarku = document.createElement('span');
         checkmarku.className = 'checkmark';
@@ -1046,18 +1044,20 @@
         checkmarkp.className = 'checkmark';
         checkmarkp.innerHTML = '&#10004;';  // Checkmark symbol
 
+
+        // Initialize Leaflet map
         var map = L.map('map').setView([40.4406, -79.9959], 11);
         
-        map.setMinZoom(5);
+        map.setMinZoom(10);
         map.setMaxZoom(18);
 
-         // Add OpenStreetMap tile layer
+        // Establish basemaps
+        // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             //attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
     
-
-        // Define tile layers
+        // Define tile layers for the basemaps
         const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: '© OpenStreetMap contributors'
@@ -1080,6 +1080,8 @@
         let vectorTileLayerF = L.layerGroup().addTo(map);
         let geojsonLayer = L.layerGroup().addTo(map) ;
 
+
+        // Functions for the map
         // Function to switch basemaps
         function switchBasemap(e) {
             // Remove all base layers
@@ -1105,7 +1107,6 @@
         radios.forEach(radio => {
             radio.addEventListener('change', switchBasemap);
         });
-
 
         var geocoder = L.Control.Geocoder.nominatim();
         if (typeof URLSearchParams !== 'undefined' && location.search) {
@@ -1141,11 +1142,7 @@
         }
         setParent(htmlObject, a);
 
-        // Add tile layer (OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
+        // Functions for the left side panel
         // Function to toggle filter visibility
         function toggleFilter(filterName) {
             var filterContent = document.querySelector('.' + filterName + '-content');
@@ -1156,6 +1153,7 @@
                 filterContent.classList.add('show');
             }
         }
+
         // Function to check all checkboxes in a filter group
         function checkAll(filterName) {
             var checkboxes = document.querySelectorAll('.' + filterName + '-content input[type="checkbox"]');
@@ -1170,65 +1168,6 @@
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = false;
             });
-        }
-
-        // Initialize pointCanvas variable
-        var pointCanvas;
-        
-        function getclickintersect(lat,lng){
-            $.ajax({
-                url: '/leasemap/coordints',
-                method: 'GET',
-                data: {
-                    coords: [lat,lng]
-                },
-                success: function(data) {
-                    console.log('GeoJSON points received:',data);
-                },
-                error: function(xhr, status, error) {
-                    enableInputs();
-                    // Handle error
-                    console.error(error);
-                }
-            });
-        }
-
-        // Function to fetch GeoJSON data for pointCanvas layer
-        function getmapdata() {
-            $.ajax({
-                url: '/leasemap/points',
-                method: 'GET',
-                data: {
-                    county: ['Allegheny']
-                },
-                success: function(data) {
-                    console.log('GeoJSON points received:',data);
-                    // Convert GeoJSON to vector tiles using leaflet-geojson-vt
-                    var geojsonStyle = {
-                        radius: 3,
-                        fillColor: "#ffff00",
-                        color: "#000",
-                        weight: 1,
-                        opacity: 0.2,
-                        fillOpacity: 0.7
-                    };
-                    
-                    var options = {
-                        maxZoom: 20,
-                        tolerance: 3,
-                        debug: 0,
-                        style: geojsonStyle
-                    };
-                    // Assign the created layer to pointCanvas variable
-                    pointCanvas = L.geoJson.vt(data);
-                },
-                error: function(xhr, status, error) {
-                    enableInputs();
-                    // Handle error
-                    console.error(error);
-                }
-            });
-
         }
 
 
@@ -1289,13 +1228,8 @@
         }
 
         getMask();
-        var pikeParcels = L.geoJson(null, {
-            onEachFeature: function(feature, layer) {
-              layer.bindPopup(feature.properties.owner)
-            },
-              style: {color:'yellow'}
-          });
-        // Load the TopoJSON file via the static path
+
+        // Load the parcel geojson file via the static path
         function getGeoJSONData() {
             fetch('static/json/og_parcels.geojson')
                 .then(function(response) {
@@ -1359,127 +1293,12 @@
                 }); 
             };
             
-        {% comment %} fetchOhio(); {% endcomment %}
-        {% comment %} function validateGeoJSON(data) {
-            try {
-                if (typeof data === "string") {
-                    const parsedData = JSON.parse(data);
-                    if (parsedData.type && parsedData.features) {
-                        console.log("Valid GeoJSON data:", parsedData);
-                        return parsedData;
-                    } else {
-                        throw new Error("Invalid GeoJSON structure");
-                    }
-                } else if (typeof data === "object" && data !== null) {
-                    if (data.type && data.features) {
-                        console.log("Valid GeoJSON data:", data);
-                        return data;
-                    } else {
-                        throw new Error("Invalid GeoJSON structure");
-                    }
-                } else {
-                    throw new Error("Data is not a valid JSON string or object");
-                }
-            } catch (error) {
-                console.error("Error parsing GeoJSON data:", error);
-                return null;
-            }
-        }
-        
-        // Example of valid GeoJSON data
-        const geojsonData = fetchOhio();
-        
-        const validData = validateGeoJSON(geojsonData);
-        if (validData) {
-            console.log('valid data:')
-            console.log(validData)
-            // Use geojson-vt to convert GeoJSON into vector tiles
-            var geojsonvtInstance = geojsonvt(validData);  // Create vector tiles from GeoJSON data
-
-            // Check if geojson-vt instance is correctly created
-            console.log('here is the geojsonvtInstance')
-            console.log(geojsonvtInstance);
-
-            // Create a vector grid layer from the vector tiles
-            var tileLayer = L.vectorGrid.slicer(geojsonvtInstance, {
-                tileSize: 512,
-                extent: 4096,
-                buffer: 64,
-                debug: 0
-            }).addTo(map);
-        }
-         {% endcomment %}
-
-
-    
-
-        {% comment %} // Function to fetch GeoJSON data from a view
-        function getGeoJSONData() {
-            $.ajax({
-                url: '/leasemap/polygon_geojson_view', // Replace with your view URL
-                method: 'GET',
-                success: function(data) {
-
-                    spinner_poly.style.display = 'block';
-                    console.log('GeoJSON data received:');
-
-                    // Convert GeoJSON to vector tiles using leaflet-geojson-vt
-                    var geojsonStyle = {
-                        fillColor:"#ff6802",
-                        color: "#fff",
-                        weight: 1,
-                        opacity: 0.1,
-                        fillOpacity: 0.9,
-                      };
-                    
-                    var options = {
-                        maxZoom: 20,
-                        tolerance: 3,
-                        debug: 0,
-                        style: geojsonStyle
-                    };
-
-                    
-                    vectorTileLayer = L.geoJSON(data, { 
-                        style: geojsonStyle,
-
-                        onEachFeature: function (feature, layer) {
-                            
-                            layer.on('click', function() {
-                                console.log(feature.properties); // Log properties of the clicked feature
-                                getMatches(feature.properties);
-                                });
-                        }
-                    }).addTo(map)
-                    console.log('added the polygons');
-                    spinner_poly.style.display = 'none';
-                    polyText.innerHTML = '';
-                    polyText.appendChild(checkmarkp);
-
-                    map.removeLayer(con)
-                    con.addTo(map)
-                    map.removeLayer(unc)
-                    unc.addTo(map)
-                    console.log('added ajax lease tiles')
-                    // Add fade-out class to the container
-                    loadingContainer.classList.add('fade-out');
-
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-
-        } {% endcomment %}
-
-
 
         // Custom marker icon
-        function createYellowCircleMarker(latlng) {
+        function createCircleMarker(latlng) {
             return L.circleMarker(latlng, {
                 radius: 3.5, // Adjust size as needed
-                fillColor: "#025687", // Blue color
+                fillColor: "#000000", // Blue color
                 color: "#fff", // White border
                 weight: 1,
                 opacity: 1,
@@ -1503,7 +1322,7 @@
         
                     unc = L.geoJSON(data, {
                         pointToLayer: function (feature, latlng) {
-                            return createYellowCircleMarker(latlng);
+                            return createCircleMarker(latlng).setStyle({fillColor: '#025687'});
                         },
                         onEachFeature: function (feature, layer) {
                             layer.bindPopup("<strong>Well Info</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
@@ -1526,17 +1345,7 @@
             });
 
             }
-        // Custom marker icon
-        function createGreenCircleMarker(latlng) {
-            return L.circleMarker(latlng, {
-                radius: 3.5, // Adjust size as needed
-                fillColor: "#32CD32", // Green color
-                color: "#fff", // White border
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.8
-            });
-        }
+
         // Function to fetch GeoJSON data from a view
         function getwellsc() {
             $.ajax({
@@ -1553,14 +1362,14 @@
 
                     con = L.geoJSON(data, {
                         pointToLayer: function (feature, latlng) {
-                            return createGreenCircleMarker(latlng);
+                            return createCircleMarker(latlng).setStyle({fillColor: '#32CD32'});
                         },
                         onEachFeature: function (feature, layer) {
                            layer.bindPopup("<strong>Well Info</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
                             
                         }
                     }).addTo(map);
-                    console.log('added the uncs');
+                    console.log('added the conventional wells');
                     spinner_con.style.display = 'none';
                     conText.innerHTML = '';
                     conText.appendChild(checkmarkc);
@@ -1576,13 +1385,6 @@
             });
 
         }
-
-        // Call the functions to fetch GeoJSON data
-        getwellsc();
-        {% comment %} getwellsu(); {% endcomment %}
-        {% comment %} getGeoJSONData(); {% endcomment %}
-
-
 
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
@@ -1646,6 +1448,12 @@
         }
 
 
+        // Call the functions to fetch GeoJSON data for the main map layers 
+        // Calls for conventional which has unconventional and polygons are nested
+        // Should change to async loading
+
+        getwellsc();
+
         var geojsonLayer_sel;
 
         function showSelection(s) {
@@ -1666,15 +1474,20 @@
                 debug: 0,
                 style: geojsonStyle_s
             }; 
-            console.log('added the filtered polygons');
-            if (map.hasLayer(geojsonLayer_sel)) {
-                map.removeLayer(geojsonLayer_sel);
-            };
-            
-            geojsonLayer_sel = L.geoJSON(s, { 
-                style: geojsonStyle_s,
 
-            }).addTo(map);
+            if (geojsonLayer_sel === undefined) {
+                geojsonLayer_sel = L.geoJSON(s, { 
+                    style: geojsonStyle_s,
+                }).addTo(map);
+            }
+            else {
+                map.removeLayer(geojsonLayer_sel);
+                geojsonLayer_sel = L.geoJSON(s, { 
+                    style: geojsonStyle_s,
+                }).addTo(map);
+            } ;
+            
+
         };
 
         // Function to fetch GeoJSON data from a view
@@ -1738,16 +1551,7 @@
             });
         }
 
-
-        {% comment %} function changeLink(c) {
-            // Get the anchor element by its ID
-            var link = document.getElementById('dvurl');
-            // Change the href attribute to "https://www.google.com"
-            link.href = c;
-            // Optionally, you can change the link text as well
-            link.innerText = 'Visit Google';
-        } {% endcomment %}
-
+        // Listen for changes to the visible layers
         document.getElementById('layer0').addEventListener('change', function() {
             if (this.checked) {
                 // If checked, add the pointCanvas layer to the map
