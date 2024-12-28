@@ -1538,7 +1538,8 @@
             // Get the div with the id 'ownership'
             var div = document.getElementById('ownership');
             var link = document.createElement('a');
-            link.href = 'https://www2.alleghenycounty.us/RealEstate/Sales.aspx?ParcelID='+pid+'&SearchType=&CurrRow=0&SearchName=&SearchStreet=&SearchNum=&SearchMuni=&SearchParcel=&pin='+pid;
+            //broken -> link.href = 'https://www2.alleghenycounty.us/RealEstate/Sales.aspx?ParcelID='+pid+'&SearchType=&CurrRow=0&SearchName=&SearchStreet=&SearchNum=&SearchMuni=&SearchParcel=&pin='+pid;
+            link.href = 'https://realestate.alleghenycounty.us/OwnerHistory?ID='+pid+'&SearchType=3&CurrRow=0&SearchName=&SearchStreet=&SearchNum=&SearchMuni=&SearchParcel='+pid+'&pin='+pid;
             link.textContent = 'See Current Ownership';
             link.target = '_blank'; 
             div.innerHTML = ''; // Clear the current content of the div
