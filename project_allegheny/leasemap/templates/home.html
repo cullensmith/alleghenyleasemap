@@ -27,9 +27,9 @@
     
     <!-- Omnivore JS (for loading GeoJSON and TopoJSON) -->
     <!-- geojson-vt-dev (For vector tile processing) -->
-    <script src="https://unpkg.com/geojson-vt/geojson-vt.js"></script>
-    <script src="https://unpkg.com/topojson@3"></script>
-    <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script>
+    {% comment %} <script src="https://unpkg.com/geojson-vt/geojson-vt.js"></script> {% endcomment %}
+    {% comment %} 12/28/24 <script src="https://unpkg.com/topojson@3"></script> {% endcomment %}
+    {% comment %} <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script> {% endcomment %}
 
     <!-- Leaflet Canvas Tiles -->
     {% comment %} 12/28/24 <script src="https://cdn.jsdelivr.net/npm/leaflet-canvas-tile@0.1.0/dist/leaflet-canvas-tile.min.js"></script> {% endcomment %}
@@ -1233,14 +1233,13 @@
         function getGeoJSONData() {
             fetch('static/json/og_parcels.geojson')
                 .then(function(response) {
-                    console.log('fetching response')
-                    console.log(response.json)
+                    console.log('fetching leased parcels')
+                    // console.log(response.json)
                     return response.json();
                 })
                 .then(function(geojsonData) {
                     // Log the GeoJSON structure to understand its format
-                    console.log('ohio in: ')
-                    console.log(geojsonData);
+                    // console.log(geojsonData);
                     spinner_poly.style.display = 'block';
                     console.log('GeoJSON data received:');
 
@@ -1308,14 +1307,17 @@
         }
         // Function to fetch GeoJSON data from a view
         function getwellsu() {
-            $.ajax({
-                url: '/leasemap/get_wellsu', // Replace with your view URL
-                method: 'GET',
-                success: function(data) {
+            fetch('static/json/wells_unc.geojson')
+            .then(function(response) {
+                console.log('fetching unconventional wells')
+                // console.log(response.json)
+                return response.json();
+            })
+            .then(function(data) {
                     spinner_unc.style.display = 'block';
 
-                    console.log('conventional data received:');
-                    {% comment %} console.log('conventional data received:', data); {% endcomment %}
+                    console.log('unconventional data received:');
+                    // console.log('unconventional data received:', data);
 
                     // Add GeoJSON layer to the map
                     var popupu = L.popup()
@@ -1326,7 +1328,7 @@
                             return createCircleMarker(latlng).setStyle({fillColor: '#025687'});
                         },
                         onEachFeature: function (feature, layer) {
-                            layer.bindPopup("<strong>Well Info</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
+                            layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
 
                         }
                     }).addTo(map);
@@ -1336,29 +1338,25 @@
                     uncText.appendChild(checkmarku);
                     console.log('made it to here')
                     getGeoJSONData();
-
-
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-
-            }
+                })
+                .catch(function(error) {
+                    console.error('Error loading Conventional Well file:', error);
+                }); 
+            };
 
         // Function to fetch GeoJSON data from a view
         function getwellsc() {
-            $.ajax({
-                url: '/leasemap/get_wellsc', // Replace with your view URL
-                method: 'GET',
-                success: function(data) {
-                    
+            fetch('static/json/wells_con.geojson')
+            .then(function(response) {
+                console.log('fetching leased parcels')
+                // console.log(response.json)
+                return response.json();
+            })
+            .then(function(data) {
                     spinner_con.style.display = 'block';
 
-                    console.log('conventional data received:');
-                    {% comment %} console.log('conventional data received:', data); {% endcomment %}
-
+                    console.log('conventional well data received:');
+                    // console.log(data)
                     // Add GeoJSON layer to the map
 
                     con = L.geoJSON(data, {
@@ -1374,18 +1372,14 @@
                     spinner_con.style.display = 'none';
                     conText.innerHTML = '';
                     conText.appendChild(checkmarkc);
-
-                    console.log('made it to here')
                     getwellsu();
+                })
+                .catch(function(error) {
+                    console.error('Error loading Conventional Well file:', error);
+                }); 
+            };
 
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-
-        }
+        
 
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
