@@ -1268,6 +1268,7 @@
                             
                             layer.on('click', function() {
                                 console.log(feature.properties.pin); // Log properties of the clicked feature
+                                showSelection(feature);
                                 getMatches(feature.properties.pin);
                                 });
                         }
@@ -1457,6 +1458,7 @@
         var geojsonLayer_sel;
 
         function showSelection(s) {
+            clearDetails();
             console.log('here is the selected geometry');
             console.log(s)
             
@@ -1492,7 +1494,6 @@
 
         // Function to fetch GeoJSON data from a view
         function getMatches(p) {
-
             $.ajax({
                 url: '/leasemap/get_matches', // Replace with your view URL
                 method: 'GET',
@@ -1500,11 +1501,8 @@
                     pin: p
                 },
                 success: function(data) {
-                    console.log('GeoJSON data received:');
-                    {% comment %} console.log('GeoJSON data received:', data); {% endcomment %}
                     document.getElementById('clear_sel').style.display = 'inline';
-                    // Convert GeoJSON to vector tiles using leaflet-geojson-vt
-                    console.log('got the records');
+                    console.log('returned the record details');
                     document.getElementById("parcelid").innerText = data.features[0]['pin'];
                     document.getElementById("bvp").innerText = data.features[0]['bk_vol_pg'];
                     document.getElementById("muni").innerText = data.features[0]['munidesc']; 
@@ -1514,11 +1512,7 @@
                     document.getElementById("acreage").innerText = data.features[0]['calcacreag']; 
                     document.getElementById("market_value").innerText = '$'+data.features[0]['fairmarkettotal']; 
                     changeToLink(data.features[0]['pin'])
-                    
                     displayData(data);
-                    showSelection(data.features[0]['geometry']);
-                    
-
                 },
                 error: function(xhr, status, error) {
                     // Handle error
@@ -1526,6 +1520,19 @@
                 }
             });
         }
+
+        function clearDetails() {
+            document.getElementById('parcelid').innerText = '----------'
+            document.getElementById('bvp').innerText = '----------'
+            document.getElementById('muni').innerText = '----------'
+            document.getElementById('schdist').innerText = '----------'
+            document.getElementById('zone').innerText = '----------'
+            document.getElementById('land_use').innerText = '----------'
+            document.getElementById('acreage').innerText = '----------'
+            document.getElementById('market_value').innerText = '----------'
+            document.getElementById('dataContainer').innerHTML = ''; // History
+            document.getElementById('ownership').innerHTML = '<p>----------</p>';
+        };
 
         function changeToLink(pid) {
             // Get the div with the id 'ownership'
@@ -1648,16 +1655,7 @@
             console.log('clicked to clear');
             document.getElementById('clear_sel').style.display = 'none';
             map.removeLayer(geojsonLayer_sel);
-            document.getElementById('parcelid').innerText = '----------'
-            document.getElementById('bvp').innerText = '----------'
-            document.getElementById('muni').innerText = '----------'
-            document.getElementById('schdist').innerText = '----------'
-            document.getElementById('zone').innerText = '----------'
-            document.getElementById('land_use').innerText = '----------'
-            document.getElementById('acreage').innerText = '----------'
-            document.getElementById('market_value').innerText = '----------'
-            document.getElementById('dataContainer').innerHTML = '';
-            document.getElementById('ownership').innerHTML = '<p>----------</p>';
+            clearDetails();
         });
         document.getElementById('applyButton').addEventListener('click', function() {
             document.body.style.cursor = "wait";

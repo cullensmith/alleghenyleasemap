@@ -247,14 +247,11 @@ def filteredparcels(request):
     return JsonResponse(geojson_collection)
 
 def get_matches(request):
-    print('grabbing filtered pins')
-    print(request)
     p = request.GET.getlist('pin')[0]
+    print(f'grabbing filtered details for: pin {p}')
+    # print(request)
     polygons = Parcels.objects.filter(Q(pin = p))
-    # for r in polygons:
-    #     print(f'doc number: {r.doc_num}, deed url: {r.dv_url}')
-    # print('those were it')
-    # return JsonResponse({"text": "here is the new text"})
+
     features = []
     for i,polygon in enumerate(polygons.annotate(last_four=Substr('file_date',8,3)).order_by('-last_four')):
         # if i > 5:
