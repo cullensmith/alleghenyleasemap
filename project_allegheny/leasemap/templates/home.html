@@ -18,6 +18,10 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    
+    {% comment %} set up ajax to read geojson from url {% endcomment %}
+    <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+
 
     {% comment %} <!-- geojson vt  -->
     <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
@@ -1231,13 +1235,13 @@
 
         // Load the parcel geojson file via the static path
         function getGeoJSONData() {
-            fetch('static/json/og_parcels.geojson')
+            {% comment %} fetch('static/json/og_parcels.geojson')
                 .then(function(response) {
                     console.log('fetching leased parcels')
                     // console.log(response.json)
                     return response.json();
                 })
-                .then(function(geojsonData) {
+                .then(function(geojsonData) { {% endcomment %}
                     // Log the GeoJSON structure to understand its format
                     // console.log(geojsonData);
                     spinner_poly.style.display = 'block';
@@ -1259,8 +1263,8 @@
                         style: geojsonStyle
                     };
 
-                    
-                    vectorTileLayer = L.geoJSON(geojsonData, { 
+                    geojsonData = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
+                    vectorTileLayer = L.geoJSON.ajax(geojsonData, { 
                         style: geojsonStyle,
 
                         onEachFeature: function (feature, layer) {
@@ -1287,10 +1291,10 @@
 
                     
                                 
-                })
+                {% comment %} })
                 .catch(function(error) {
                     console.error('Error loading GeoJSON file:', error);
-                }); 
+                });  {% endcomment %}
             };
             
 
@@ -1336,11 +1340,10 @@
                     spinner_unc.style.display = 'none';
                     uncText.innerHTML = '';
                     uncText.appendChild(checkmarku);
-                    console.log('made it to here')
                     getGeoJSONData();
                 })
                 .catch(function(error) {
-                    console.error('Error loading Conventional Well file:', error);
+                    console.error('Error loading Unconventional Well file:', error);
                 }); 
             };
 
@@ -1364,8 +1367,7 @@
                             return createCircleMarker(latlng).setStyle({fillColor: '#32CD32'});
                         },
                         onEachFeature: function (feature, layer) {
-                           layer.bindPopup("<strong>Well Info</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
-                            
+                           layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
                         }
                     }).addTo(map);
                     console.log('added the conventional wells');
