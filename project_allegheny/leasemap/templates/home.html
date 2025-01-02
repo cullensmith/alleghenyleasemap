@@ -1193,7 +1193,7 @@
             });
 
         };
-        cachecheck();
+        {% comment %} cachecheck(); {% endcomment %}
 
         // Function to fetch GeoJSON data from a view
         function getMask() {
@@ -1234,69 +1234,44 @@
         getMask();
 
         // Load the parcel geojson file via the static path
-        function getGeoJSONData() {
-            {% comment %} fetch('static/json/og_parcels.geojson')
-                .then(function(response) {
-                    console.log('fetching leased parcels')
-                    // console.log(response.json)
-                    return response.json();
-                })
-                .then(function(geojsonData) { {% endcomment %}
-                    // Log the GeoJSON structure to understand its format
-                    // console.log(geojsonData);
-                    spinner_poly.style.display = 'block';
-                    console.log('GeoJSON data received:');
+        spinner_poly.style.display = 'block';
+        console.log('GeoJSON parcel data received:');
 
-                    // Convert GeoJSON to vector tiles using leaflet-geojson-vt
-                    var geojsonStyle = {
-                        fillColor:"#ff6802",
-                        color: "#fff",
-                        weight: 1,
-                        opacity: 0.1,
-                        fillOpacity: 0.9,
-                      };
-                    
-                    var options = {
-                        maxZoom: 20,
-                        tolerance: 3,
-                        debug: 0,
-                        style: geojsonStyle
-                    };
-
-                    geojsonData = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
-                    vectorTileLayer = L.geoJSON.ajax(geojsonData, { 
-                        style: geojsonStyle,
-
-                        onEachFeature: function (feature, layer) {
-                            
-                            layer.on('click', function() {
-                                console.log(feature.properties.pin); // Log properties of the clicked feature
-                                showSelection(feature);
-                                getMatches(feature.properties.pin);
-                                });
-                        }
-                    }).addTo(map)
-                    console.log('added the polygons');
-                    spinner_poly.style.display = 'none';
-                    polyText.innerHTML = '';
-                    polyText.appendChild(checkmarkp);
-
-                    map.removeLayer(con)
-                    con.addTo(map)
-                    map.removeLayer(unc)
-                    unc.addTo(map)
-                    console.log('added ajax lease tiles')
-                    // Add fade-out class to the container
-                    loadingContainer.classList.add('fade-out');
-
-                    
-                                
-                {% comment %} })
-                .catch(function(error) {
-                    console.error('Error loading GeoJSON file:', error);
-                });  {% endcomment %}
+        var geojsonStyle = {
+            fillColor:"#ff6802",
+            color: "#fff",
+            weight: 1,
+            opacity: 0.1,
+            fillOpacity: 0.9,
             };
-            
+        
+        var options = {
+            maxZoom: 20,
+            tolerance: 3,
+            debug: 0,
+            style: geojsonStyle
+        };
+
+        geojsonData = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
+        vectorTileLayer = L.geoJSON.ajax(geojsonData, { 
+            style: geojsonStyle,
+
+            onEachFeature: function (feature, layer) {
+                
+                layer.on('click', function() {
+                    console.log(feature.properties.pin); // Log properties of the clicked feature
+                    showSelection(feature);
+                    getMatches(feature.properties.pin);
+                    });
+            }
+        }).addTo(map)
+        console.log('added the polygons');
+        // Add fade-out class to the container
+        spinner_poly.style.display = 'none';
+        polyText.innerHTML = '';
+        polyText.appendChild(checkmarkp);
+        loadingContainer.classList.add('fade-out');
+
 
         // Custom marker icon
         function createCircleMarker(latlng) {
@@ -1309,79 +1284,53 @@
                 fillOpacity: 0.8
             });
         }
-        // Function to fetch GeoJSON data from a view
-        function getwellsu() {
-            fetch('static/json/wells_unc.geojson')
-            .then(function(response) {
-                console.log('fetching unconventional wells')
-                // console.log(response.json)
-                return response.json();
-            })
-            .then(function(data) {
-                    spinner_unc.style.display = 'block';
 
-                    console.log('unconventional data received:');
-                    // console.log('unconventional data received:', data);
+        // Create a default popup as a placeholder for the well layers
+        var popupu = L.popup()
+            .setContent("I am a standalone popup.");
 
-                    // Add GeoJSON layer to the map
-                    var popupu = L.popup()
-                        .setContent("I am a standalone popup.");
-        
-                    unc = L.geoJSON(data, {
-                        pointToLayer: function (feature, latlng) {
-                            return createCircleMarker(latlng).setStyle({fillColor: '#025687'});
-                        },
-                        onEachFeature: function (feature, layer) {
-                            layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
+        // Add the conventional wells to the map
+        spinner_con.style.display = 'block';
+        conurl = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/wells_con.geojson'
+        con = L.geoJSON.ajax(conurl, {
+            pointToLayer: function (feature, latlng) {
+                return createCircleMarker(latlng).setStyle({fillColor: '#32CD32'});
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
+            }
+        }).addTo(map);
+        console.log('added the conventional wells');
+        spinner_con.style.display = 'none';
+        conText.innerHTML = '';
+        conText.appendChild(checkmarkc);
 
-                        }
-                    }).addTo(map);
-                    console.log('added the polygons');
-                    spinner_unc.style.display = 'none';
-                    uncText.innerHTML = '';
-                    uncText.appendChild(checkmarku);
-                    getGeoJSONData();
-                })
-                .catch(function(error) {
-                    console.error('Error loading Unconventional Well file:', error);
-                }); 
-            };
+        function check4layer(maplayer) {
+            if (!map.hasLayer(maplayer)) {
+                console.log('layer was not there yet')
+            } else {
+                console.log('the layer was already there')
+            }
+        };
 
-        // Function to fetch GeoJSON data from a view
-        function getwellsc() {
-            fetch('static/json/wells_con.geojson')
-            .then(function(response) {
-                console.log('fetching leased parcels')
-                // console.log(response.json)
-                return response.json();
-            })
-            .then(function(data) {
-                    spinner_con.style.display = 'block';
+        check4layer(vectorTileLayer);
+        // Add the unconventional wells to the map
+        spinner_unc.style.display = 'block';
+        uncurl = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/wells_unc.geojson'
+        unc = L.geoJSON.ajax(uncurl, {
+            pointToLayer: function (feature, latlng) {
+                return createCircleMarker(latlng).setStyle({fillColor: '#025687'});
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
+            }
+        }).addTo(map);
+        console.log('added the unconventional wells');
+        spinner_unc.style.display = 'none';
+        uncText.innerHTML = '';
+        uncText.appendChild(checkmarku);
 
-                    console.log('conventional well data received:');
-                    // console.log(data)
-                    // Add GeoJSON layer to the map
 
-                    con = L.geoJSON(data, {
-                        pointToLayer: function (feature, latlng) {
-                            return createCircleMarker(latlng).setStyle({fillColor: '#32CD32'});
-                        },
-                        onEachFeature: function (feature, layer) {
-                           layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
-                        }
-                    }).addTo(map);
-                    console.log('added the conventional wells');
-                    spinner_con.style.display = 'none';
-                    conText.innerHTML = '';
-                    conText.appendChild(checkmarkc);
-                    getwellsu();
-                })
-                .catch(function(error) {
-                    console.error('Error loading Conventional Well file:', error);
-                }); 
-            };
-
-        
 
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
@@ -1449,7 +1398,6 @@
         // Calls for conventional which has unconventional and polygons are nested
         // Should change to async loading
 
-        getwellsc();
 
         var geojsonLayer_sel;
 
