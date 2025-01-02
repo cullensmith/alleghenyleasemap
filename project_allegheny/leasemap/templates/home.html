@@ -1366,12 +1366,12 @@
                         onEachFeature: function (feature, layer) {
                             
                             layer.on('click', function() {
-                                console.log(feature.properties.pin); // Log properties of the clicked feature
-                                getMatches(feature.properties.pin);
+                                console.log(feature.properties); // Log properties of the clicked feature
+                                getMatches(feature.properties);
+                                showSelection(feature)
                                 });
                         }
                     }).addTo(map);
-                    console.log('made it to here')
                     document.body.style.cursor = "default";
                     document.getElementById('applyButton').innerHTML = 'Apply Selection'
 
