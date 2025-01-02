@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import Wells_C
-from .models import Wells_U
+# from .models import Wells_C
+# from .models import Wells_U
 from .models import Parcels
-from .models import Points
-from .models import PolygonModel, PolygonShort
+# from .models import Points
+# from .models import PolygonModel, PolygonShort
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.db.models.functions import Substr
@@ -228,23 +228,24 @@ def filteredparcels(request):
         # if i > 5:
         #     break
         # Parse GeoJSON text from the geomjson field
-        geojson_data = polygon.geomjson
+        # geojson_data = polygon.geomjson
         # Add GeoJSON feature to the list
-        feature = dict()
-        feature['type'] = "Feature"
-        feature['properties'] = polygon.pin
-        feature['geometry'] = ast.literal_eval(geojson_data)
-        features.append(feature)
+        # feature = dict()
+        # feature['type'] = "Feature"
+        # feature['properties'] = polygon.pin
+        # # feature['geometry'] = ast.literal_eval(geojson_data)
+        # features.append(feature)
         # print('so we got here')
-        
-    # Create GeoJSON FeatureCollection
-    geojson_collection = {
-        "type": "FeatureCollection",
-        "features": features
-    }
-    # print(geojson_collection)
-    print('requested polygons')
-    return JsonResponse(geojson_collection)
+        features.append(polygon.pin)
+    # # Create GeoJSON FeatureCollection
+    # geojson_collection = {
+    #     "type": "FeatureCollection",
+    #     "features": features
+    # }
+    # # print(geojson_collection)
+    # print('requested polygons')
+    # return JsonResponse(geojson_collection)
+    return JsonResponse(features, safe=False)
 
 def get_matches(request):
     p = request.GET.getlist('pin')[0]
@@ -257,7 +258,7 @@ def get_matches(request):
         # if i > 5:
         #     break
         # Parse GeoJSON text from the geomjson field
-        geojson_data = polygon.geomjson
+        # geojson_data = polygon.geomjson
         # Add GeoJSON feature to the list
         feature = dict()
         feature['type'] = "Feature"
@@ -274,7 +275,7 @@ def get_matches(request):
         feature['calcacreag'] = polygon.calcacreag
         feature['usedesc'] = polygon.usedesc
         feature['dv_url'] = polygon.dv_url
-        feature['geometry'] = ast.literal_eval(geojson_data)
+        # feature['geometry'] = ast.literal_eval(geojson_data)
         features.append(feature)
         # print('so we got here')
         

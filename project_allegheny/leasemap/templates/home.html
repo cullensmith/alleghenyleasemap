@@ -1323,7 +1323,7 @@
 
 
 
-        
+        let filtvectorTileLayer = L.layerGroup().addTo(map) ;
 
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
@@ -1359,19 +1359,43 @@
                         style: geojsonStyle
                     }; 
                     console.log('added the filtered polygons');
+                    parcelshapes2 = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
                     
-                    geojsonLayer = L.geoJSON(data, { 
-                        style: geojsonStyle,
+                    
+                    // Fetch the GeoJSON data from GitHub
+                    fetch(parcelshapes2)
+                        .then(response => response.json())
+                        .then(filtgeojsonData => {
+                        // Filter the GeoJSON data based on the selected categories
+                        var filteredGeojsonData = {
+                            type: 'FeatureCollection',
+                            features: filtgeojsonData.features.filter(function(feature) {
+                            return data.includes(feature.properties.pin);
+                            })
+                        };
 
-                        onEachFeature: function (feature, layer) {
-                            
-                            layer.on('click', function() {
-                                console.log(feature.properties); // Log properties of the clicked feature
-                                getMatches(feature.properties);
-                                showSelection(feature)
-                                });
-                        }
-                    }).addTo(map);
+                        // Add the filtered GeoJSON data to the map
+                        filtvectorTileLayer = L.geoJSON(filteredGeojsonData, { 
+                            style: geojsonStyle,
+    
+                            onEachFeature: function (feature, layer) {
+                                
+                                layer.on('click', function() {
+                                    console.log(feature.properties.pin); // Log properties of the clicked feature
+                                    getMatches(feature.properties.pin);
+                                    showSelection(feature)
+                                    });
+                            }
+                        }).addTo(map); 
+                    })
+                    .catch(error => {
+                        console.error('Error fetching GeoJSON data:', error);
+                    });
+                    
+                    
+                    
+ 
+
                     document.body.style.cursor = "default";
                     document.getElementById('applyButton').innerHTML = 'Apply Selection'
 
@@ -1385,7 +1409,16 @@
             });
 
         }
-
+        // Function to filter features by a list of categories
+        function filterCategories(categories) {
+            // Clear existing layer (optional)
+            vectorTileLayer.clearLayers();
+            
+            // Add the filtered features back to the map
+            vectorTileLayer.addData(geojsonData.features.filter(function(feature) {
+                return categories.includes(feature.properties.category);
+            }));
+        }
 
         // Call the functions to fetch GeoJSON data for the main map layers 
         // Calls for conventional which has unconventional and polygons are nested
@@ -1537,7 +1570,7 @@
         document.getElementById('layer2').addEventListener('change', function() {
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
-                geojsonLayer.addTo(map);
+                filtvectorTileLayer.addTo(map);
                 if (document.getElementById('layer1').checked) {
                 
                     map.removeLayer(unc);
@@ -1550,8 +1583,8 @@
                 }
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
-                if (geojsonLayer) {
-                    map.removeLayer(geojsonLayer);
+                if (filtvectorTileLayer) {
+                    map.removeLayer(filtvectorTileLayer);
                 }
             }
         });
@@ -1571,9 +1604,9 @@
                     map.removeLayer(con);
                     con.addTo(map);
                 }
-                if (document.getElementById('layer2').checked && map.hasLayer(geojsonLayer)) {
-                    map.removeLayer(geojsonLayer);
-                    geojsonLayer.addTo(map);
+                if (document.getElementById('layer2').checked && map.hasLayer(filtvectorTileLayer)) {
+                    map.removeLayer(filtvectorTileLayer);
+                    filtvectorTileLayer.addTo(map);
                     if (document.getElementById('layer1').checked) {
                 
                         map.removeLayer(unc);
@@ -1604,7 +1637,9 @@
             document.getElementById('applyButton').innerHTML = 'Please Wait...'
                     // Function to uncheck all checkboxes in a filter group
             document.getElementById('layer3').checked = false;
-            map.removeLayer(geojsonLayer);
+            if (map.hasLayer(filtvectorTileLayer)) {
+                map.removeLayer(filtvectorTileLayer);
+            }
             map.removeLayer(vectorTileLayer);
             var startdate = document.getElementById('from-date').value;
             var enddate = document.getElementById('to-date').value;
