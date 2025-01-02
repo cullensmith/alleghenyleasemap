@@ -586,7 +586,7 @@
                     <div class="dropdown-content">
                         <label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer0" checked>Conventional Wells</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>
-                        <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" checked>Filtered Parcels</label><br>
+                        <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" unchecked>Filtered Parcels</label><br>
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br>
                     </div>
                 </div>
@@ -3934,6 +3934,7 @@
                 };
             
             getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs);
+            document.getElementById('layer2').checked = true;
 
         });
 
