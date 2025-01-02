@@ -1571,15 +1571,19 @@
                     map.removeLayer(con);
                     con.addTo(map);
                 }
-                if (document.getElementById('layer1').checked) {
+                if (document.getElementById('layer2').checked && map.hasLayer(geojsonLayer)) {
+                    map.removeLayer(geojsonLayer);
+                    geojsonLayer.addTo(map);
+                    if (document.getElementById('layer1').checked) {
                 
-                    map.removeLayer(unc);
-                    unc.addTo(map);
-                }
-                if (document.getElementById('layer0').checked) {
-                
-                    map.removeLayer(con);
-                    con.addTo(map);
+                        map.removeLayer(unc);
+                        unc.addTo(map);
+                    }
+                    if (document.getElementById('layer0').checked) {
+                    
+                        map.removeLayer(con);
+                        con.addTo(map);
+                    } 
                 }
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
