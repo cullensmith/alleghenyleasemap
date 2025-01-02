@@ -1393,11 +1393,13 @@
                     });
                     
                     
-                    
- 
+                    document.getElementById('applyButton').innerHTML = 'Almost Done...'
 
-                    document.body.style.cursor = "default";
-                    document.getElementById('applyButton').innerHTML = 'Apply Selection'
+ 
+                    setTimeout(function() {
+                        document.body.style.cursor = "default";
+                        document.getElementById('applyButton').innerHTML = 'Apply Selection'
+                    }, 1000);
 
                 },
                 error: function(xhr, status, error) {
