@@ -1305,15 +1305,6 @@
         conText.innerHTML = '';
         conText.appendChild(checkmarkc);
 
-        function check4layer(maplayer) {
-            if (!map.hasLayer(maplayer)) {
-                console.log('layer was not there yet')
-            } else {
-                console.log('the layer was already there')
-            }
-        };
-
-        check4layer(vectorTileLayer);
         // Add the unconventional wells to the map
         spinner_unc.style.display = 'block';
         uncurl = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/wells_unc.geojson'
@@ -1331,6 +1322,8 @@
         uncText.appendChild(checkmarku);
 
 
+
+        
 
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
@@ -3846,6 +3839,17 @@
             });
         });
 
+        // Function to delay adding the point layer until the page has fully loaded
+        window.addEventListener('load', function() {
+            // Add the point layer after the page is fully loaded
+            // add the layers to the map
+            setTimeout(function() {
+                map.removeLayer(unc);
+                map.removeLayer(con);
+                unc.addTo(map);
+                con.addTo(map);
+            }, 500);
+        });
     </script>
 </body>
 </html>
