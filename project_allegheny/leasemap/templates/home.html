@@ -678,7 +678,7 @@
                         <!-- Company filter -->
                         <div class="filter toggle-company show">
                             <h4 onclick="toggleFilter('company')">Company</h4>
-                            <div id='companyblock' class='show'>
+                            <div id='companyblock' class='companyblocks show'>
                                 <button onclick="checkAll('company')">Check All</button>
                                 <button onclick="uncheckAll('company')">Uncheck All</button>
                                 <input type="checkbox" id="company0" value="All American" checked> <label for="company0">All American</label><br>
@@ -1312,7 +1312,12 @@
 
         // Function to check all checkboxes in a filter group
         function checkAll(filterName) {
-            var checkboxes = document.querySelectorAll('.' + filterName + '-content input[type="checkbox"]');
+            if (filterName == 'company') {
+                var checkboxes = document.querySelectorAll('.companyblocks input[type="checkbox"]');
+                
+            } else {
+                var checkboxes = document.querySelectorAll('.' + filterName + '-content input[type="checkbox"]');
+            }
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = true;
             });
@@ -1320,7 +1325,12 @@
 
         // Function to uncheck all checkboxes in a filter group
         function uncheckAll(filterName) {
-            var checkboxes = document.querySelectorAll('.' + filterName + '-content input[type="checkbox"]');
+            if (filterName == 'company') {
+                var checkboxes = document.querySelectorAll('.companyblocks input[type="checkbox"]');
+                
+            } else {
+                var checkboxes = document.querySelectorAll('.' + filterName + '-content input[type="checkbox"]');
+            }
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = false;
             });
@@ -4111,13 +4121,14 @@
             
             getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs);
             document.getElementById('layer2').checked = true;
-            document.getElementById('layer2a').checked = true;
+            document.getElementById('layer2c').checked = true;
             document.getElementById('layer3').checked = false;
+            document.getElementById('layer3c').checked = false;
 
         });
 
         document.getElementById('resetButton').addEventListener('click', function() {
-            var checkboxes = document.querySelectorAll('.company-content input[type="checkbox"]');
+            var checkboxes = document.querySelectorAll('.companyblocks input[type="checkbox"]');
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = true;
             });
