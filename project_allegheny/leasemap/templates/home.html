@@ -661,10 +661,11 @@
                             <div id="search-container">
                                 {% comment %} <h2>Go To Location</h2> {% endcomment %}
                             </div>
-                            <div id="clear-geocode">
-                                <p>X</p>
-                            </div>
+                            {% comment %} <div id="clear-geocode">
+                                <button id="del-geocode">x</button>
+                            </div> {% endcomment %}
                         </div>
+                        <br>
                         <h2>Filters</h2>
                         <!-- Date filter -->
                         <div class="filter toggle-date hide">
@@ -1159,6 +1160,8 @@
                 <p>Welcome to the Allegheny Lease Mapping Project!</p>
                 <p>Use the filters on the left hand side to narrow down your search</p>
                 <p>Click on a parcel for more information</p>
+                <p>This is just placeholder text</p>
+                <p>Everything minus the date filter should be functioning</p>
                 <p></p>
                 <button class="sbtn" onclick="removeSplash()">Enter</button>
             </div>
