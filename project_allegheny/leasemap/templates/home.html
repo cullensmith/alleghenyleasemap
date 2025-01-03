@@ -612,6 +612,7 @@
                         <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>
                         <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" unchecked>Filtered Parcels</label><br>
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br>
+                        <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_" checked>Map Legend</label><br>
                     </div>
                 </div>
             </header>
@@ -1028,7 +1029,7 @@
                     <div id="map-legend">
                         <label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer0c" checked>Conventional Wells</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1c" checked>Unconventional Wells</label><br>
-                        <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2c" unchecked>Filtered Parcels</label><br>
+                        <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2c" >Filtered Parcels</label><br>
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3c" checked>Oil & Gas Parcels</label><br>
                     </div>
                 </div>
@@ -1632,11 +1633,23 @@
             });
         }
 
+        // Listen for changes - add or remove legend from the map
+        document.getElementById('layer_').addEventListener('change', function() {
+            if (this.checked) {
+                    document.getElementById('map-legend').style.display = 'inline';
+                } 
+            else {
+                document.getElementById('map-legend').style.display = 'none';
+            }
+        });
+
+        // This section should be rewritten to remove repitition
         // Listen for changes to the visible layers
         document.getElementById('layer0').addEventListener('change', function() {
             if (this.checked) {
                 // If checked, add the pointCanvas layer to the map
                 if (con) {
+                    document.getElementById('layer0c').checked = true;
                     con.addTo(map);
                 } else {
                     // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
@@ -1645,6 +1658,26 @@
             } else {
                 // If unchecked, remove the pointCanvas layer from the map
                 if (con) {
+                    document.getElementById('layer0c').checked = false;
+                    map.removeLayer(con);
+                }
+            }
+        });
+        // Listen for changes to the visible layers
+        document.getElementById('layer0c').addEventListener('change', function() {
+            if (this.checked) {
+                // If checked, add the pointCanvas layer to the map
+                if (con) {
+                    document.getElementById('layer0').checked = true;
+                    con.addTo(map);
+                } else {
+                    // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
+                    getmapdata();
+                }
+            } else {
+                // If unchecked, remove the pointCanvas layer from the map
+                if (con) {
+                    document.getElementById('layer0').checked = false;
                     map.removeLayer(con);
                 }
             }
@@ -1654,6 +1687,7 @@
             if (this.checked) {
                 // If checked, add the pointCanvas layer to the map
                 if (unc) {
+                    document.getElementById('layer1c').checked = true;
                     unc.addTo(map);
                 } else {
                     // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
@@ -1662,48 +1696,85 @@
             } else {
                 // If unchecked, remove the pointCanvas layer from the map
                 if (unc) {
+                    document.getElementById('layer1c').checked = false;
                     map.removeLayer(unc);
                 }
             }
         });
-
-
-
+        // Function to handle checkbox change events for pointCanvas layer
+        document.getElementById('layer1c').addEventListener('change', function() {
+            if (this.checked) {
+                // If checked, add the pointCanvas layer to the map
+                if (unc) {
+                    document.getElementById('layer1').checked = true;
+                    unc.addTo(map);
+                } else {
+                    // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
+                    getmapdata();
+                }
+            } else {
+                // If unchecked, remove the pointCanvas layer from the map
+                if (unc) {
+                    document.getElementById('layer1').checked = false;
+                    map.removeLayer(unc);
+                }
+            }
+        });
         // Function to handle checkbox change events for layer2 (polygon)
         document.getElementById('layer2').addEventListener('change', function() {
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
                 filtvectorTileLayer.addTo(map);
                 if (document.getElementById('layer1').checked) {
-                
+                    document.getElementById('layer2c').checked = true;
                     map.removeLayer(unc);
                     unc.addTo(map);
                 }
                 if (document.getElementById('layer0').checked) {
-                
                     map.removeLayer(con);
                     con.addTo(map);
                 }
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
                 if (filtvectorTileLayer) {
+                    document.getElementById('layer2c').checked = false;
                     map.removeLayer(filtvectorTileLayer);
                 }
             }
         });
-
+        // Function to handle checkbox change events for layer2 (polygon)
+        document.getElementById('layer2c').addEventListener('change', function() {
+            if (this.checked) {
+                // If checked, call the function to get and update the polygon layer
+                filtvectorTileLayer.addTo(map);
+                if (document.getElementById('layer1').checked) {
+                    document.getElementById('layer2').checked = true;
+                    map.removeLayer(unc);
+                    unc.addTo(map);
+                }
+                if (document.getElementById('layer0').checked) {
+                    map.removeLayer(con);
+                    con.addTo(map);
+                }
+            } else {
+                // If unchecked, remove the polygon layer from the map using the canvasLayer variable
+                if (filtvectorTileLayer) {
+                    document.getElementById('layer2').checked = false;
+                    map.removeLayer(filtvectorTileLayer);
+                }
+            }
+        });
         // Function to handle checkbox change events for layer2 (polygon)
         document.getElementById('layer3').addEventListener('change', function() {
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
                 vectorTileLayer.addTo(map);
                 if (document.getElementById('layer1').checked) {
-                
+                    document.getElementById('layer3c').checked = true;
                     map.removeLayer(unc);
                     unc.addTo(map);
                 }
                 if (document.getElementById('layer0').checked) {
-                
                     map.removeLayer(con);
                     con.addTo(map);
                 }
@@ -1711,12 +1782,10 @@
                     map.removeLayer(filtvectorTileLayer);
                     filtvectorTileLayer.addTo(map);
                     if (document.getElementById('layer1').checked) {
-                
                         map.removeLayer(unc);
                         unc.addTo(map);
                     }
                     if (document.getElementById('layer0').checked) {
-                    
                         map.removeLayer(con);
                         con.addTo(map);
                     } 
@@ -1724,11 +1793,47 @@
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
                 if (vectorTileLayer) {
+                    document.getElementById('layer3c').checked = false;
+
                     map.removeLayer(vectorTileLayer);
                 }
             }
         });
+        // Function to handle checkbox change events for layer2 (polygon)
+        document.getElementById('layer3c').addEventListener('change', function() {
+            if (this.checked) {
+                // If checked, call the function to get and update the polygon layer
+                vectorTileLayer.addTo(map);
+                if (document.getElementById('layer1').checked) {
+                    document.getElementById('layer3').checked = true;
+                    map.removeLayer(unc);
+                    unc.addTo(map);
+                }
+                if (document.getElementById('layer0').checked) {
+                    map.removeLayer(con);
+                    con.addTo(map);
+                }
+                if (document.getElementById('layer2').checked && map.hasLayer(filtvectorTileLayer)) {
+                    map.removeLayer(filtvectorTileLayer);
+                    filtvectorTileLayer.addTo(map);
+                    if (document.getElementById('layer1').checked) {
+                        map.removeLayer(unc);
+                        unc.addTo(map);
+                    }
+                    if (document.getElementById('layer0').checked) {
+                        map.removeLayer(con);
+                        con.addTo(map);
+                    } 
+                }
+            } else {
+                // If unchecked, remove the polygon layer from the map using the canvasLayer variable
+                if (vectorTileLayer) {
+                    document.getElementById('layer3').checked = false;
 
+                    map.removeLayer(vectorTileLayer);
+                }
+            }
+        });
         document.getElementById('clear_sel').addEventListener('click', function() {
             console.log('clicked to clear');
             document.getElementById('clear_sel').style.display = 'none';
@@ -3991,7 +4096,7 @@
                 map.removeLayer(con);
                 unc.addTo(map);
                 con.addTo(map);
-            }, 500);
+            }, 1500);
         });
 
 
