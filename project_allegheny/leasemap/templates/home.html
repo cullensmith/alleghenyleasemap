@@ -261,20 +261,29 @@
             color: #A3CF5F;
             cursor: pointer;
         }
-        #sidebar { /* Style the sidebar */
+        .sidebar { /* Style the sidebar */
             width: 100%; /* Take 10% of the screen width */
-            {% comment %} min-width: 200px; {% endcomment %}
-            height: 89vh;
-            {% comment %} margin-top: 6vh; {% endcomment %}
+            height: 81vh;
             background-color: #31322e;
             float: left; /* Float sidebar to the left */
             font-family: Arial;
             color: #dadada;
             overflow: auto;
-            {% comment %} max-height: 90%; {% endcomment %}
-            {% comment %} max-width:15%; {% endcomment %}
         }
 
+        .apply-container {
+            position: absolute;
+            padding: 20px;
+            margin-left: 8px;
+            margin-bottom: 16px;
+            bottom: 0;
+            left: 0;
+            height: 4vh;
+            width: 11%;
+            min-width: 240px;
+            background-color: #31322e;
+        }
+        
         /* Style the content inside the sidebar */
         #sidebar-content {
             margin-top: -20px;
@@ -595,12 +604,11 @@
 
         <div class="bottom">
                 <!-- Splash Screen -->
-
             <div class="left">
-                <div id="projectlogo">
+                <div class="projectlogo">
                     <img src="../static/images/fractracker-logo.png" alt="My Image" width="260" height="50">
                 </div> 
-                <div id="sidebar">
+                <div class="sidebar">
                     <div id="sidebar-content">
                         <div id="search-container">
                             <h2>Go To Location</h2>
@@ -608,10 +616,6 @@
                         <br>
                         <br>
                         <h2>Filters</h2>
-                        <div class="ab-button-container">
-                            <button class="apply-button" id="applyButton" >Apply Selection</button>
-                            <button class="reset-button" id="resetButton" >Reset</button>
-                        </div>
                         <!-- Date filter -->
                         <div class="filter">
                             <h4 onclick="toggleFilter('date')">Date</h4>
@@ -980,13 +984,6 @@
                             </div>
                         </div>
                         <br>
-                        {% comment %} <div>
-                            <p>above</p>
-                        </div>
-                        <div class="loader"></div>
-                        <div>
-                            <p>below</p>
-                        </div> {% endcomment %}
                         <div id="loading-container">
                             <strong>Loading Layers</strong>
                             <div id="con-status">
@@ -1001,13 +998,14 @@
                                 Parcels... <span class="spinner" id="spinner_poly"></span>
                                 <span id='poly-status-done'></span>
                             </div>
-                            {% comment %} <div id="done-status" style="display: none;">
-                                <strong>Done!</strong>
-                            </div> {% endcomment %}
                         </div>
                         <!-- Button to apply filters -->
                         {% comment %} <button class="apply-button" id="applyButton" >Apply Filters</button> {% endcomment %}
                     </div>
+                </div>
+                <div class="apply-container">
+                        <button class="apply-button" id="applyButton" >Apply Selection</button>
+                        <button class="reset-button" id="resetButton" >Reset</button>
                 </div>
             </div>
             <div class="middle">
