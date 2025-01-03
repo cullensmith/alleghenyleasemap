@@ -303,10 +303,18 @@
         }
 
         .filter h4::after {
-            content: '+';
+            content: var(--after-content, "");
             float: right;
             position: absolute;
             right: 0;
+        }
+
+        .filter.show h4::after {
+            content: var(--after-content, "-");
+        }
+
+        .filter.hide h4::after {
+            content: var(--after-content, "+");
         }
 
         .filter-content {
@@ -321,9 +329,6 @@
             max-height: 200px;
         }
 
-        .filter-content.show + h4::after {
-            content: '-';
-        }
 
         /* Style smaller checkboxes */
         .filter input[type="checkbox"] {
@@ -413,11 +418,6 @@
             font-size: 12px;
         }
 
-        {% comment %} /* Map layers container style */
-        #map-layers {
-            margin-top: 20px;
-        } {% endcomment %}
-
         .dropdown {
             color: #ff0101;
             position: relative;
@@ -464,19 +464,6 @@
         .dropdown-content a:hover {
             background-color: #bcbcbc;
         }
-        {% comment %} arrow for the basemap and layer dropdowns {% endcomment %}
-        {% comment %} .dropdown button::after {
-            content: '';
-            position: absolute;
-            right: 0px;
-            top: 25%;
-            transform: translateY(-50%);
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            padding: 3px;
-            transform: rotate(45deg);
-        } {% endcomment %}
-
 
         .hdropdown {
             color: #ff0101;
@@ -582,7 +569,50 @@
             bottom: 20px;
             right: 5px;
             z-index: 5000;
-            border-radius: 5px; /* Optional, for rounded corners */
+            border-
+            radius: 5px; /* Optional, for rounded corners */
+        }
+
+        #companyblock {
+            display: block;
+            font-size: 12px;
+            background-color: #3b3c38;
+            overflow-y: auto;
+            max-height: 200px;        
+        }
+
+        {% comment %} .filter-content {
+            display: none;
+        } {% endcomment %}
+
+        #companyblock.hide {
+            display: none;
+
+        }
+
+        #companyblock.show {
+            display: block;
+            font-size: 12px;
+            background-color: #3b3c38;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+
+        #companyblock.show + h4::after {
+            content: '-';
+        }
+
+        {% comment %} /* Style smaller checkboxes */
+        .filter input[type="checkbox"] {
+            transform: scale(0.75);
+            margin-right: 5px;
+        } {% endcomment %}
+        
+        /* Button style */
+        #companyblock button {
+            margin-top:5px;
+            width: 49%;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -626,14 +656,18 @@
                 </div> 
                 <div class="sidebar">
                     <div id="sidebar-content">
-                        <div id="search-container">
-                            <h2>Go To Location</h2>
+                        <div id="search-content">
+                            <br>
+                            <div id="search-container">
+                                {% comment %} <h2>Go To Location</h2> {% endcomment %}
+                            </div>
+                            <div id="clear-geocode">
+                                <p>X</p>
+                            </div>
                         </div>
-                        <br>
-                        <br>
                         <h2>Filters</h2>
                         <!-- Date filter -->
-                        <div class="filter">
+                        <div class="filter toggle-date hide">
                             <h4 onclick="toggleFilter('date')">Date</h4>
                             <div class="filter-content date-content">
                                 <label for="from-date">From:</label>
@@ -642,12 +676,63 @@
                                 <input type="date" id="to-date">
                             </div> 
                         </div>
+                        <!-- Company filter -->
+                        <div class="filter toggle-company show">
+                            <h4 onclick="toggleFilter('company')">Company</h4>
+                            <div id='companyblock' class='show'>
+                                <button onclick="checkAll('company')">Check All</button>
+                                <button onclick="uncheckAll('company')">Uncheck All</button>
+                                <input type="checkbox" id="company0" value="All American" checked> <label for="company0">All American</label><br>
+                                <input type="checkbox" id="company1" value="Atlas" checked> <label for="company1">Atlas</label><br>
+                                <input type="checkbox" id="company2" value="Baron Group" checked> <label for="company2">Baron Group</label><br>
+                                <input type="checkbox" id="company3" value="Bittinger Drilling" checked> <label for="company3">Bittinger Drilling</label><br>
+                                <input type="checkbox" id="company4" value="BLX" checked> <label for="company4">BLX</label><br>
+                                <input type="checkbox" id="company5" value="Bow & Arrow" checked> <label for="company5">Bow & Arrow</label><br>
+                                <input type="checkbox" id="company6" value="Carnegie Natural Gas" checked> <label for="company6">Carnegie Natural Gas</label><br>
+                                <input type="checkbox" id="company7" value="Carter Oil & Gas" checked> <label for="company7">Carter Oil & Gas</label><br>
+                                <input type="checkbox" id="company8" value="Chesapeake" checked> <label for="company8">Chesapeake</label><br>
+                                <input type="checkbox" id="company9" value="CNX" checked> <label for="company9">CNX</label><br>
+                                <input type="checkbox" id="company10" value="Columbia Gas" checked> <label for="company10">Columbia Gas</label><br>
+                                <input type="checkbox" id="company11" value="Cone Gathering" checked> <label for="company11">Cone Gathering</label><br>
+                                <input type="checkbox" id="company12" value="Consol" checked> <label for="company12">Consol</label><br>
+                                <input type="checkbox" id="company13" value="Dale Property Services" checked> <label for="company13">Dale Property Services</label><br>
+                                <input type="checkbox" id="company14" value="Dominion" checked> <label for="company14">Dominion</label><br>
+                                <input type="checkbox" id="company15" value="Dorso" checked> <label for="company15">Dorso</label><br>
+                                <input type="checkbox" id="company16" value="EQT" checked> <label for="company16">EQT</label><br>
+                                <input type="checkbox" id="company17" value="Equitrans" checked> <label for="company17">Equitrans</label><br>
+                                <input type="checkbox" id="company18" value="Everest Exploration" checked> <label for="company18">Everest Exploration</label><br>
+                                <input type="checkbox" id="company19" value="Great Lakes Energy" checked> <label for="company19">Great Lakes Energy</label><br>
+                                <input type="checkbox" id="company20" value="H&M Holdings" checked> <label for="company20">H&M Holdings</label><br>
+                                <input type="checkbox" id="company21" value="Huntley & Huntley" checked> <label for="company21">Huntley & Huntley</label><br>
+                                <input type="checkbox" id="company22" value="JJ Oil & Gas" checked> <label for="company22">JJ Oil & Gas</label><br>
+                                <input type="checkbox" id="company23" value="Kriebel" checked> <label for="company23">Kriebel</label><br>
+                                <input type="checkbox" id="company24" value="Marco Drilling" checked> <label for="company24">Marco Drilling</label><br>
+                                <input type="checkbox" id="company25" value="MarkWest" checked> <label for="company25">MarkWest</label><br>
+                                <input type="checkbox" id="company26" value="Natural Energy" checked> <label for="company26">Natural Energy</label><br>
+                                <input type="checkbox" id="company27" value="Noble Energy" checked> <label for="company27">Noble Energy</label><br>
+                                <input type="checkbox" id="company28" value="Oil & Gas Mgmt" checked> <label for="company28">Oil & Gas Mgmt</label><br>
+                                <input type="checkbox" id="company29" value="Patriot Exploration" checked> <label for="company29">Patriot Exploration</label><br>
+                                <input type="checkbox" id="company30" value="Penneco" checked> <label for="company30">Penneco</label><br>
+                                <input type="checkbox" id="company31" value="Peoples Natural Gas" checked> <label for="company31">Peoples Natural Gas</label><br>
+                                <input type="checkbox" id="company32" value="Phillips" checked> <label for="company32">Phillips</label><br>
+                                <input type="checkbox" id="company33" value="Principle Energy Resources" checked> <label for="company33">Principle Energy Resources</label><br>
+                                <input type="checkbox" id="company34" value="Range Resources" checked> <label for="company34">Range Resources</label><br>
+                                <input type="checkbox" id="company35" value="Rice Drilling" checked> <label for="company35">Rice Drilling</label><br>
+                                <input type="checkbox" id="company36" value="Shell" checked> <label for="company36">Shell</label><br>
+                                <input type="checkbox" id="company37" value="Statoil USA" checked> <label for="company37">Statoil USA</label><br>
+                                <input type="checkbox" id="company38" value="Sunoco" checked> <label for="company38">Sunoco</label><br>
+                                <input type="checkbox" id="company39" value="Sylvan Energy" checked> <label for="company39">Sylvan Energy</label><br>
+                                <input type="checkbox" id="company40" value="Turm Oil" checked> <label for="company40">Turm Oil</label><br>
+                                <input type="checkbox" id="company41" value="Wadwell Group" checked> <label for="company41">Wadwell Group</label><br>
+                                <input type="checkbox" id="company42" value="XTO Energy" checked> <label for="company42">XTO Energy</label><br>                                
+                            </div>
+                        </div>
                         <!-- Record type filter -->
-                        <div class="filter">
-                            <h4 onclick="toggleFilter('record-type')">Record Type</h4>
-                            <div class="filter-content record-type-content">
-                                <button onclick="checkAll('record-type')">Check All</button>
-                                <button onclick="uncheckAll('record-type')">Uncheck All</button>
+                        <div class="filter toggle-recordtype hide">
+                            <h4 onclick="toggleFilter('recordtype')">Record Type</h4>
+                            <div class="filter-content recordtype-content">
+                                <button onclick="checkAll('recordtype')">Check All</button>
+                                <button onclick="uncheckAll('recordtype')">Uncheck All</button>
                                 <input type="checkbox" id="agmt0" value="ADDENDUM OIL & GAS" checked> <label for="agmt0">ADDENDUM OIL & GAS</label><br>
                                 <input type="checkbox" id="agmt1" value="ADDENDUM RIGHT OF WAY" checked> <label for="agmt1">ADDENDUM RIGHT OF WAY</label><br>
                                 <input type="checkbox" id="agmt2" value="AFFIDAVIT" checked> <label for="agmt2">AFFIDAVIT</label><br>
@@ -713,59 +798,9 @@
                                 <input type="checkbox" id="agmt62" value="UNIT OPERATION" checked> <label for="agmt62">UNIT OPERATION</label><br>                                
                             </div>
                         </div>
-                        <!-- Company filter -->
-                        <div class="filter company">
-                            <h4 onclick="toggleFilter('company')">Company</h4>
-                            <div class="filter-content company-content">
-                                <button onclick="checkAll('company')">Check All</button>
-                                <button onclick="uncheckAll('company')">Uncheck All</button>
-                                <input type="checkbox" id="company0" value="All American" checked> <label for="company0">All American</label><br>
-                                <input type="checkbox" id="company1" value="Atlas" checked> <label for="company1">Atlas</label><br>
-                                <input type="checkbox" id="company2" value="Baron Group" checked> <label for="company2">Baron Group</label><br>
-                                <input type="checkbox" id="company3" value="Bittinger Drilling" checked> <label for="company3">Bittinger Drilling</label><br>
-                                <input type="checkbox" id="company4" value="BLX" checked> <label for="company4">BLX</label><br>
-                                <input type="checkbox" id="company5" value="Bow & Arrow" checked> <label for="company5">Bow & Arrow</label><br>
-                                <input type="checkbox" id="company6" value="Carnegie Natural Gas" checked> <label for="company6">Carnegie Natural Gas</label><br>
-                                <input type="checkbox" id="company7" value="Carter Oil & Gas" checked> <label for="company7">Carter Oil & Gas</label><br>
-                                <input type="checkbox" id="company8" value="Chesapeake" checked> <label for="company8">Chesapeake</label><br>
-                                <input type="checkbox" id="company9" value="CNX" checked> <label for="company9">CNX</label><br>
-                                <input type="checkbox" id="company10" value="Columbia Gas" checked> <label for="company10">Columbia Gas</label><br>
-                                <input type="checkbox" id="company11" value="Cone Gathering" checked> <label for="company11">Cone Gathering</label><br>
-                                <input type="checkbox" id="company12" value="Consol" checked> <label for="company12">Consol</label><br>
-                                <input type="checkbox" id="company13" value="Dale Property Services" checked> <label for="company13">Dale Property Services</label><br>
-                                <input type="checkbox" id="company14" value="Dominion" checked> <label for="company14">Dominion</label><br>
-                                <input type="checkbox" id="company15" value="Dorso" checked> <label for="company15">Dorso</label><br>
-                                <input type="checkbox" id="company16" value="EQT" checked> <label for="company16">EQT</label><br>
-                                <input type="checkbox" id="company17" value="Equitrans" checked> <label for="company17">Equitrans</label><br>
-                                <input type="checkbox" id="company18" value="Everest Exploration" checked> <label for="company18">Everest Exploration</label><br>
-                                <input type="checkbox" id="company19" value="Great Lakes Energy" checked> <label for="company19">Great Lakes Energy</label><br>
-                                <input type="checkbox" id="company20" value="H&M Holdings" checked> <label for="company20">H&M Holdings</label><br>
-                                <input type="checkbox" id="company21" value="Huntley & Huntley" checked> <label for="company21">Huntley & Huntley</label><br>
-                                <input type="checkbox" id="company22" value="JJ Oil & Gas" checked> <label for="company22">JJ Oil & Gas</label><br>
-                                <input type="checkbox" id="company23" value="Kriebel" checked> <label for="company23">Kriebel</label><br>
-                                <input type="checkbox" id="company24" value="Marco Drilling" checked> <label for="company24">Marco Drilling</label><br>
-                                <input type="checkbox" id="company25" value="MarkWest" checked> <label for="company25">MarkWest</label><br>
-                                <input type="checkbox" id="company26" value="Natural Energy" checked> <label for="company26">Natural Energy</label><br>
-                                <input type="checkbox" id="company27" value="Noble Energy" checked> <label for="company27">Noble Energy</label><br>
-                                <input type="checkbox" id="company28" value="Oil & Gas Mgmt" checked> <label for="company28">Oil & Gas Mgmt</label><br>
-                                <input type="checkbox" id="company29" value="Patriot Exploration" checked> <label for="company29">Patriot Exploration</label><br>
-                                <input type="checkbox" id="company30" value="Penneco" checked> <label for="company30">Penneco</label><br>
-                                <input type="checkbox" id="company31" value="Peoples Natural Gas" checked> <label for="company31">Peoples Natural Gas</label><br>
-                                <input type="checkbox" id="company32" value="Phillips" checked> <label for="company32">Phillips</label><br>
-                                <input type="checkbox" id="company33" value="Principle Energy Resources" checked> <label for="company33">Principle Energy Resources</label><br>
-                                <input type="checkbox" id="company34" value="Range Resources" checked> <label for="company34">Range Resources</label><br>
-                                <input type="checkbox" id="company35" value="Rice Drilling" checked> <label for="company35">Rice Drilling</label><br>
-                                <input type="checkbox" id="company36" value="Shell" checked> <label for="company36">Shell</label><br>
-                                <input type="checkbox" id="company37" value="Statoil USA" checked> <label for="company37">Statoil USA</label><br>
-                                <input type="checkbox" id="company38" value="Sunoco" checked> <label for="company38">Sunoco</label><br>
-                                <input type="checkbox" id="company39" value="Sylvan Energy" checked> <label for="company39">Sylvan Energy</label><br>
-                                <input type="checkbox" id="company40" value="Turm Oil" checked> <label for="company40">Turm Oil</label><br>
-                                <input type="checkbox" id="company41" value="Wadwell Group" checked> <label for="company41">Wadwell Group</label><br>
-                                <input type="checkbox" id="company42" value="XTO Energy" checked> <label for="company42">XTO Energy</label><br>                                
-                            </div>
-                        </div>
+
                         <!-- Municipality filter -->
-                        <div class="filter municipality">
+                        <div class="filter toggle-municipality hide">
                             <h4 onclick="toggleFilter('municipality')">Municipality</h4>
                             <div class="filter-content municipality-content">
                                 <button onclick="checkAll('municipality')">Check All</button>
@@ -929,62 +964,62 @@
                             </div>
                         </div>
                         <!-- School district filter -->
-                        <div class="filter">
-                            <h4 onclick="toggleFilter('school-district')">School District</h4>
-                            <div class="filter-content school-district-content">
-                                <button onclick="checkAll('school-district')">Check All</button>
-                                <button onclick="uncheckAll('school-district')">Uncheck All</button><br>
-                                <input type="checkbox" id="school-district0" value="Allegheny Valley" checked> <label for="school-district0">Allegheny Valley</label><br>
-                                <input type="checkbox" id="school-district1" value="Avonworth" checked> <label for="school-district1">Avonworth</label><br>
-                                <input type="checkbox" id="school-district2" value="Baldwin Whitehall" checked> <label for="school-district2">Baldwin Whitehall</label><br>
-                                <input type="checkbox" id="school-district3" value="Bethel Park" checked> <label for="school-district3">Bethel Park</label><br>
-                                <input type="checkbox" id="school-district4" value="Brentwood Boro" checked> <label for="school-district4">Brentwood Boro</label><br>
-                                <input type="checkbox" id="school-district5" value="Carlynton" checked> <label for="school-district5">Carlynton</label><br>
-                                <input type="checkbox" id="school-district6" value="Chartiers Valley" checked> <label for="school-district6">Chartiers Valley</label><br>
-                                <input type="checkbox" id="school-district7" value="Clairton City" checked> <label for="school-district7">Clairton City</label><br>
-                                <input type="checkbox" id="school-district8" value="Cornell" checked> <label for="school-district8">Cornell</label><br>
-                                <input type="checkbox" id="school-district9" value="Deer Lakes" checked> <label for="school-district9">Deer Lakes</label><br>
-                                <input type="checkbox" id="school-district10" value="Duquesne City" checked> <label for="school-district10">Duquesne City</label><br>
-                                <input type="checkbox" id="school-district11" value="East Allegheny" checked> <label for="school-district11">East Allegheny</label><br>
-                                <input type="checkbox" id="school-district12" value="Elizabeth Forward" checked> <label for="school-district12">Elizabeth Forward</label><br>
-                                <input type="checkbox" id="school-district13" value="Fort Cherry" checked> <label for="school-district13">Fort Cherry</label><br>
-                                <input type="checkbox" id="school-district14" value="Fox Chapel Area" checked> <label for="school-district14">Fox Chapel Area</label><br>
-                                <input type="checkbox" id="school-district15" value="Gateway" checked> <label for="school-district15">Gateway</label><br>
-                                <input type="checkbox" id="school-district16" value="Hampton Township" checked> <label for="school-district16">Hampton Township</label><br>
-                                <input type="checkbox" id="school-district17" value="Highlands" checked> <label for="school-district17">Highlands</label><br>
-                                <input type="checkbox" id="school-district18" value="Keystone Oaks" checked> <label for="school-district18">Keystone Oaks</label><br>
-                                <input type="checkbox" id="school-district19" value="McKeesport Area" checked> <label for="school-district19">McKeesport Area</label><br>
-                                <input type="checkbox" id="school-district20" value="Montour" checked> <label for="school-district20">Montour</label><br>
-                                <input type="checkbox" id="school-district21" value="Moon Area" checked> <label for="school-district21">Moon Area</label><br>
-                                <input type="checkbox" id="school-district22" value="Mt Lebanon" checked> <label for="school-district22">Mt Lebanon</label><br>
-                                <input type="checkbox" id="school-district23" value="North Allegheny" checked> <label for="school-district23">North Allegheny</label><br>
-                                <input type="checkbox" id="school-district24" value="North Hills" checked> <label for="school-district24">North Hills</label><br>
-                                <input type="checkbox" id="school-district25" value="Northgate" checked> <label for="school-district25">Northgate</label><br>
-                                <input type="checkbox" id="school-district26" value="Norwin" checked> <label for="school-district26">Norwin</label><br>
-                                <input type="checkbox" id="school-district27" value="Penn-Trafford" checked> <label for="school-district27">Penn-Trafford</label><br>
-                                <input type="checkbox" id="school-district28" value="Penn Hills Twp" checked> <label for="school-district28">Penn Hills Twp</label><br>
-                                <input type="checkbox" id="school-district29" value="Pine-Richland" checked> <label for="school-district29">Pine-Richland</label><br>
-                                <input type="checkbox" id="school-district30" value="Pittsburgh" checked> <label for="school-district30">Pittsburgh</label><br>
-                                <input type="checkbox" id="school-district31" value="Plum Boro" checked> <label for="school-district31">Plum Boro</label><br>
-                                <input type="checkbox" id="school-district32" value="Quaker Valley" checked> <label for="school-district32">Quaker Valley</label><br>
-                                <input type="checkbox" id="school-district33" value="Riverview" checked> <label for="school-district33">Riverview</label><br>
-                                <input type="checkbox" id="school-district34" value="Shaler Area" checked> <label for="school-district34">Shaler Area</label><br>
-                                <input type="checkbox" id="school-district35" value="South Allegheny" checked> <label for="school-district35">South Allegheny</label><br>
-                                <input type="checkbox" id="school-district36" value="South Fayette Twp" checked> <label for="school-district36">South Fayette Twp</label><br>
-                                <input type="checkbox" id="school-district37" value="South Park" checked> <label for="school-district37">South Park</label><br>
-                                <input type="checkbox" id="school-district38" value="Steel Valley" checked> <label for="school-district38">Steel Valley</label><br>
-                                <input type="checkbox" id="school-district39" value="Sto-Rox" checked> <label for="school-district39">Sto-Rox</label><br>
-                                <input type="checkbox" id="school-district40" value="Upper St Clair" checked> <label for="school-district40">Upper St Clair</label><br>
-                                <input type="checkbox" id="school-district41" value="West Allegheny" checked> <label for="school-district41">West Allegheny</label><br>
-                                <input type="checkbox" id="school-district42" value="West Jefferson Hills" checked> <label for="school-district42">West Jefferson Hills</label><br>
-                                <input type="checkbox" id="school-district43" value="West Mifflin Area" checked> <label for="school-district43">West Mifflin Area</label><br>
-                                <input type="checkbox" id="school-district44" value="Wilkinsburg Boro" checked> <label for="school-district44">Wilkinsburg Boro</label><br>
-                                <input type="checkbox" id="school-district45" value="Woodland Hills" checked> <label for="school-district45">Woodland Hills</label><br>
+                        <div class="filter toggle-schooldistrict hide">
+                            <h4 onclick="toggleFilter('schooldistrict')">School District</h4>
+                            <div class="filter-content schooldistrict-content">
+                                <button onclick="checkAll('schooldistrict')">Check All</button>
+                                <button onclick="uncheckAll('schooldistrict')">Uncheck All</button><br>
+                                <input type="checkbox" id="schooldistrict0" value="Allegheny Valley" checked> <label for="schooldistrict0">Allegheny Valley</label><br>
+                                <input type="checkbox" id="schooldistrict1" value="Avonworth" checked> <label for="schooldistrict1">Avonworth</label><br>
+                                <input type="checkbox" id="schooldistrict2" value="Baldwin Whitehall" checked> <label for="schooldistrict2">Baldwin Whitehall</label><br>
+                                <input type="checkbox" id="schooldistrict3" value="Bethel Park" checked> <label for="schooldistrict3">Bethel Park</label><br>
+                                <input type="checkbox" id="schooldistrict4" value="Brentwood Boro" checked> <label for="schooldistrict4">Brentwood Boro</label><br>
+                                <input type="checkbox" id="schooldistrict5" value="Carlynton" checked> <label for="schooldistrict5">Carlynton</label><br>
+                                <input type="checkbox" id="schooldistrict6" value="Chartiers Valley" checked> <label for="schooldistrict6">Chartiers Valley</label><br>
+                                <input type="checkbox" id="schooldistrict7" value="Clairton City" checked> <label for="schooldistrict7">Clairton City</label><br>
+                                <input type="checkbox" id="schooldistrict8" value="Cornell" checked> <label for="schooldistrict8">Cornell</label><br>
+                                <input type="checkbox" id="schooldistrict9" value="Deer Lakes" checked> <label for="schooldistrict9">Deer Lakes</label><br>
+                                <input type="checkbox" id="schooldistrict10" value="Duquesne City" checked> <label for="schooldistrict10">Duquesne City</label><br>
+                                <input type="checkbox" id="schooldistrict11" value="East Allegheny" checked> <label for="schooldistrict11">East Allegheny</label><br>
+                                <input type="checkbox" id="schooldistrict12" value="Elizabeth Forward" checked> <label for="schooldistrict12">Elizabeth Forward</label><br>
+                                <input type="checkbox" id="schooldistrict13" value="Fort Cherry" checked> <label for="schooldistrict13">Fort Cherry</label><br>
+                                <input type="checkbox" id="schooldistrict14" value="Fox Chapel Area" checked> <label for="schooldistrict14">Fox Chapel Area</label><br>
+                                <input type="checkbox" id="schooldistrict15" value="Gateway" checked> <label for="schooldistrict15">Gateway</label><br>
+                                <input type="checkbox" id="schooldistrict16" value="Hampton Township" checked> <label for="schooldistrict16">Hampton Township</label><br>
+                                <input type="checkbox" id="schooldistrict17" value="Highlands" checked> <label for="schooldistrict17">Highlands</label><br>
+                                <input type="checkbox" id="schooldistrict18" value="Keystone Oaks" checked> <label for="schooldistrict18">Keystone Oaks</label><br>
+                                <input type="checkbox" id="schooldistrict19" value="McKeesport Area" checked> <label for="schooldistrict19">McKeesport Area</label><br>
+                                <input type="checkbox" id="schooldistrict20" value="Montour" checked> <label for="schooldistrict20">Montour</label><br>
+                                <input type="checkbox" id="schooldistrict21" value="Moon Area" checked> <label for="schooldistrict21">Moon Area</label><br>
+                                <input type="checkbox" id="schooldistrict22" value="Mt Lebanon" checked> <label for="schooldistrict22">Mt Lebanon</label><br>
+                                <input type="checkbox" id="schooldistrict23" value="North Allegheny" checked> <label for="schooldistrict23">North Allegheny</label><br>
+                                <input type="checkbox" id="schooldistrict24" value="North Hills" checked> <label for="schooldistrict24">North Hills</label><br>
+                                <input type="checkbox" id="schooldistrict25" value="Northgate" checked> <label for="schooldistrict25">Northgate</label><br>
+                                <input type="checkbox" id="schooldistrict26" value="Norwin" checked> <label for="schooldistrict26">Norwin</label><br>
+                                <input type="checkbox" id="schooldistrict27" value="Penn-Trafford" checked> <label for="schooldistrict27">Penn-Trafford</label><br>
+                                <input type="checkbox" id="schooldistrict28" value="Penn Hills Twp" checked> <label for="schooldistrict28">Penn Hills Twp</label><br>
+                                <input type="checkbox" id="schooldistrict29" value="Pine-Richland" checked> <label for="schooldistrict29">Pine-Richland</label><br>
+                                <input type="checkbox" id="schooldistrict30" value="Pittsburgh" checked> <label for="schooldistrict30">Pittsburgh</label><br>
+                                <input type="checkbox" id="schooldistrict31" value="Plum Boro" checked> <label for="schooldistrict31">Plum Boro</label><br>
+                                <input type="checkbox" id="schooldistrict32" value="Quaker Valley" checked> <label for="schooldistrict32">Quaker Valley</label><br>
+                                <input type="checkbox" id="schooldistrict33" value="Riverview" checked> <label for="schooldistrict33">Riverview</label><br>
+                                <input type="checkbox" id="schooldistrict34" value="Shaler Area" checked> <label for="schooldistrict34">Shaler Area</label><br>
+                                <input type="checkbox" id="schooldistrict35" value="South Allegheny" checked> <label for="schooldistrict35">South Allegheny</label><br>
+                                <input type="checkbox" id="schooldistrict36" value="South Fayette Twp" checked> <label for="schooldistrict36">South Fayette Twp</label><br>
+                                <input type="checkbox" id="schooldistrict37" value="South Park" checked> <label for="schooldistrict37">South Park</label><br>
+                                <input type="checkbox" id="schooldistrict38" value="Steel Valley" checked> <label for="schooldistrict38">Steel Valley</label><br>
+                                <input type="checkbox" id="schooldistrict39" value="Sto-Rox" checked> <label for="schooldistrict39">Sto-Rox</label><br>
+                                <input type="checkbox" id="schooldistrict40" value="Upper St Clair" checked> <label for="schooldistrict40">Upper St Clair</label><br>
+                                <input type="checkbox" id="schooldistrict41" value="West Allegheny" checked> <label for="schooldistrict41">West Allegheny</label><br>
+                                <input type="checkbox" id="schooldistrict42" value="West Jefferson Hills" checked> <label for="schooldistrict42">West Jefferson Hills</label><br>
+                                <input type="checkbox" id="schooldistrict43" value="West Mifflin Area" checked> <label for="schooldistrict43">West Mifflin Area</label><br>
+                                <input type="checkbox" id="schooldistrict44" value="Wilkinsburg Boro" checked> <label for="schooldistrict44">Wilkinsburg Boro</label><br>
+                                <input type="checkbox" id="schooldistrict45" value="Woodland Hills" checked> <label for="schooldistrict45">Woodland Hills</label><br>
 
                             </div>
                         </div>
                         <!-- Zoning filter -->
-                        <div class="filter">
+                        <div class="filter toggle-zoning hide">
                             <h4 onclick="toggleFilter('zoning')">Zoning</h4>
                             <div class="filter-content zoning-content">
                                 <button onclick="checkAll('zoning')">Check All</button>
@@ -1229,13 +1264,13 @@
   
         var control = L.Control.geocoder({
           collapsed: false,
-          placeholder: '',
+          placeholder: 'Go to Location...',
           position:'topleft',
           geocoder: geocoder
         }).addTo(map);
+  
         var dots;
   
-
         // Call the getContainer routine.
         var htmlObject = control.getContainer();
         // Get the desired parent node.
@@ -1251,12 +1286,26 @@
         // Functions for the left side panel
         // Function to toggle filter visibility
         function toggleFilter(filterName) {
-            var filterContent = document.querySelector('.' + filterName + '-content');
-            var filterIcon = document.querySelector('.filter.h4::after');
+            if (filterName == 'company') {
+                var filterContent = document.getElementById('companyblock');
+                
+            } else {
+                var filterContent = document.querySelector('.' + filterName + '-content');
+            }
+            
+            var filterIcon = document.querySelector('.filter.toggle-' + filterName + ' h4');
+            console.log(filterName)
+            console.log(filterContent)
+            console.log(filterIcon)
             if (filterContent.classList.contains('show')) {
                 filterContent.classList.remove('show');
+                filterContent.classList.add('hide');
+                filterIcon.style.setProperty('--after-content', '"+"');
             } else {
                 filterContent.classList.add('show');
+                filterContent.classList.remove('hide');
+                filterIcon.style.setProperty('--after-content', '"-"');
+
             }
         }
 
@@ -3686,322 +3735,322 @@
                 console.log('Checkbox is not checked');
                 };
             sd = ''
-            var checkbox_sd0 = document.getElementById('school-district0');
+            var checkbox_sd0 = document.getElementById('schooldistrict0');
             if (checkbox_sd0.checked) {
                 sd += ','
                 sd += checkbox_sd0.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd1 = document.getElementById('school-district1');
+            var checkbox_sd1 = document.getElementById('schooldistrict1');
             if (checkbox_sd1.checked) {
                 sd += ','
                 sd += checkbox_sd1.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd2 = document.getElementById('school-district2');
+            var checkbox_sd2 = document.getElementById('schooldistrict2');
             if (checkbox_sd2.checked) {
                 sd += ','
                 sd += checkbox_sd2.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd3 = document.getElementById('school-district3');
+            var checkbox_sd3 = document.getElementById('schooldistrict3');
             if (checkbox_sd3.checked) {
                 sd += ','
                 sd += checkbox_sd3.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd4 = document.getElementById('school-district4');
+            var checkbox_sd4 = document.getElementById('schooldistrict4');
             if (checkbox_sd4.checked) {
                 sd += ','
                 sd += checkbox_sd4.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd5 = document.getElementById('school-district5');
+            var checkbox_sd5 = document.getElementById('schooldistrict5');
             if (checkbox_sd5.checked) {
                 sd += ','
                 sd += checkbox_sd5.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd6 = document.getElementById('school-district6');
+            var checkbox_sd6 = document.getElementById('schooldistrict6');
             if (checkbox_sd6.checked) {
                 sd += ','
                 sd += checkbox_sd6.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd7 = document.getElementById('school-district7');
+            var checkbox_sd7 = document.getElementById('schooldistrict7');
             if (checkbox_sd7.checked) {
                 sd += ','
                 sd += checkbox_sd7.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd8 = document.getElementById('school-district8');
+            var checkbox_sd8 = document.getElementById('schooldistrict8');
             if (checkbox_sd8.checked) {
                 sd += ','
                 sd += checkbox_sd8.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd9 = document.getElementById('school-district9');
+            var checkbox_sd9 = document.getElementById('schooldistrict9');
             if (checkbox_sd9.checked) {
                 sd += ','
                 sd += checkbox_sd9.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd10 = document.getElementById('school-district10');
+            var checkbox_sd10 = document.getElementById('schooldistrict10');
             if (checkbox_sd10.checked) {
                 sd += ','
                 sd += checkbox_sd10.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd11 = document.getElementById('school-district11');
+            var checkbox_sd11 = document.getElementById('schooldistrict11');
             if (checkbox_sd11.checked) {
                 sd += ','
                 sd += checkbox_sd11.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd12 = document.getElementById('school-district12');
+            var checkbox_sd12 = document.getElementById('schooldistrict12');
             if (checkbox_sd12.checked) {
                 sd += ','
                 sd += checkbox_sd12.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd13 = document.getElementById('school-district13');
+            var checkbox_sd13 = document.getElementById('schooldistrict13');
             if (checkbox_sd13.checked) {
                 sd += ','
                 sd += checkbox_sd13.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd14 = document.getElementById('school-district14');
+            var checkbox_sd14 = document.getElementById('schooldistrict14');
             if (checkbox_sd14.checked) {
                 sd += ','
                 sd += checkbox_sd14.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd15 = document.getElementById('school-district15');
+            var checkbox_sd15 = document.getElementById('schooldistrict15');
             if (checkbox_sd15.checked) {
                 sd += ','
                 sd += checkbox_sd15.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd16 = document.getElementById('school-district16');
+            var checkbox_sd16 = document.getElementById('schooldistrict16');
             if (checkbox_sd16.checked) {
                 sd += ','
                 sd += checkbox_sd16.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd17 = document.getElementById('school-district17');
+            var checkbox_sd17 = document.getElementById('schooldistrict17');
             if (checkbox_sd17.checked) {
                 sd += ','
                 sd += checkbox_sd17.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd18 = document.getElementById('school-district18');
+            var checkbox_sd18 = document.getElementById('schooldistrict18');
             if (checkbox_sd18.checked) {
                 sd += ','
                 sd += checkbox_sd18.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd19 = document.getElementById('school-district19');
+            var checkbox_sd19 = document.getElementById('schooldistrict19');
             if (checkbox_sd19.checked) {
                 sd += ','
                 sd += checkbox_sd19.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd20 = document.getElementById('school-district20');
+            var checkbox_sd20 = document.getElementById('schooldistrict20');
             if (checkbox_sd20.checked) {
                 sd += ','
                 sd += checkbox_sd20.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd21 = document.getElementById('school-district21');
+            var checkbox_sd21 = document.getElementById('schooldistrict21');
             if (checkbox_sd21.checked) {
                 sd += ','
                 sd += checkbox_sd21.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd22 = document.getElementById('school-district22');
+            var checkbox_sd22 = document.getElementById('schooldistrict22');
             if (checkbox_sd22.checked) {
                 sd += ','
                 sd += checkbox_sd22.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd23 = document.getElementById('school-district23');
+            var checkbox_sd23 = document.getElementById('schooldistrict23');
             if (checkbox_sd23.checked) {
                 sd += ','
                 sd += checkbox_sd23.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd24 = document.getElementById('school-district24');
+            var checkbox_sd24 = document.getElementById('schooldistrict24');
             if (checkbox_sd24.checked) {
                 sd += ','
                 sd += checkbox_sd24.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd25 = document.getElementById('school-district25');
+            var checkbox_sd25 = document.getElementById('schooldistrict25');
             if (checkbox_sd25.checked) {
                 sd += ','
                 sd += checkbox_sd25.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd26 = document.getElementById('school-district26');
+            var checkbox_sd26 = document.getElementById('schooldistrict26');
             if (checkbox_sd26.checked) {
                 sd += ','
                 sd += checkbox_sd26.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd27 = document.getElementById('school-district27');
+            var checkbox_sd27 = document.getElementById('schooldistrict27');
             if (checkbox_sd27.checked) {
                 sd += ','
                 sd += checkbox_sd27.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd28 = document.getElementById('school-district28');
+            var checkbox_sd28 = document.getElementById('schooldistrict28');
             if (checkbox_sd28.checked) {
                 sd += ','
                 sd += checkbox_sd28.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd29 = document.getElementById('school-district29');
+            var checkbox_sd29 = document.getElementById('schooldistrict29');
             if (checkbox_sd29.checked) {
                 sd += ','
                 sd += checkbox_sd29.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd30 = document.getElementById('school-district30');
+            var checkbox_sd30 = document.getElementById('schooldistrict30');
             if (checkbox_sd30.checked) {
                 sd += ','
                 sd += checkbox_sd30.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd31 = document.getElementById('school-district31');
+            var checkbox_sd31 = document.getElementById('schooldistrict31');
             if (checkbox_sd31.checked) {
                 sd += ','
                 sd += checkbox_sd31.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd32 = document.getElementById('school-district32');
+            var checkbox_sd32 = document.getElementById('schooldistrict32');
             if (checkbox_sd32.checked) {
                 sd += ','
                 sd += checkbox_sd32.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd33 = document.getElementById('school-district33');
+            var checkbox_sd33 = document.getElementById('schooldistrict33');
             if (checkbox_sd33.checked) {
                 sd += ','
                 sd += checkbox_sd33.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd34 = document.getElementById('school-district34');
+            var checkbox_sd34 = document.getElementById('schooldistrict34');
             if (checkbox_sd34.checked) {
                 sd += ','
                 sd += checkbox_sd34.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd35 = document.getElementById('school-district35');
+            var checkbox_sd35 = document.getElementById('schooldistrict35');
             if (checkbox_sd35.checked) {
                 sd += ','
                 sd += checkbox_sd35.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd36 = document.getElementById('school-district36');
+            var checkbox_sd36 = document.getElementById('schooldistrict36');
             if (checkbox_sd36.checked) {
                 sd += ','
                 sd += checkbox_sd36.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd37 = document.getElementById('school-district37');
+            var checkbox_sd37 = document.getElementById('schooldistrict37');
             if (checkbox_sd37.checked) {
                 sd += ','
                 sd += checkbox_sd37.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd38 = document.getElementById('school-district38');
+            var checkbox_sd38 = document.getElementById('schooldistrict38');
             if (checkbox_sd38.checked) {
                 sd += ','
                 sd += checkbox_sd38.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd39 = document.getElementById('school-district39');
+            var checkbox_sd39 = document.getElementById('schooldistrict39');
             if (checkbox_sd39.checked) {
                 sd += ','
                 sd += checkbox_sd39.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd40 = document.getElementById('school-district40');
+            var checkbox_sd40 = document.getElementById('schooldistrict40');
             if (checkbox_sd40.checked) {
                 sd += ','
                 sd += checkbox_sd40.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd41 = document.getElementById('school-district41');
+            var checkbox_sd41 = document.getElementById('schooldistrict41');
             if (checkbox_sd41.checked) {
                 sd += ','
                 sd += checkbox_sd41.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd42 = document.getElementById('school-district42');
+            var checkbox_sd42 = document.getElementById('schooldistrict42');
             if (checkbox_sd42.checked) {
                 sd += ','
                 sd += checkbox_sd42.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd43 = document.getElementById('school-district43');
+            var checkbox_sd43 = document.getElementById('schooldistrict43');
             if (checkbox_sd43.checked) {
                 sd += ','
                 sd += checkbox_sd43.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd44 = document.getElementById('school-district44');
+            var checkbox_sd44 = document.getElementById('schooldistrict44');
             if (checkbox_sd44.checked) {
                 sd += ','
                 sd += checkbox_sd44.value
                 } else {
                 console.log('Checkbox is not checked');
                 };
-            var checkbox_sd45 = document.getElementById('school-district45');
+            var checkbox_sd45 = document.getElementById('schooldistrict45');
             if (checkbox_sd45.checked) {
                 sd += ','
                 sd += checkbox_sd45.value
@@ -4069,7 +4118,7 @@
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = true;
             });
-            var checkboxes = document.querySelectorAll('.record-type-content input[type="checkbox"]');
+            var checkboxes = document.querySelectorAll('.recordtype-content input[type="checkbox"]');
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = true;
             });
@@ -4077,7 +4126,7 @@
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = true;
             });
-            var checkboxes = document.querySelectorAll('.school-district-content input[type="checkbox"]');
+            var checkboxes = document.querySelectorAll('.schooldistrict-content input[type="checkbox"]');
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = true;
             });
