@@ -6,46 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Allegheny Lease Map</title>
     <!-- Include Leaflet CSS and JavaScript -->
-    {% comment %} <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" /> {% endcomment %}
-    {% comment %} <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet-src.js" integrity="sha512-IkGU/uDhB9u9F8k+2OsA6XXoowIhOuQL1NTgNZHY1nkURnqEGlDZq3GsfmdJdKFe1k1zOc6YU2K7qY+hF9AodA==" crossorigin=""></script> {% endcomment %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
     <!-- for the underscore variable/js function-->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-
+    <!-- Needed for the geocoder-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    
-    {% comment %} set up ajax to read geojson from url {% endcomment %}
+    <!-- set up ajax to read geojson from url -->
     <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
-
-
-    {% comment %} <!-- geojson vt  -->
-    <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
-    <script src="https://unpkg.com/leaflet-geojson-vt@1.1.0/src/leaflet-geojson-vt.js"></script> {% endcomment %}
-    <!--Start Map Post Content-->
-    {% comment %} 12/28/24 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-canvas-tile@0.1.0/dist/leaflet-canvas-tile.min.css" /> {% endcomment %}
-    
-    <!-- Omnivore JS (for loading GeoJSON and TopoJSON) -->
-    <!-- geojson-vt-dev (For vector tile processing) -->
-    {% comment %} <script src="https://unpkg.com/geojson-vt/geojson-vt.js"></script> {% endcomment %}
-    {% comment %} 12/28/24 <script src="https://unpkg.com/topojson@3"></script> {% endcomment %}
-    {% comment %} <script src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script> {% endcomment %}
-
-    <!-- Leaflet Canvas Tiles -->
-    {% comment %} 12/28/24 <script src="https://cdn.jsdelivr.net/npm/leaflet-canvas-tile@0.1.0/dist/leaflet-canvas-tile.min.js"></script> {% endcomment %}
-    {% comment %} <script src="../static/scripts/L.CanvasTiles.js.download"></script> {% endcomment %}
-
-
-    <!-- Leaflet PIP (Point in Polygon) -->
-    {% comment %} 12/28/24 <script src="https://cdn.jsdelivr.net/npm/leaflet-pip@0.0.8/dist/leaflet-pip.min.js"></script> {% endcomment %}
 
     <style>
         {% comment %} Create the splash screen settings {% endcomment %}
         /* Splash screen styling */
+        /* Makes it full screen, the main box is below */
         #splashScreen {
             position: fixed;
             top: 0;
@@ -59,12 +35,10 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            {% comment %} opacity: 1; {% endcomment %}
             transition: opacity 0.5s ease-out;
         }
-        
 
-        /* Box with text inside it */
+        /* Main content of the splash screen */
         #textBox {
             padding: 50px;
             background-color: #eaeaea;
@@ -76,17 +50,6 @@
             border-radius: 10px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
         }
-
-        /* Padding area around the text box with opacity */
-        {% comment %} #splashScreen .paddingArea {
-            padding: 200px;
-            background-color: rgba(0, 0, 0, 0.5); /* 50% opacity background */
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        } {% endcomment %}
 
         /* Button on the splash screen */
         .sbtn {
@@ -106,10 +69,13 @@
             background-color: #ccc;
         }
 
-        #map { /* Style the map container */
+        /* Create the map container */
+        #map { 
             height: 100%;
             width: 100%;
         }
+
+        /* Animations */
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
             border-top: 4px solid #3498db;
@@ -133,40 +99,13 @@
         #loading-container {
             transition: opacity 3s ease-out;
         }
-        {% comment %} .loading-text {
-            margin-left: 10px;
-            font-size: 14px;
-            font-weight: normal;
-        } {% endcomment %}
+
         .checkmark {
             font-size: 30px;
             color: green;
         }
-        {% comment %} .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite; /* Safari */
-            animation: spin 2s linear infinite;
-          }
-          
-        /* Safari */
-        @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
-        }
-          
-        @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-        } {% endcomment %}
-        .container {
-            {% comment %} position: relative; {% endcomment %}
-            {% comment %} display: flex; {% endcomment %}
-            {% comment %} display: none; /* Hidden initially */ {% endcomment %}
 
+        .container {
             flex-direction: column;
             height: 98vh; /* Full height of the viewport */
             box-sizing: border-box;
@@ -177,40 +116,31 @@
             color: white;
             display: flex;
             align-items: center;
-            {% comment %} justify-content: center; {% endcomment %}
         }
-
         .bottom {
             display: flex;
-            {% comment %} align-items: center; {% endcomment %}
         }
         .left {
             width: 15%;
             min-width: 260px;
             height: 100%;
-            {% comment %} background-color: #2196F3; {% endcomment %}
             color: white;
-            {% comment %} padding: 20px; {% endcomment %}
             box-sizing: border-box;
         }
         .middle {
             width: 75%;
             background-color: #FF5722;
             color: white;
-            {% comment %} padding: 20px; {% endcomment %}
             box-sizing: border-box;
         }
         .right (
             width: 20%;
             height: 100%;
             margin-right: 0;
-            {% comment %} padding: 20px; {% endcomment %}
             box-sizing: border-box;
-            {% comment %} align-items: right; {% endcomment %}
-            {% comment %} justify-content: right; {% endcomment %}
         )
-        #projectlogo { 
 
+        #projectlogo { 
         }
         #logo { /* Style the logo container */
             padding-top: 3%;
@@ -218,36 +148,30 @@
             height: 5%;
             min-heigh: 50px;
             width: 100%;
-            {% comment %} background-color: white; {% endcomment %}
             float: left;
         }
+
         .leaflet-control-geocoder {
             {% comment %} margin-bottom: 25px !important; {% endcomment %}
          }
-
         .leaflet-control-geocoder-form input{
             width: 100% !important;
             font-family: Arial;
             font-size: 12px;
          }
+
         #rightside { /* Style the sidebar */
             width: 100%; /* Take 10% of the screen width */
-            {% comment %} min-width: 200px; {% endcomment %}
             padding-left: 20px;
             height: 89vh;
-            {% comment %} margin-top: 6vh; {% endcomment %}
             background-color: #eaeaea;
             float: right; /* Float sidebar to the left */
             font-family: Arial;
             color: #31322e;
             overflow: auto;
-            {% comment %} max-height: 90%; {% endcomment %}
-            {% comment %} max-width:15%; {% endcomment %}
         }
         /* Style the content inside the sidebar */
         #rightside-content {
-            {% comment %} margin-top: -20px; {% endcomment %}
-            {% comment %} padding: 20px; {% endcomment %}
         }
 
         .clear {
@@ -261,6 +185,7 @@
             color: #A3CF5F;
             cursor: pointer;
         }
+
         .sidebar { /* Style the sidebar */
             width: 100%; /* Take 10% of the screen width */
             height: 81vh;
@@ -350,17 +275,13 @@
             padding-left: 20px;
         }
 
-
         .r_filter h4 {
             cursor: default;
             margin-bottom: 5px;
-            {% comment %} color: #fff; {% endcomment %}
             position: relative;
-
         }
         
         .r_filter h4::after {
-            {% comment %} content: '+'; {% endcomment %}
             float: right;
             position: absolute;
             right: 0;
@@ -370,10 +291,7 @@
             cursor: default;
             text-align: center; 
             margin-right: 20px;
-            {% comment %} margin-bottom: 5px; {% endcomment %}
-            {% comment %} color: #000; {% endcomment %}
             position: relative;
-
         }
 
         .r_filter-content {
@@ -397,7 +315,6 @@
             padding: 15px;
             overflow-y: auto;
             max-height: 190px;
-            {% comment %} display: flex; {% endcomment %}
             margin: 15px;
         }
 
@@ -427,7 +344,6 @@
             
         }
         .dropdown button {
-            {% comment %} height: 25px; {% endcomment %}
             height: 3%;
             width: 150px;
             font-family: Arial;
@@ -542,19 +458,15 @@
         #dataContainer(
             background-color: red;
             color: yellow;
-            {% comment %} padding: 20px; /* Padding for spacing */ {% endcomment %}
             border-radius: 10px; /* Rounded corners */
             max-width: 600px; /* Maximum width of the container */
             margin: 0 auto; /* Center the container */
             text-align: center; /* Center the text inside the container */
         )
 
-
-
         /* Main content styling */
         #mainContent {
             display: none; /* Hide the content initially until splash screen is removed */
-            {% comment %} padding: 20px; {% endcomment %}
         } 
 
         #map-legend {
@@ -581,10 +493,6 @@
             max-height: 200px;        
         }
 
-        {% comment %} .filter-content {
-            display: none;
-        } {% endcomment %}
-
         #companyblock.hide {
             display: none;
 
@@ -601,12 +509,6 @@
         #companyblock.show + h4::after {
             content: '-';
         }
-
-        {% comment %} /* Style smaller checkboxes */
-        .filter input[type="checkbox"] {
-            transform: scale(0.75);
-            margin-right: 5px;
-        } {% endcomment %}
         
         /* Button style */
         #companyblock button {
@@ -617,12 +519,6 @@
     </style>
 </head>
 <body>
-
-    {% comment %} <!-- Splash Screen -->
-    <div id="splashScreen">
-        <button class="sbtn" onclick="removeSplash()">ENTER</button>
-    </div> {% endcomment %}
-
     <div class="container" id="mainContent">
         <div class="top">
             <header>
@@ -647,9 +543,7 @@
                 </div>
             </header>
         </div>
-
         <div class="bottom">
-                <!-- Splash Screen -->
             <div class="left">
                 <div class="projectlogo">
                     <img src="../static/images/fractracker-logo.png" alt="My Image" width="260" height="50">
@@ -659,9 +553,7 @@
                         <div id="search-content">
                             <br>
                             <div id="search-container">
-                                {% comment %} <h2>Go To Location</h2> {% endcomment %}
                             </div>
-
                         </div>
                         <br>
                         <h2>Filters</h2>
@@ -797,7 +689,6 @@
                                 <input type="checkbox" id="agmt62" value="UNIT OPERATION" checked> <label for="agmt62">UNIT OPERATION</label><br>                                
                             </div>
                         </div>
-
                         <!-- Municipality filter -->
                         <div class="filter toggle-municipality hide">
                             <h4 onclick="toggleFilter('municipality')">Municipality</h4>
@@ -959,7 +850,6 @@
                                 <input type="checkbox" id="muni152" value="Wilkins " checked> <label for="muni152">Wilkins </label><br>
                                 <input type="checkbox" id="muni153" value="Wilkinsburg  " checked> <label for="muni153">Wilkinsburg  </label><br>
                                 <input type="checkbox" id="muni154" value="Wilmerding  " checked> <label for="muni154">Wilmerding  </label><br>
-
                             </div>
                         </div>
                         <!-- School district filter -->
@@ -1014,7 +904,6 @@
                                 <input type="checkbox" id="schooldistrict43" value="West Mifflin Area" checked> <label for="schooldistrict43">West Mifflin Area</label><br>
                                 <input type="checkbox" id="schooldistrict44" value="Wilkinsburg Boro" checked> <label for="schooldistrict44">Wilkinsburg Boro</label><br>
                                 <input type="checkbox" id="schooldistrict45" value="Woodland Hills" checked> <label for="schooldistrict45">Woodland Hills</label><br>
-
                             </div>
                         </div>
                         <!-- Zoning filter -->
@@ -1030,7 +919,6 @@
                                 <input type='checkbox' id='zoning4' value='Other' checked> <label for='zoning4'>Other</label><br>
                                 <input type='checkbox' id='zoning5' value='Residential' checked> <label for='zoning5'>Residential</label><br>
                                 <input type='checkbox' id='zoning6' value='Utilities' checked> <label for='zoning6'>Utilities</label><br>
-
                             </div>
                         </div>
                         <br>
@@ -1049,8 +937,6 @@
                                 <span id='poly-status-done'></span>
                             </div>
                         </div>
-                        <!-- Button to apply filters -->
-                        {% comment %} <button class="apply-button" id="applyButton" >Apply Filters</button> {% endcomment %}
                     </div>
                 </div>
                 <div class="apply-container">
@@ -1067,7 +953,6 @@
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3c" checked>Oil & Gas Parcels</label><br>
                     </div>
                 </div>
-
             </div>
             <div class="deets">
                 <div id="projectlogo">
@@ -1157,7 +1042,6 @@
         </div>
     </div>
     <script>
-
         // Construct spinners to show that the main map layers are still loading
         const spinner_con = document.getElementById('spinner_con');
         const spinner_unc = document.getElementById('spinner_unc');
@@ -1177,10 +1061,8 @@
         checkmarkp.className = 'checkmark';
         checkmarkp.innerHTML = '&#10004;';  // Checkmark symbol
 
-
         // Initialize Leaflet map
         var map = L.map('map').setView([40.4406, -79.9959], 11);
-        
         map.setMinZoom(10);
         map.setMaxZoom(18);
 
@@ -1232,6 +1114,7 @@
             } else {
                 map.addLayer(terrainLayer);
             };
+            map.removeLayer(vectorMaskLayer);
             getMask();
         }
 
@@ -1286,9 +1169,6 @@
             }
             
             var filterIcon = document.querySelector('.filter.toggle-' + filterName + ' h4');
-            console.log(filterName)
-            console.log(filterContent)
-            console.log(filterIcon)
             if (filterContent.classList.contains('show')) {
                 filterContent.classList.remove('show');
                 filterContent.classList.add('hide');
@@ -1297,7 +1177,6 @@
                 filterContent.classList.add('show');
                 filterContent.classList.remove('hide');
                 filterIcon.style.setProperty('--after-content', '"-"');
-
             }
         }
 
@@ -1327,27 +1206,6 @@
             });
         }
 
-
-        // Function to fetch GeoJSON data from a view
-        function cachecheck() {
-            $.ajax({
-                url: '/leasemap/cachecheck', // Replace with your view URL
-                method: 'GET',
-                success: function(data) {
-                    console.log('start check')
-                    console.log(data)
-                    console.log('ran cachechecker')
-
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-
-        };
-        {% comment %} cachecheck(); {% endcomment %}
-
         // Function to fetch GeoJSON data from a view
         function getMask() {
             $.ajax({
@@ -1356,11 +1214,11 @@
                 success: function(data) {
                     console.log('Adding the mask:');
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
-                    var geojsonStyle = {
-                        fillColor:"#fff",
+                    var maskStyle = {
+                        fillColor:"#000",
                         color: "#000",
                         weight: 1,
-                        opacity: 0.1,
+                        opacity: 0.2,
                         fillOpacity: 0.66,
                       };
                     
@@ -1368,16 +1226,11 @@
                         maxZoom: 20,
                         tolerance: 3,
                         debug: 0,
-                        style: geojsonStyle
+                        style: maskStyle
                     };
                     vectorMaskLayer = L.geoJson(data, options).addTo(map);
-                    console.log('added the mask');
-
-                    console.log('made it to here')
-
                 },
                 error: function(xhr, status, error) {
-                    // Handle error
                     console.error(error);
                 }
             });
@@ -1388,9 +1241,8 @@
 
         // Load the parcel geojson file via the static path
         spinner_poly.style.display = 'block';
-        console.log('GeoJSON parcel data received:');
 
-        var geojsonStyle = {
+        var parcelStyle = {
             fillColor:"#ff6802",
             color: "#fff",
             weight: 1,
@@ -1402,29 +1254,26 @@
             maxZoom: 20,
             tolerance: 3,
             debug: 0,
-            style: geojsonStyle
+            style: parcelStyle
         };
 
-        geojsonData = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
-        vectorTileLayer = L.geoJSON.ajax(geojsonData, { 
-            style: geojsonStyle,
-
+        parcelGeojsonData = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
+        vectorTileLayer = L.geoJSON.ajax(parcelGeojsonData, { 
+            style: parcelStyle,
             onEachFeature: function (feature, layer) {
                 
                 layer.on('click', function() {
-                    console.log(feature.properties.pin); // Log properties of the clicked feature
                     showSelection(feature);
                     getMatches(feature.properties.pin);
                     });
             }
-        }).addTo(map)
-        console.log('added the polygons');
+        }).addTo(map);
+
         // Add fade-out class to the container
         spinner_poly.style.display = 'none';
         polyText.innerHTML = '';
         polyText.appendChild(checkmarkp);
         loadingContainer.classList.add('fade-out');
-
 
         // Custom marker icon
         function createCircleMarker(latlng) {
@@ -1439,8 +1288,7 @@
         }
 
         // Create a default popup as a placeholder for the well layers
-        var popupu = L.popup()
-            .setContent("I am a standalone popup.");
+        var popupu = L.popup().setContent("I am a standalone popup.");
 
         // Add the conventional wells to the map
         spinner_con.style.display = 'block';
@@ -1453,7 +1301,6 @@
                 layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
             }
         }).addTo(map);
-        console.log('added the conventional wells');
         spinner_con.style.display = 'none';
         conText.innerHTML = '';
         conText.appendChild(checkmarkc);
@@ -1469,7 +1316,6 @@
                 layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
             }
         }).addTo(map);
-        console.log('added the unconventional wells');
         spinner_unc.style.display = 'none';
         uncText.innerHTML = '';
         uncText.appendChild(checkmarku);
@@ -1494,10 +1340,8 @@
                     zoning: z
                 },
                 success: function(data) {
-                    console.log('Filtered GeoJSON data received:');
-                    {% comment %} console.log('Filtered GeoJSON data received:', data); {% endcomment %}
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
-                    var geojsonStyle = {
+                    var filteredStyle = {
                         fillColor:"#0287D4",
                         color: "#025687",
                         weight: 1,
@@ -1509,14 +1353,12 @@
                         maxZoom: 20,
                         tolerance: 3,
                         debug: 0,
-                        style: geojsonStyle
+                        style: filteredStyle
                     }; 
                     console.log('added the filtered polygons');
-                    parcelshapes2 = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/og_parcels.geojson'
-                    
                     
                     // Fetch the GeoJSON data from GitHub
-                    fetch(parcelshapes2)
+                    fetch(parcelGeojsonData)
                         .then(response => response.json())
                         .then(filtgeojsonData => {
                         // Filter the GeoJSON data based on the selected categories
@@ -1529,12 +1371,9 @@
 
                         // Add the filtered GeoJSON data to the map
                         filtvectorTileLayer = L.geoJSON(filteredGeojsonData, { 
-                            style: geojsonStyle,
-    
+                            style: filteredStyle,
                             onEachFeature: function (feature, layer) {
-                                
                                 layer.on('click', function() {
-                                    console.log(feature.properties.pin); // Log properties of the clicked feature
                                     getMatches(feature.properties.pin);
                                     showSelection(feature)
                                     });
@@ -1575,18 +1414,11 @@
             }));
         }
 
-        // Call the functions to fetch GeoJSON data for the main map layers 
-        // Calls for conventional which has unconventional and polygons are nested
-        // Should change to async loading
-
-
         var geojsonLayer_sel;
 
         function showSelection(s) {
             clearDetails();
-            console.log('here is the selected geometry');
-            console.log(s)
-            
+          
             var geojsonStyle_s = {
                 fillColor:"#fffb01",
                 color: "#fffb01",
@@ -1613,8 +1445,6 @@
                     style: geojsonStyle_s,
                 }).addTo(map);
             } ;
-            
-
         };
 
         // Function to fetch GeoJSON data from a view
@@ -1663,13 +1493,11 @@
             // Get the div with the id 'ownership'
             var div = document.getElementById('ownership');
             var link = document.createElement('a');
-            //broken -> link.href = 'https://www2.alleghenycounty.us/RealEstate/Sales.aspx?ParcelID='+pid+'&SearchType=&CurrRow=0&SearchName=&SearchStreet=&SearchNum=&SearchMuni=&SearchParcel=&pin='+pid;
             link.href = 'https://realestate.alleghenycounty.us/OwnerHistory?ID='+pid+'&SearchType=3&CurrRow=0&SearchName=&SearchStreet=&SearchNum=&SearchMuni=&SearchParcel='+pid+'&pin='+pid;
             link.textContent = 'See Current Ownership';
             link.target = '_blank'; 
             div.innerHTML = ''; // Clear the current content of the div
             div.appendChild(link); // Add the link inside the div
-
             }
 
         function displayData(data) {
@@ -1907,2208 +1735,45 @@
             console.log(startdate.value)
             // Get the checkbox element
             a=''
-            var checkbox_a0 = document.getElementById('agmt0');
-            if (checkbox_a0.checked) {
-                a += ','
-                a += checkbox_a0.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a1 = document.getElementById('agmt1');
-            if (checkbox_a1.checked) {
-                a += ','
-                a += checkbox_a1.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a2 = document.getElementById('agmt2');
-            if (checkbox_a2.checked) {
-                a += ','
-                a += checkbox_a2.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a3 = document.getElementById('agmt3');
-            if (checkbox_a3.checked) {
-                a += ','
-                a += checkbox_a3.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a4 = document.getElementById('agmt4');
-            if (checkbox_a4.checked) {
-                a += ','
-                a += checkbox_a4.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a5 = document.getElementById('agmt5');
-            if (checkbox_a5.checked) {
-                a += ','
-                a += checkbox_a5.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a6 = document.getElementById('agmt6');
-            if (checkbox_a6.checked) {
-                a += ','
-                a += checkbox_a6.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a7 = document.getElementById('agmt7');
-            if (checkbox_a7.checked) {
-                a += ','
-                a += checkbox_a7.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a8 = document.getElementById('agmt8');
-            if (checkbox_a8.checked) {
-                a += ','
-                a += checkbox_a8.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a9 = document.getElementById('agmt9');
-            if (checkbox_a9.checked) {
-                a += ','
-                a += checkbox_a9.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a10 = document.getElementById('agmt10');
-            if (checkbox_a10.checked) {
-                a += ','
-                a += checkbox_a10.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a11 = document.getElementById('agmt11');
-            if (checkbox_a11.checked) {
-                a += ','
-                a += checkbox_a11.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a12 = document.getElementById('agmt12');
-            if (checkbox_a12.checked) {
-                a += ','
-                a += checkbox_a12.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a13 = document.getElementById('agmt13');
-            if (checkbox_a13.checked) {
-                a += ','
-                a += checkbox_a13.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a14 = document.getElementById('agmt14');
-            if (checkbox_a14.checked) {
-                a += ','
-                a += checkbox_a14.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a15 = document.getElementById('agmt15');
-            if (checkbox_a15.checked) {
-                a += ','
-                a += checkbox_a15.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a16 = document.getElementById('agmt16');
-            if (checkbox_a16.checked) {
-                a += ','
-                a += checkbox_a16.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a17 = document.getElementById('agmt17');
-            if (checkbox_a17.checked) {
-                a += ','
-                a += checkbox_a17.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a18 = document.getElementById('agmt18');
-            if (checkbox_a18.checked) {
-                a += ','
-                a += checkbox_a18.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a19 = document.getElementById('agmt19');
-            if (checkbox_a19.checked) {
-                a += ','
-                a += checkbox_a19.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a20 = document.getElementById('agmt20');
-            if (checkbox_a20.checked) {
-                a += ','
-                a += checkbox_a20.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a21 = document.getElementById('agmt21');
-            if (checkbox_a21.checked) {
-                a += ','
-                a += checkbox_a21.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a22 = document.getElementById('agmt22');
-            if (checkbox_a22.checked) {
-                a += ','
-                a += checkbox_a22.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a23 = document.getElementById('agmt23');
-            if (checkbox_a23.checked) {
-                a += ','
-                a += checkbox_a23.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a24 = document.getElementById('agmt24');
-            if (checkbox_a24.checked) {
-                a += ','
-                a += checkbox_a24.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a25 = document.getElementById('agmt25');
-            if (checkbox_a25.checked) {
-                a += ','
-                a += checkbox_a25.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a26 = document.getElementById('agmt26');
-            if (checkbox_a26.checked) {
-                a += ','
-                a += checkbox_a26.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a27 = document.getElementById('agmt27');
-            if (checkbox_a27.checked) {
-                a += ','
-                a += checkbox_a27.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a28 = document.getElementById('agmt28');
-            if (checkbox_a28.checked) {
-                a += ','
-                a += checkbox_a28.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a29 = document.getElementById('agmt29');
-            if (checkbox_a29.checked) {
-                a += ','
-                a += checkbox_a29.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a30 = document.getElementById('agmt30');
-            if (checkbox_a30.checked) {
-                a += ','
-                a += checkbox_a30.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a31 = document.getElementById('agmt31');
-            if (checkbox_a31.checked) {
-                a += ','
-                a += checkbox_a31.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a32 = document.getElementById('agmt32');
-            if (checkbox_a32.checked) {
-                a += ','
-                a += checkbox_a32.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a33 = document.getElementById('agmt33');
-            if (checkbox_a33.checked) {
-                a += ','
-                a += checkbox_a33.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a34 = document.getElementById('agmt34');
-            if (checkbox_a34.checked) {
-                a += ','
-                a += checkbox_a34.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a35 = document.getElementById('agmt35');
-            if (checkbox_a35.checked) {
-                a += ','
-                a += checkbox_a35.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a36 = document.getElementById('agmt36');
-            if (checkbox_a36.checked) {
-                a += ','
-                a += checkbox_a36.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a37 = document.getElementById('agmt37');
-            if (checkbox_a37.checked) {
-                a += ','
-                a += checkbox_a37.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a38 = document.getElementById('agmt38');
-            if (checkbox_a38.checked) {
-                a += ','
-                a += checkbox_a38.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a39 = document.getElementById('agmt39');
-            if (checkbox_a39.checked) {
-                a += ','
-                a += checkbox_a39.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a40 = document.getElementById('agmt40');
-            if (checkbox_a40.checked) {
-                a += ','
-                a += checkbox_a40.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a41 = document.getElementById('agmt41');
-            if (checkbox_a41.checked) {
-                a += ','
-                a += checkbox_a41.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a42 = document.getElementById('agmt42');
-            if (checkbox_a42.checked) {
-                a += ','
-                a += checkbox_a42.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a43 = document.getElementById('agmt43');
-            if (checkbox_a43.checked) {
-                a += ','
-                a += checkbox_a43.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a44 = document.getElementById('agmt44');
-            if (checkbox_a44.checked) {
-                a += ','
-                a += checkbox_a44.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a45 = document.getElementById('agmt45');
-            if (checkbox_a45.checked) {
-                a += ','
-                a += checkbox_a45.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a46 = document.getElementById('agmt46');
-            if (checkbox_a46.checked) {
-                a += ','
-                a += checkbox_a46.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a47 = document.getElementById('agmt47');
-            if (checkbox_a47.checked) {
-                a += ','
-                a += checkbox_a47.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a48 = document.getElementById('agmt48');
-            if (checkbox_a48.checked) {
-                a += ','
-                a += checkbox_a48.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a49 = document.getElementById('agmt49');
-            if (checkbox_a49.checked) {
-                a += ','
-                a += checkbox_a49.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a50 = document.getElementById('agmt50');
-            if (checkbox_a50.checked) {
-                a += ','
-                a += checkbox_a50.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a51 = document.getElementById('agmt51');
-            if (checkbox_a51.checked) {
-                a += ','
-                a += checkbox_a51.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a52 = document.getElementById('agmt52');
-            if (checkbox_a52.checked) {
-                a += ','
-                a += checkbox_a52.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a53 = document.getElementById('agmt53');
-            if (checkbox_a53.checked) {
-                a += ','
-                a += checkbox_a53.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a54 = document.getElementById('agmt54');
-            if (checkbox_a54.checked) {
-                a += ','
-                a += checkbox_a54.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a55 = document.getElementById('agmt55');
-            if (checkbox_a55.checked) {
-                a += ','
-                a += checkbox_a55.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a56 = document.getElementById('agmt56');
-            if (checkbox_a56.checked) {
-                a += ','
-                a += checkbox_a56.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a57 = document.getElementById('agmt57');
-            if (checkbox_a57.checked) {
-                a += ','
-                a += checkbox_a57.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a58 = document.getElementById('agmt58');
-            if (checkbox_a58.checked) {
-                a += ','
-                a += checkbox_a58.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a59 = document.getElementById('agmt59');
-            if (checkbox_a59.checked) {
-                a += ','
-                a += checkbox_a59.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a60 = document.getElementById('agmt60');
-            if (checkbox_a60.checked) {
-                a += ','
-                a += checkbox_a60.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a61 = document.getElementById('agmt61');
-            if (checkbox_a61.checked) {
-                a += ','
-                a += checkbox_a61.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_a62 = document.getElementById('agmt62');
-            if (checkbox_a62.checked) {
-                a += ','
-                a += checkbox_a62.value
-                } else {
-                console.log('Checkbox is not checked');
-                };            
+            for (let cba = 0; cba <= 62; cba++) {
+                abox = document.getElementById('agmt'+cba);
+                if (abox.checked) {
+                    a += ','
+                    a += abox.value
+                    };
+            };
             c=''
-            var checkbox_c0 = document.getElementById('company0');
-            if (checkbox_c0.checked) {
-                c += ','
-                c += checkbox_c0.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c1 = document.getElementById('company1');
-            if (checkbox_c1.checked) {
-                c += ','
-                c += checkbox_c1.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c2 = document.getElementById('company2');
-            if (checkbox_c2.checked) {
-                c += ','
-                c += checkbox_c2.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c3 = document.getElementById('company3');
-            if (checkbox_c3.checked) {
-                c += ','
-                c += checkbox_c3.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c4 = document.getElementById('company4');
-            if (checkbox_c4.checked) {
-                c += ','
-                c += checkbox_c4.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c5 = document.getElementById('company5');
-            if (checkbox_c5.checked) {
-                c += ','
-                c += checkbox_c5.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c6 = document.getElementById('company6');
-            if (checkbox_c6.checked) {
-                c += ','
-                c += checkbox_c6.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c7 = document.getElementById('company7');
-            if (checkbox_c7.checked) {
-                c += ','
-                c += checkbox_c7.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c8 = document.getElementById('company8');
-            if (checkbox_c8.checked) {
-                c += ','
-                c += checkbox_c8.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c9 = document.getElementById('company9');
-            if (checkbox_c9.checked) {
-                c += ','
-                c += checkbox_c9.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c10 = document.getElementById('company10');
-            if (checkbox_c10.checked) {
-                c += ','
-                c += checkbox_c10.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c11 = document.getElementById('company11');
-            if (checkbox_c11.checked) {
-                c += ','
-                c += checkbox_c11.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c12 = document.getElementById('company12');
-            if (checkbox_c12.checked) {
-                c += ','
-                c += checkbox_c12.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c13 = document.getElementById('company13');
-            if (checkbox_c13.checked) {
-                c += ','
-                c += checkbox_c13.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c14 = document.getElementById('company14');
-            if (checkbox_c14.checked) {
-                c += ','
-                c += checkbox_c14.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c15 = document.getElementById('company15');
-            if (checkbox_c15.checked) {
-                c += ','
-                c += checkbox_c15.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c16 = document.getElementById('company16');
-            if (checkbox_c16.checked) {
-                c += ','
-                c += checkbox_c16.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c17 = document.getElementById('company17');
-            if (checkbox_c17.checked) {
-                c += ','
-                c += checkbox_c17.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c18 = document.getElementById('company18');
-            if (checkbox_c18.checked) {
-                c += ','
-                c += checkbox_c18.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c19 = document.getElementById('company19');
-            if (checkbox_c19.checked) {
-                c += ','
-                c += checkbox_c19.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c20 = document.getElementById('company20');
-            if (checkbox_c20.checked) {
-                c += ','
-                c += checkbox_c20.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c21 = document.getElementById('company21');
-            if (checkbox_c21.checked) {
-                c += ','
-                c += checkbox_c21.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c22 = document.getElementById('company22');
-            if (checkbox_c22.checked) {
-                c += ','
-                c += checkbox_c22.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c23 = document.getElementById('company23');
-            if (checkbox_c23.checked) {
-                c += ','
-                c += checkbox_c23.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c24 = document.getElementById('company24');
-            if (checkbox_c24.checked) {
-                c += ','
-                c += checkbox_c24.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c25 = document.getElementById('company25');
-            if (checkbox_c25.checked) {
-                c += ','
-                c += checkbox_c25.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c26 = document.getElementById('company26');
-            if (checkbox_c26.checked) {
-                c += ','
-                c += checkbox_c26.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c27 = document.getElementById('company27');
-            if (checkbox_c27.checked) {
-                c += ','
-                c += checkbox_c27.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c28 = document.getElementById('company28');
-            if (checkbox_c28.checked) {
-                c += ','
-                c += checkbox_c28.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c29 = document.getElementById('company29');
-            if (checkbox_c29.checked) {
-                c += ','
-                c += checkbox_c29.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c30 = document.getElementById('company30');
-            if (checkbox_c30.checked) {
-                c += ','
-                c += checkbox_c30.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c31 = document.getElementById('company31');
-            if (checkbox_c31.checked) {
-                c += ','
-                c += checkbox_c31.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c32 = document.getElementById('company32');
-            if (checkbox_c32.checked) {
-                c += ','
-                c += checkbox_c32.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c33 = document.getElementById('company33');
-            if (checkbox_c33.checked) {
-                c += ','
-                c += checkbox_c33.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c34 = document.getElementById('company34');
-            if (checkbox_c34.checked) {
-                c += ','
-                c += checkbox_c34.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c35 = document.getElementById('company35');
-            if (checkbox_c35.checked) {
-                c += ','
-                c += checkbox_c35.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c36 = document.getElementById('company36');
-            if (checkbox_c36.checked) {
-                c += ','
-                c += checkbox_c36.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c37 = document.getElementById('company37');
-            if (checkbox_c37.checked) {
-                c += ','
-                c += checkbox_c37.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c38 = document.getElementById('company38');
-            if (checkbox_c38.checked) {
-                c += ','
-                c += checkbox_c38.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c39 = document.getElementById('company39');
-            if (checkbox_c39.checked) {
-                c += ','
-                c += checkbox_c39.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c40 = document.getElementById('company40');
-            if (checkbox_c40.checked) {
-                c += ','
-                c += checkbox_c40.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c41 = document.getElementById('company41');
-            if (checkbox_c41.checked) {
-                c += ','
-                c += checkbox_c41.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_c42 = document.getElementById('company42');
-            if (checkbox_c42.checked) {
-                c += ','
-                c += checkbox_c42.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
+            for (let cbc = 0; cbc <= 42; cbc++) {
+                cbox = document.getElementById('company'+cbc);
+                if (cbox.checked) {
+                    c += ','
+                    c += cbox.value
+                    };
+            };
             md = ''
-            var checkbox_m0 = document.getElementById('muni0');
-            if (checkbox_m0.checked) {
-                md += ','
-                md += checkbox_m0.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m1 = document.getElementById('muni1');
-            if (checkbox_m1.checked) {
-                md += ','
-                md += checkbox_m1.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m2 = document.getElementById('muni2');
-            if (checkbox_m2.checked) {
-                md += ','
-                md += checkbox_m2.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m3 = document.getElementById('muni3');
-            if (checkbox_m3.checked) {
-                md += ','
-                md += checkbox_m3.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m4 = document.getElementById('muni4');
-            if (checkbox_m4.checked) {
-                md += ','
-                md += checkbox_m4.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m5 = document.getElementById('muni5');
-            if (checkbox_m5.checked) {
-                md += ','
-                md += checkbox_m5.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m6 = document.getElementById('muni6');
-            if (checkbox_m6.checked) {
-                md += ','
-                md += checkbox_m6.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m7 = document.getElementById('muni7');
-            if (checkbox_m7.checked) {
-                md += ','
-                md += checkbox_m7.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m8 = document.getElementById('muni8');
-            if (checkbox_m8.checked) {
-                md += ','
-                md += checkbox_m8.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m9 = document.getElementById('muni9');
-            if (checkbox_m9.checked) {
-                md += ','
-                md += checkbox_m9.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m10 = document.getElementById('muni10');
-            if (checkbox_m10.checked) {
-                md += ','
-                md += checkbox_m10.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m11 = document.getElementById('muni11');
-            if (checkbox_m11.checked) {
-                md += ','
-                md += checkbox_m11.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m12 = document.getElementById('muni12');
-            if (checkbox_m12.checked) {
-                md += ','
-                md += checkbox_m12.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m13 = document.getElementById('muni13');
-            if (checkbox_m13.checked) {
-                md += ','
-                md += checkbox_m13.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m14 = document.getElementById('muni14');
-            if (checkbox_m14.checked) {
-                md += ','
-                md += checkbox_m14.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m15 = document.getElementById('muni15');
-            if (checkbox_m15.checked) {
-                md += ','
-                md += checkbox_m15.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m16 = document.getElementById('muni16');
-            if (checkbox_m16.checked) {
-                md += ','
-                md += checkbox_m16.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m17 = document.getElementById('muni17');
-            if (checkbox_m17.checked) {
-                md += ','
-                md += checkbox_m17.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m18 = document.getElementById('muni18');
-            if (checkbox_m18.checked) {
-                md += ','
-                md += checkbox_m18.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m19 = document.getElementById('muni19');
-            if (checkbox_m19.checked) {
-                md += ','
-                md += checkbox_m19.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m20 = document.getElementById('muni20');
-            if (checkbox_m20.checked) {
-                md += ','
-                md += checkbox_m20.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m21 = document.getElementById('muni21');
-            if (checkbox_m21.checked) {
-                md += ','
-                md += checkbox_m21.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m22 = document.getElementById('muni22');
-            if (checkbox_m22.checked) {
-                md += ','
-                md += checkbox_m22.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m23 = document.getElementById('muni23');
-            if (checkbox_m23.checked) {
-                md += ','
-                md += checkbox_m23.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m24 = document.getElementById('muni24');
-            if (checkbox_m24.checked) {
-                md += ','
-                md += checkbox_m24.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m25 = document.getElementById('muni25');
-            if (checkbox_m25.checked) {
-                md += ','
-                md += checkbox_m25.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m26 = document.getElementById('muni26');
-            if (checkbox_m26.checked) {
-                md += ','
-                md += checkbox_m26.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m27 = document.getElementById('muni27');
-            if (checkbox_m27.checked) {
-                md += ','
-                md += checkbox_m27.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m28 = document.getElementById('muni28');
-            if (checkbox_m28.checked) {
-                md += ','
-                md += checkbox_m28.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m29 = document.getElementById('muni29');
-            if (checkbox_m29.checked) {
-                md += ','
-                md += checkbox_m29.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m30 = document.getElementById('muni30');
-            if (checkbox_m30.checked) {
-                md += ','
-                md += checkbox_m30.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m31 = document.getElementById('muni31');
-            if (checkbox_m31.checked) {
-                md += ','
-                md += checkbox_m31.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m32 = document.getElementById('muni32');
-            if (checkbox_m32.checked) {
-                md += ','
-                md += checkbox_m32.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m33 = document.getElementById('muni33');
-            if (checkbox_m33.checked) {
-                md += ','
-                md += checkbox_m33.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m34 = document.getElementById('muni34');
-            if (checkbox_m34.checked) {
-                md += ','
-                md += checkbox_m34.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m35 = document.getElementById('muni35');
-            if (checkbox_m35.checked) {
-                md += ','
-                md += checkbox_m35.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m36 = document.getElementById('muni36');
-            if (checkbox_m36.checked) {
-                md += ','
-                md += checkbox_m36.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m37 = document.getElementById('muni37');
-            if (checkbox_m37.checked) {
-                md += ','
-                md += checkbox_m37.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m38 = document.getElementById('muni38');
-            if (checkbox_m38.checked) {
-                md += ','
-                md += checkbox_m38.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m39 = document.getElementById('muni39');
-            if (checkbox_m39.checked) {
-                md += ','
-                md += checkbox_m39.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m40 = document.getElementById('muni40');
-            if (checkbox_m40.checked) {
-                md += ','
-                md += checkbox_m40.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m41 = document.getElementById('muni41');
-            if (checkbox_m41.checked) {
-                md += ','
-                md += checkbox_m41.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m42 = document.getElementById('muni42');
-            if (checkbox_m42.checked) {
-                md += ','
-                md += checkbox_m42.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m43 = document.getElementById('muni43');
-            if (checkbox_m43.checked) {
-                md += ','
-                md += checkbox_m43.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m44 = document.getElementById('muni44');
-            if (checkbox_m44.checked) {
-                md += ','
-                md += checkbox_m44.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m45 = document.getElementById('muni45');
-            if (checkbox_m45.checked) {
-                md += ','
-                md += checkbox_m45.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m46 = document.getElementById('muni46');
-            if (checkbox_m46.checked) {
-                md += ','
-                md += checkbox_m46.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m47 = document.getElementById('muni47');
-            if (checkbox_m47.checked) {
-                md += ','
-                md += checkbox_m47.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m48 = document.getElementById('muni48');
-            if (checkbox_m48.checked) {
-                md += ','
-                md += checkbox_m48.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m49 = document.getElementById('muni49');
-            if (checkbox_m49.checked) {
-                md += ','
-                md += checkbox_m49.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m50 = document.getElementById('muni50');
-            if (checkbox_m50.checked) {
-                md += ','
-                md += checkbox_m50.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m51 = document.getElementById('muni51');
-            if (checkbox_m51.checked) {
-                md += ','
-                md += checkbox_m51.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m52 = document.getElementById('muni52');
-            if (checkbox_m52.checked) {
-                md += ','
-                md += checkbox_m52.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m53 = document.getElementById('muni53');
-            if (checkbox_m53.checked) {
-                md += ','
-                md += checkbox_m53.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m54 = document.getElementById('muni54');
-            if (checkbox_m54.checked) {
-                md += ','
-                md += checkbox_m54.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m55 = document.getElementById('muni55');
-            if (checkbox_m55.checked) {
-                md += ','
-                md += checkbox_m55.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m56 = document.getElementById('muni56');
-            if (checkbox_m56.checked) {
-                md += ','
-                md += checkbox_m56.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m57 = document.getElementById('muni57');
-            if (checkbox_m57.checked) {
-                md += ','
-                md += checkbox_m57.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m58 = document.getElementById('muni58');
-            if (checkbox_m58.checked) {
-                md += ','
-                md += checkbox_m58.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m59 = document.getElementById('muni59');
-            if (checkbox_m59.checked) {
-                md += ','
-                md += checkbox_m59.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m60 = document.getElementById('muni60');
-            if (checkbox_m60.checked) {
-                md += ','
-                md += checkbox_m60.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m61 = document.getElementById('muni61');
-            if (checkbox_m61.checked) {
-                md += ','
-                md += checkbox_m61.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m62 = document.getElementById('muni62');
-            if (checkbox_m62.checked) {
-                md += ','
-                md += checkbox_m62.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m63 = document.getElementById('muni63');
-            if (checkbox_m63.checked) {
-                md += ','
-                md += checkbox_m63.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m64 = document.getElementById('muni64');
-            if (checkbox_m64.checked) {
-                md += ','
-                md += checkbox_m64.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m65 = document.getElementById('muni65');
-            if (checkbox_m65.checked) {
-                md += ','
-                md += checkbox_m65.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m66 = document.getElementById('muni66');
-            if (checkbox_m66.checked) {
-                md += ','
-                md += checkbox_m66.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m67 = document.getElementById('muni67');
-            if (checkbox_m67.checked) {
-                md += ','
-                md += checkbox_m67.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m68 = document.getElementById('muni68');
-            if (checkbox_m68.checked) {
-                md += ','
-                md += checkbox_m68.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m69 = document.getElementById('muni69');
-            if (checkbox_m69.checked) {
-                md += ','
-                md += checkbox_m69.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m70 = document.getElementById('muni70');
-            if (checkbox_m70.checked) {
-                md += ','
-                md += checkbox_m70.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m71 = document.getElementById('muni71');
-            if (checkbox_m71.checked) {
-                md += ','
-                md += checkbox_m71.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m72 = document.getElementById('muni72');
-            if (checkbox_m72.checked) {
-                md += ','
-                md += checkbox_m72.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m73 = document.getElementById('muni73');
-            if (checkbox_m73.checked) {
-                md += ','
-                md += checkbox_m73.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m74 = document.getElementById('muni74');
-            if (checkbox_m74.checked) {
-                md += ','
-                md += checkbox_m74.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m75 = document.getElementById('muni75');
-            if (checkbox_m75.checked) {
-                md += ','
-                md += checkbox_m75.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m76 = document.getElementById('muni76');
-            if (checkbox_m76.checked) {
-                md += ','
-                md += checkbox_m76.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m77 = document.getElementById('muni77');
-            if (checkbox_m77.checked) {
-                md += ','
-                md += checkbox_m77.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m78 = document.getElementById('muni78');
-            if (checkbox_m78.checked) {
-                md += ','
-                md += checkbox_m78.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m79 = document.getElementById('muni79');
-            if (checkbox_m79.checked) {
-                md += ','
-                md += checkbox_m79.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m80 = document.getElementById('muni80');
-            if (checkbox_m80.checked) {
-                md += ','
-                md += checkbox_m80.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m81 = document.getElementById('muni81');
-            if (checkbox_m81.checked) {
-                md += ','
-                md += checkbox_m81.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m82 = document.getElementById('muni82');
-            if (checkbox_m82.checked) {
-                md += ','
-                md += checkbox_m82.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m83 = document.getElementById('muni83');
-            if (checkbox_m83.checked) {
-                md += ','
-                md += checkbox_m83.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m84 = document.getElementById('muni84');
-            if (checkbox_m84.checked) {
-                md += ','
-                md += checkbox_m84.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m85 = document.getElementById('muni85');
-            if (checkbox_m85.checked) {
-                md += ','
-                md += checkbox_m85.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m86 = document.getElementById('muni86');
-            if (checkbox_m86.checked) {
-                md += ','
-                md += checkbox_m86.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m87 = document.getElementById('muni87');
-            if (checkbox_m87.checked) {
-                md += ','
-                md += checkbox_m87.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m88 = document.getElementById('muni88');
-            if (checkbox_m88.checked) {
-                md += ','
-                md += checkbox_m88.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m89 = document.getElementById('muni89');
-            if (checkbox_m89.checked) {
-                md += ','
-                md += checkbox_m89.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m90 = document.getElementById('muni90');
-            if (checkbox_m90.checked) {
-                md += ','
-                md += checkbox_m90.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m91 = document.getElementById('muni91');
-            if (checkbox_m91.checked) {
-                md += ','
-                md += checkbox_m91.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m92 = document.getElementById('muni92');
-            if (checkbox_m92.checked) {
-                md += ','
-                md += checkbox_m92.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m93 = document.getElementById('muni93');
-            if (checkbox_m93.checked) {
-                md += ','
-                md += checkbox_m93.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m94 = document.getElementById('muni94');
-            if (checkbox_m94.checked) {
-                md += ','
-                md += checkbox_m94.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m95 = document.getElementById('muni95');
-            if (checkbox_m95.checked) {
-                md += ','
-                md += checkbox_m95.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m96 = document.getElementById('muni96');
-            if (checkbox_m96.checked) {
-                md += ','
-                md += checkbox_m96.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m97 = document.getElementById('muni97');
-            if (checkbox_m97.checked) {
-                md += ','
-                md += checkbox_m97.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m98 = document.getElementById('muni98');
-            if (checkbox_m98.checked) {
-                md += ','
-                md += checkbox_m98.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m99 = document.getElementById('muni99');
-            if (checkbox_m99.checked) {
-                md += ','
-                md += checkbox_m99.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m100 = document.getElementById('muni100');
-            if (checkbox_m100.checked) {
-                md += ','
-                md += checkbox_m100.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m101 = document.getElementById('muni101');
-            if (checkbox_m101.checked) {
-                md += ','
-                md += checkbox_m101.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m102 = document.getElementById('muni102');
-            if (checkbox_m102.checked) {
-                md += ','
-                md += checkbox_m102.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m103 = document.getElementById('muni103');
-            if (checkbox_m103.checked) {
-                md += ','
-                md += checkbox_m103.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m104 = document.getElementById('muni104');
-            if (checkbox_m104.checked) {
-                md += ','
-                md += checkbox_m104.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m105 = document.getElementById('muni105');
-            if (checkbox_m105.checked) {
-                md += ','
-                md += checkbox_m105.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m106 = document.getElementById('muni106');
-            if (checkbox_m106.checked) {
-                md += ','
-                md += checkbox_m106.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m107 = document.getElementById('muni107');
-            if (checkbox_m107.checked) {
-                md += ','
-                md += checkbox_m107.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m108 = document.getElementById('muni108');
-            if (checkbox_m108.checked) {
-                md += ','
-                md += checkbox_m108.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m109 = document.getElementById('muni109');
-            if (checkbox_m109.checked) {
-                md += ','
-                md += checkbox_m109.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m110 = document.getElementById('muni110');
-            if (checkbox_m110.checked) {
-                md += ','
-                md += checkbox_m110.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m111 = document.getElementById('muni111');
-            if (checkbox_m111.checked) {
-                md += ','
-                md += checkbox_m111.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m112 = document.getElementById('muni112');
-            if (checkbox_m112.checked) {
-                md += ','
-                md += checkbox_m112.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m113 = document.getElementById('muni113');
-            if (checkbox_m113.checked) {
-                md += ','
-                md += checkbox_m113.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m114 = document.getElementById('muni114');
-            if (checkbox_m114.checked) {
-                md += ','
-                md += checkbox_m114.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m115 = document.getElementById('muni115');
-            if (checkbox_m115.checked) {
-                md += ','
-                md += checkbox_m115.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m116 = document.getElementById('muni116');
-            if (checkbox_m116.checked) {
-                md += ','
-                md += checkbox_m116.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m117 = document.getElementById('muni117');
-            if (checkbox_m117.checked) {
-                md += ','
-                md += checkbox_m117.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m118 = document.getElementById('muni118');
-            if (checkbox_m118.checked) {
-                md += ','
-                md += checkbox_m118.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m119 = document.getElementById('muni119');
-            if (checkbox_m119.checked) {
-                md += ','
-                md += checkbox_m119.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m120 = document.getElementById('muni120');
-            if (checkbox_m120.checked) {
-                md += ','
-                md += checkbox_m120.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m121 = document.getElementById('muni121');
-            if (checkbox_m121.checked) {
-                md += ','
-                md += checkbox_m121.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m122 = document.getElementById('muni122');
-            if (checkbox_m122.checked) {
-                md += ','
-                md += checkbox_m122.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m123 = document.getElementById('muni123');
-            if (checkbox_m123.checked) {
-                md += ','
-                md += checkbox_m123.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m124 = document.getElementById('muni124');
-            if (checkbox_m124.checked) {
-                md += ','
-                md += checkbox_m124.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m125 = document.getElementById('muni125');
-            if (checkbox_m125.checked) {
-                md += ','
-                md += checkbox_m125.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m126 = document.getElementById('muni126');
-            if (checkbox_m126.checked) {
-                md += ','
-                md += checkbox_m126.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m127 = document.getElementById('muni127');
-            if (checkbox_m127.checked) {
-                md += ','
-                md += checkbox_m127.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m128 = document.getElementById('muni128');
-            if (checkbox_m128.checked) {
-                md += ','
-                md += checkbox_m128.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m129 = document.getElementById('muni129');
-            if (checkbox_m129.checked) {
-                md += ','
-                md += checkbox_m129.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m130 = document.getElementById('muni130');
-            if (checkbox_m130.checked) {
-                md += ','
-                md += checkbox_m130.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m131 = document.getElementById('muni131');
-            if (checkbox_m131.checked) {
-                md += ','
-                md += checkbox_m131.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m132 = document.getElementById('muni132');
-            if (checkbox_m132.checked) {
-                md += ','
-                md += checkbox_m132.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m133 = document.getElementById('muni133');
-            if (checkbox_m133.checked) {
-                md += ','
-                md += checkbox_m133.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m134 = document.getElementById('muni134');
-            if (checkbox_m134.checked) {
-                md += ','
-                md += checkbox_m134.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m135 = document.getElementById('muni135');
-            if (checkbox_m135.checked) {
-                md += ','
-                md += checkbox_m135.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m136 = document.getElementById('muni136');
-            if (checkbox_m136.checked) {
-                md += ','
-                md += checkbox_m136.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m137 = document.getElementById('muni137');
-            if (checkbox_m137.checked) {
-                md += ','
-                md += checkbox_m137.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m138 = document.getElementById('muni138');
-            if (checkbox_m138.checked) {
-                md += ','
-                md += checkbox_m138.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m139 = document.getElementById('muni139');
-            if (checkbox_m139.checked) {
-                md += ','
-                md += checkbox_m139.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m140 = document.getElementById('muni140');
-            if (checkbox_m140.checked) {
-                md += ','
-                md += checkbox_m140.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m141 = document.getElementById('muni141');
-            if (checkbox_m141.checked) {
-                md += ','
-                md += checkbox_m141.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m142 = document.getElementById('muni142');
-            if (checkbox_m142.checked) {
-                md += ','
-                md += checkbox_m142.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m143 = document.getElementById('muni143');
-            if (checkbox_m143.checked) {
-                md += ','
-                md += checkbox_m143.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m144 = document.getElementById('muni144');
-            if (checkbox_m144.checked) {
-                md += ','
-                md += checkbox_m144.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m145 = document.getElementById('muni145');
-            if (checkbox_m145.checked) {
-                md += ','
-                md += checkbox_m145.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m146 = document.getElementById('muni146');
-            if (checkbox_m146.checked) {
-                md += ','
-                md += checkbox_m146.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m147 = document.getElementById('muni147');
-            if (checkbox_m147.checked) {
-                md += ','
-                md += checkbox_m147.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m148 = document.getElementById('muni148');
-            if (checkbox_m148.checked) {
-                md += ','
-                md += checkbox_m148.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m149 = document.getElementById('muni149');
-            if (checkbox_m149.checked) {
-                md += ','
-                md += checkbox_m149.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m150 = document.getElementById('muni150');
-            if (checkbox_m150.checked) {
-                md += ','
-                md += checkbox_m150.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m151 = document.getElementById('muni151');
-            if (checkbox_m151.checked) {
-                md += ','
-                md += checkbox_m151.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m152 = document.getElementById('muni152');
-            if (checkbox_m152.checked) {
-                md += ','
-                md += checkbox_m152.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m153 = document.getElementById('muni153');
-            if (checkbox_m153.checked) {
-                md += ','
-                md += checkbox_m153.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_m154 = document.getElementById('muni154');
-            if (checkbox_m154.checked) {
-                md += ','
-                md += checkbox_m154.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
+            for (let cbm = 0; cbm <= 154; cbm++) {
+                mbox = document.getElementById('muni'+cbm);
+                if (mbox.checked) {
+                    m += ','
+                    m += mbox.value
+                    };
+            };
             sd = ''
-            var checkbox_sd0 = document.getElementById('schooldistrict0');
-            if (checkbox_sd0.checked) {
-                sd += ','
-                sd += checkbox_sd0.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd1 = document.getElementById('schooldistrict1');
-            if (checkbox_sd1.checked) {
-                sd += ','
-                sd += checkbox_sd1.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd2 = document.getElementById('schooldistrict2');
-            if (checkbox_sd2.checked) {
-                sd += ','
-                sd += checkbox_sd2.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd3 = document.getElementById('schooldistrict3');
-            if (checkbox_sd3.checked) {
-                sd += ','
-                sd += checkbox_sd3.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd4 = document.getElementById('schooldistrict4');
-            if (checkbox_sd4.checked) {
-                sd += ','
-                sd += checkbox_sd4.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd5 = document.getElementById('schooldistrict5');
-            if (checkbox_sd5.checked) {
-                sd += ','
-                sd += checkbox_sd5.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd6 = document.getElementById('schooldistrict6');
-            if (checkbox_sd6.checked) {
-                sd += ','
-                sd += checkbox_sd6.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd7 = document.getElementById('schooldistrict7');
-            if (checkbox_sd7.checked) {
-                sd += ','
-                sd += checkbox_sd7.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd8 = document.getElementById('schooldistrict8');
-            if (checkbox_sd8.checked) {
-                sd += ','
-                sd += checkbox_sd8.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd9 = document.getElementById('schooldistrict9');
-            if (checkbox_sd9.checked) {
-                sd += ','
-                sd += checkbox_sd9.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd10 = document.getElementById('schooldistrict10');
-            if (checkbox_sd10.checked) {
-                sd += ','
-                sd += checkbox_sd10.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd11 = document.getElementById('schooldistrict11');
-            if (checkbox_sd11.checked) {
-                sd += ','
-                sd += checkbox_sd11.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd12 = document.getElementById('schooldistrict12');
-            if (checkbox_sd12.checked) {
-                sd += ','
-                sd += checkbox_sd12.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd13 = document.getElementById('schooldistrict13');
-            if (checkbox_sd13.checked) {
-                sd += ','
-                sd += checkbox_sd13.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd14 = document.getElementById('schooldistrict14');
-            if (checkbox_sd14.checked) {
-                sd += ','
-                sd += checkbox_sd14.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd15 = document.getElementById('schooldistrict15');
-            if (checkbox_sd15.checked) {
-                sd += ','
-                sd += checkbox_sd15.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd16 = document.getElementById('schooldistrict16');
-            if (checkbox_sd16.checked) {
-                sd += ','
-                sd += checkbox_sd16.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd17 = document.getElementById('schooldistrict17');
-            if (checkbox_sd17.checked) {
-                sd += ','
-                sd += checkbox_sd17.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd18 = document.getElementById('schooldistrict18');
-            if (checkbox_sd18.checked) {
-                sd += ','
-                sd += checkbox_sd18.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd19 = document.getElementById('schooldistrict19');
-            if (checkbox_sd19.checked) {
-                sd += ','
-                sd += checkbox_sd19.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd20 = document.getElementById('schooldistrict20');
-            if (checkbox_sd20.checked) {
-                sd += ','
-                sd += checkbox_sd20.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd21 = document.getElementById('schooldistrict21');
-            if (checkbox_sd21.checked) {
-                sd += ','
-                sd += checkbox_sd21.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd22 = document.getElementById('schooldistrict22');
-            if (checkbox_sd22.checked) {
-                sd += ','
-                sd += checkbox_sd22.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd23 = document.getElementById('schooldistrict23');
-            if (checkbox_sd23.checked) {
-                sd += ','
-                sd += checkbox_sd23.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd24 = document.getElementById('schooldistrict24');
-            if (checkbox_sd24.checked) {
-                sd += ','
-                sd += checkbox_sd24.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd25 = document.getElementById('schooldistrict25');
-            if (checkbox_sd25.checked) {
-                sd += ','
-                sd += checkbox_sd25.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd26 = document.getElementById('schooldistrict26');
-            if (checkbox_sd26.checked) {
-                sd += ','
-                sd += checkbox_sd26.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd27 = document.getElementById('schooldistrict27');
-            if (checkbox_sd27.checked) {
-                sd += ','
-                sd += checkbox_sd27.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd28 = document.getElementById('schooldistrict28');
-            if (checkbox_sd28.checked) {
-                sd += ','
-                sd += checkbox_sd28.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd29 = document.getElementById('schooldistrict29');
-            if (checkbox_sd29.checked) {
-                sd += ','
-                sd += checkbox_sd29.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd30 = document.getElementById('schooldistrict30');
-            if (checkbox_sd30.checked) {
-                sd += ','
-                sd += checkbox_sd30.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd31 = document.getElementById('schooldistrict31');
-            if (checkbox_sd31.checked) {
-                sd += ','
-                sd += checkbox_sd31.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd32 = document.getElementById('schooldistrict32');
-            if (checkbox_sd32.checked) {
-                sd += ','
-                sd += checkbox_sd32.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd33 = document.getElementById('schooldistrict33');
-            if (checkbox_sd33.checked) {
-                sd += ','
-                sd += checkbox_sd33.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd34 = document.getElementById('schooldistrict34');
-            if (checkbox_sd34.checked) {
-                sd += ','
-                sd += checkbox_sd34.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd35 = document.getElementById('schooldistrict35');
-            if (checkbox_sd35.checked) {
-                sd += ','
-                sd += checkbox_sd35.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd36 = document.getElementById('schooldistrict36');
-            if (checkbox_sd36.checked) {
-                sd += ','
-                sd += checkbox_sd36.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd37 = document.getElementById('schooldistrict37');
-            if (checkbox_sd37.checked) {
-                sd += ','
-                sd += checkbox_sd37.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd38 = document.getElementById('schooldistrict38');
-            if (checkbox_sd38.checked) {
-                sd += ','
-                sd += checkbox_sd38.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd39 = document.getElementById('schooldistrict39');
-            if (checkbox_sd39.checked) {
-                sd += ','
-                sd += checkbox_sd39.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd40 = document.getElementById('schooldistrict40');
-            if (checkbox_sd40.checked) {
-                sd += ','
-                sd += checkbox_sd40.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd41 = document.getElementById('schooldistrict41');
-            if (checkbox_sd41.checked) {
-                sd += ','
-                sd += checkbox_sd41.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd42 = document.getElementById('schooldistrict42');
-            if (checkbox_sd42.checked) {
-                sd += ','
-                sd += checkbox_sd42.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd43 = document.getElementById('schooldistrict43');
-            if (checkbox_sd43.checked) {
-                sd += ','
-                sd += checkbox_sd43.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd44 = document.getElementById('schooldistrict44');
-            if (checkbox_sd44.checked) {
-                sd += ','
-                sd += checkbox_sd44.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_sd45 = document.getElementById('schooldistrict45');
-            if (checkbox_sd45.checked) {
-                sd += ','
-                sd += checkbox_sd45.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
+            for (let cbs = 0; cbs <= 45; cbs++) {
+                sbox = document.getElementById('schooldistrict'+cbs);
+                if (sbox.checked) {
+                    s += ','
+                    s += sbox.value
+                    };
+            };
             zs = ''
-            var checkbox_z0 = document.getElementById('zoning0');
-            if (checkbox_z0.checked) {
-                zs += ','
-                zs += checkbox_z0.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_z1 = document.getElementById('zoning1');
-            if (checkbox_z1.checked) {
-                zs += ','
-                zs += checkbox_z1.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_z2 = document.getElementById('zoning2');
-            if (checkbox_z2.checked) {
-                zs += ','
-                zs += checkbox_z2.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_z3 = document.getElementById('zoning3');
-            if (checkbox_z3.checked) {
-                zs += ','
-                zs += checkbox_z3.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_z4 = document.getElementById('zoning4');
-            if (checkbox_z4.checked) {
-                zs += ','
-                zs += checkbox_z4.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_z5 = document.getElementById('zoning5');
-            if (checkbox_z5.checked) {
-                zs += ','
-                zs += checkbox_z5.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
-            var checkbox_z6 = document.getElementById('zoning6');
-            if (checkbox_z6.checked) {
-                zs += ','
-                zs += checkbox_z6.value
-                } else {
-                console.log('Checkbox is not checked');
-                };
+            for (let cbz = 0; cbz <= 6; cbz++) {
+                zbox = document.getElementById('zoning'+cbz);
+                if (zbox.checked) {
+                    z += ','
+                    z += zbox.value
+                    };
+            };
             
             getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs);
             document.getElementById('layer2').checked = true;
