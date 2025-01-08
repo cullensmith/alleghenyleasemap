@@ -46,13 +46,24 @@
             color: #000;
             font-family: Arial;
             font-size: 18px;
-            text-align: center;
+            text-align: left;
             border-radius: 10px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
         }
-
+        #centertitle {
+            text-align: center;
+        }
+        #textleft {
+            text-align: left;
+        }
         /* Button on the splash screen */
         .sbtn {
+            position: relative;
+            left: 43%;
+            bottom: 0px;
+            {% comment %} margin-left: 15px;
+            margin-bottom: 0px; {% endcomment %}
+            {% comment %} right: 62px; {% endcomment %}
             padding: 15px 30px;
             font-size: 18px;
             background-color: #025687;
@@ -66,7 +77,8 @@
         }
         
         .sbtn:hover {
-            background-color: #ccc;
+            background-color: #A3CF5F;
+            color: #31322e;
         }
 
         /* Create the map container */
@@ -112,7 +124,7 @@
         }
         .top {
             height: 3%;
-            background-color: #151515;
+            background-color: #31322e;
             color: white;
             display: flex;
             align-items: center;
@@ -205,7 +217,7 @@
             left: 0;
             height: 4vh;
             width: 11%;
-            min-width: 240px;
+            min-width: 50%;
             background-color: #31322e;
         }
         
@@ -347,7 +359,7 @@
             height: 3%;
             width: 150px;
             font-family: Arial;
-            background-color: #151515;
+            background-color: #31322e;
             color: white;
             border: none;
             cursor: pointer;
@@ -378,6 +390,54 @@
             display: block;
         }
         .dropdown-content a:hover {
+            background-color: #bcbcbc;
+        }
+
+        .dropdownright {
+            color: #ff0101;
+            position: absolute;
+            right: 30px;
+            display: inline-block;
+            width: 125px;
+            margin-right: 10px;
+            
+        }
+        .dropdownright button {
+            height: 3%;
+            width: 150px;
+            font-family: Arial;
+            background-color: #31322e;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .dropdownright button:hover {
+            background-color: #31322e;
+        }
+        .dropdownright-content {
+            display: none;
+            width: 600px;
+            padding: 20px;
+            color: black;
+            font-family: Arial;
+            position: absolute;
+            right: -32px;
+            background-color: #f9f9f9;
+            min-width: 100px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 10000;
+        }
+        .dropdownright:hover .dropdownright-content {
+            display: block;
+        }
+        .dropdownright-content a {
+            color: black;
+            padding: 10px 10px;
+            font-family: Arial;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdownright-content a:hover {
             background-color: #bcbcbc;
         }
 
@@ -532,13 +592,21 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button>Layers + Legend</button>
+                    <button>Layers + More</button>
                     <div class="dropdown-content">
                         <label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer0" checked>Conventional Wells</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>
                         <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" unchecked>Filtered Parcels</label><br>
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br>
                         <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_" checked>Map Legend</label><br>
+                        <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_ss" unchecked>Splash Screen</label><br>
+                        <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_h" unchecked>Project Home</label><br>
+                    </div>
+                </div>
+                <div class="dropdownright">
+                    <button>Legal Disclaimer</button>
+                    <div class="dropdownright-content">
+                        <p>The FracTracker Alliance (“FracTracker”) has collected the information in this lease records database and produced the resulting maps for informational purposes only. FracTracker cannot provide any assurance that the information provided in this lease records database or the resulting maps is accurate, reliable, or up-to-date. In addition, the information in this lease records database and the resulting maps should not be considered an assessment of property rights nor should anyone consider the content within this database and the resulting maps as legal advice. If you have questions about property rights or the legal status of property or a person’s property rights, you should consult an attorney and/or official records. As such, FracTracker is not responsible for errors contained in the maps or lease records database, nor is FracTracker in any way responsible for the use of the information provided in this lease records database. FracTracker assumes no liability for any errors, omissions, or inaccuracies in the information provided regardless of the cause of such or for any decision made, action taken, or action not taken by the user in reliance on any maps or data provided herein. <a href="http://www.fairshake-els.org/" target="_blank" >(Source: Fair Shake Environmental Legal Services)</a></p>
                     </div>
                 </div>
             </header>
@@ -556,7 +624,9 @@
                             </div>
                         </div>
                         <br>
-                        <h2>Filters</h2>
+                        <div id="centertitle">
+                            <h2>Filters</h2>
+                        </div>
                         <!-- Date filter -->
                         <div class="filter toggle-date hide">
                             <h4 onclick="toggleFilter('date')">Date</h4>
@@ -1031,13 +1101,23 @@
     <div id="splashScreen">
         <div class="paddingArea">
             <div id="textBox">
-                <p>Welcome to the Allegheny Lease Mapping Project!</p>
-                <p>Use the filters on the left hand side to narrow down your search</p>
-                <p>Click on a parcel for more information</p>
-                <p>This is just placeholder text</p>
-                <p>Everything minus the date filter should be functioning</p>
-                <p></p>
-                <button class="sbtn" onclick="removeSplash()">Enter</button>
+                <div id="centertitle">
+                    <h2></b>Welcome to the Allegheny Lease Mapping Project</b></h2>
+                </div>
+                <div id="textleft">
+                    <p>Originally released in 2016 to explore the patterns of oil and gas agreements in Allegheny County, the<br>FracTracker Allegheny Lease Map has been updated to include parcel agreement histories as of<br>November 2023. This new dataset provides records of 269,370 agreements with oil and gas companies<br>over 33,923 parcels in Allegheny County, totalling 152,642 acres, or about 32% of the county's landmass.</p>
+                    <p>For a more tailored view:</p>
+                    <ul>
+                        <li>Narrow down your search criteria by applying the filtering tools on the left</li>
+                        <li>Take a peek underneath by changing the basemap in the top left corner</li>
+                        <li>Click on a parcel for its current details and history</li>
+                        <li>Click on a well to learn more about it</li>
+                    </ul>
+                    <p></p>
+                </div>
+                <div>
+                    <button class="sbtn" onclick="removeSplash()">Enter</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1521,7 +1601,27 @@
                 document.getElementById('map-legend').style.display = 'none';
             }
         });
-
+        // Listen for changes - add or remove legend from the map
+        document.getElementById('layer_ss').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('layer_ss').checked = false;
+                document.getElementById('splashScreen').style.opacity = 1;
+                document.getElementById('splashScreen').style.display = 'flex';
+                } 
+            else {
+                {% comment %} document.getElementById('map-legend').style.display = 'none'; {% endcomment %}
+            }
+        });
+        // Listen for changes - add or remove legend from the map
+        document.getElementById('layer_h').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('layer_h').checked = false;
+                window.open('https://www.fractracker.org/resources/lease-mapping/', '_blank');
+                } 
+            else {
+                {% comment %} document.getElementById('map-legend').style.display = 'none'; {% endcomment %}
+            }
+        });
         // This section should be rewritten to remove repitition
         // Listen for changes to the visible layers
         document.getElementById('layer0').addEventListener('change', function() {
