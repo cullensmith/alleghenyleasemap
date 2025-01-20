@@ -1366,7 +1366,31 @@
                 fillOpacity: 0.8
             });
         }
-
+        function styleFeature(feature) {
+            var color;
+            console.log(feature.properties)
+            switch (feature.properties.secondary) {
+              case 'active':
+                color = 'red';
+                break;
+              case 'never materialized':
+                color = 'blue';
+                break;
+              case 'plugged':
+                color = 'green';
+                break;
+              case 'other':
+                color = 'purple';
+                break;
+              default:
+                color = 'gray';
+            }
+            return {
+              color: color,
+              radius: 8,  // Size of the marker
+              fillOpacity: 0.6
+            };
+          }
         // Create a default popup as a placeholder for the well layers
         var popupu = L.popup().setContent("I am a standalone popup.");
 
@@ -1375,7 +1399,7 @@
         conurl = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/wells_con.geojson'
         con = L.geoJSON.ajax(conurl, {
             pointToLayer: function (feature, latlng) {
-                return createCircleMarker(latlng).setStyle({fillColor: '#32CD32'});
+                return createCircleMarker(latlng).setStyle({fillColor: styleFeature(feature)});
             },
             onEachFeature: function (feature, layer) {
                 layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
@@ -1436,7 +1460,7 @@
                         style: filteredStyle
                     }; 
                     console.log('added the filtered polygons');
-                    
+                    console.log()
                     // Fetch the GeoJSON data from GitHub
                     fetch(parcelGeojsonData)
                         .then(response => response.json())
@@ -1843,12 +1867,16 @@
                     };
             };
             c=''
+            nc=''
             for (let cbc = 0; cbc <= 42; cbc++) {
                 cbox = document.getElementById('company'+cbc);
                 if (cbox.checked) {
                     c += ','
                     c += cbox.value
-                    };
+                    }
+                else {
+                    nc += cbox.value
+                }
             };
             md = ''
             for (let cbm = 0; cbm <= 154; cbm++) {
