@@ -530,8 +530,8 @@
         } 
 
         #map-legend {
-            width: 160px;
-            height: 85px;
+            width: 138px;
+            height: 297px;
             padding: 8px;
             color: black;
             text-family: arial;
@@ -1017,10 +1017,19 @@
             <div class="middle">
                 <div id="map">
                     <div id="map-legend">
-                        <label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer0c" checked>Conventional Wells</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1c" checked>Unconventional Wells</label><br>
-                        <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2c" >Filtered Parcels</label><br>
-                        <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3c" checked>Oil & Gas Parcels</label><br>
+                        <label><strong>Conventional Wells</strong></label></br>
+                        <label><img src="../static/images/point_green.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwa" checked>Active</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend blue" width="15" height="15"><input type="checkbox" id="layer_cwp" checked>Plugged</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwo" checked>Other</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwn" checked>Never Materialized</label><br><br>
+                        <label><strong>Unconventional Wells</strong></label></br>
+                        <label><img src="../static/images/point_green.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwa" checked>Active</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwp" checked>Plugged</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwo" checked>Other</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwn" checked>Never Materialized</label><br><br>
+                        <label><strong>Parcel Layers</strong></label></br>
+                        <label><img src="../static/images/parcel_filtered.png" alt="legend blue poly" width="15" height="15"><input type="checkbox" id="layer2c" >Filtered Parcels</label><br>
+                        <label><img src="../static/images/parcel_orange.png" alt="legend orange poly" width="15" height="15"><input type="checkbox" id="layer3c" checked>Oil & Gas Parcels</label><br>
                     </div>
                 </div>
             </div>
@@ -1366,29 +1375,28 @@
                 fillOpacity: 0.8
             });
         }
-        function styleFeature(feature) {
+        function styleBlueFeature(feature) {
             var color;
-            console.log(feature.properties)
             switch (feature.properties.secondary) {
               case 'active':
-                color = 'red';
+                fillColor = '#00253b';
                 break;
               case 'never materialized':
-                color = 'blue';
+                fillColor = '#83d2ff';
                 break;
               case 'plugged':
-                color = 'green';
+                fillColor = '#0287d4';
                 break;
               case 'other':
-                color = 'purple';
+                fillColor = '#025687';
                 break;
               default:
-                color = 'gray';
+                fillColor = '#000000';
             }
             return {
-              color: color,
-              radius: 8,  // Size of the marker
-              fillOpacity: 0.6
+                fillColor: fillColor,
+              // radius: 8,  // Size of the marker
+              // fillOpacity: 0.6
             };
           }
         // Create a default popup as a placeholder for the well layers
@@ -1399,7 +1407,7 @@
         conurl = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/wells_con.geojson'
         con = L.geoJSON.ajax(conurl, {
             pointToLayer: function (feature, latlng) {
-                return createCircleMarker(latlng).setStyle({fillColor: styleFeature(feature)});
+                return createCircleMarker(latlng).setStyle(styleBlueFeature(feature));
             },
             onEachFeature: function (feature, layer) {
                 layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
@@ -1409,12 +1417,37 @@
         conText.innerHTML = '';
         conText.appendChild(checkmarkc);
 
+
+        function styleGreenFeature(feature) {
+            var color;
+            switch (feature.properties.secondary) {
+              case 'active':
+                fillColor = '#5d792f';
+                break;
+              case 'never materialized':
+                fillColor = '#cee7a6';
+                break;
+              case 'plugged':
+                fillColor = '#a3cf5f';
+                break;
+              case 'other':
+                fillColor = '#7aa535';
+                break;
+              default:
+                fillColor = '#ff0000';
+            }
+            return {
+                fillColor: fillColor,
+              // radius: 8,  // Size of the marker
+              // fillOpacity: 0.6
+            };
+          }
         // Add the unconventional wells to the map
         spinner_unc.style.display = 'block';
         uncurl = 'https://raw.githubusercontent.com/cullensmith/alleghenyleasemap/refs/heads/main/project_allegheny/static/json/wells_unc.geojson'
         unc = L.geoJSON.ajax(uncurl, {
             pointToLayer: function (feature, latlng) {
-                return createCircleMarker(latlng).setStyle({fillColor: '#025687'});
+                return createCircleMarker(latlng).setStyle(styleGreenFeature(feature));
             },
             onEachFeature: function (feature, layer) {
                 layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
@@ -1647,82 +1680,101 @@
             }
         });
         // This section should be rewritten to remove repitition
-        // Listen for changes to the visible layers
-        document.getElementById('layer0').addEventListener('change', function() {
-            if (this.checked) {
-                // If checked, add the pointCanvas layer to the map
-                if (con) {
-                    document.getElementById('layer0c').checked = true;
-                    con.addTo(map);
-                } else {
-                    // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
-                    getmapdata();
+
+        // function to filter the points based on legend checkboxes 
+        var newcon;
+        var newunc;
+
+        // Function to update the map based on selected categories
+        function updateMapPoints() {
+            if (con) {
+                map.removeLayer(con);  // Clear existing layers
+            }  
+            if (newcon) {
+                map.removeLayer(newcon);  // Clear existing layers
+            }    
+            // Get selected categories from checkboxes
+            var selectedCategoriescon = [];
+            if (document.getElementById('layer_cwa').checked) selectedCategoriescon.push('active');
+            if (document.getElementById('layer_cwp').checked) selectedCategoriescon.push('plugged');
+            if (document.getElementById('layer_cwo').checked) selectedCategoriescon.push('other');
+            if (document.getElementById('layer_cwn').checked) selectedCategoriescon.push('never materialized');
+            console.log(selectedCategoriescon)
+            // Filter GeoJSON data based on selected categories
+            var filteredDataCon = {
+                type: 'FeatureCollection',
+                features: con.getLayers().filter(function (layer) {
+                    // Example filter: check the properties of the feature (if they exist)
+                    return selectedCategoriescon.includes(layer.feature.properties.secondary);
+                }).map(function (layer) {
+                    // Manually create a GeoJSON feature for each filtered layer
+                    var geojsonFeature = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',  // Assuming all layers are points (markers)
+                            coordinates: layer.getLatLng() ? [layer.getLatLng().lng, layer.getLatLng().lat] : [] // Get the lat/lng from the marker
+                        },
+                        properties: layer.feature ? layer.feature.properties : {} // Use the properties of the original feature
+                    };
+
+                    return geojsonFeature;
+                })
+            };
+
+            // Add filtered GeoJSON data to the map
+            newcon = L.geoJSON(filteredDataCon, {
+                pointToLayer: function (feature, latlng) {
+                    return createCircleMarker(latlng).setStyle(styleBlueFeature(feature));
                 }
-            } else {
-                // If unchecked, remove the pointCanvas layer from the map
-                if (con) {
-                    document.getElementById('layer0c').checked = false;
-                    map.removeLayer(con);
+            }).addTo(map);
+
+            if (unc) {
+                map.removeLayer(unc);  // Clear existing layers
+            }  
+            if (newunc) {
+                map.removeLayer(newunc);  // Clear existing layers
+            }    
+            // Get selected categories from checkboxes
+            var selectedCategoriesunc = [];
+            if (document.getElementById('layer_uwa').checked) selectedCategoriesunc.push('active');
+            if (document.getElementById('layer_uwp').checked) selectedCategoriesunc.push('plugged');
+            if (document.getElementById('layer_uwo').checked) selectedCategoriesunc.push('other');
+            if (document.getElementById('layer_uwn').checked) selectedCategoriesunc.push('never materialized');
+            console.log(selectedCategoriesunc)
+            // Filter GeoJSON data based on selected categories
+            var filteredDataUnc = {
+                type: 'FeatureCollection',
+                features: unc.getLayers().filter(function (layer) {
+                    // Example filter: check the properties of the feature (if they exist)
+                    return selectedCategoriesunc.includes(layer.feature.properties.secondary);
+                }).map(function (layer) {
+                    // Manually create a GeoJSON feature for each filtered layer
+                    var geojsonFeatureu = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',  // Assuming all layers are points (markers)
+                            coordinates: layer.getLatLng() ? [layer.getLatLng().lng, layer.getLatLng().lat] : [] // Get the lat/lng from the marker
+                        },
+                        properties: layer.feature ? layer.feature.properties : {} // Use the properties of the original feature
+                    };
+
+                    return geojsonFeatureu;
+                })
+            };
+
+            // Add filtered GeoJSON data to the map
+            newunc = L.geoJSON(filteredDataUnc, {
+                pointToLayer: function (feature, latlng) {
+                    return createCircleMarker(latlng).setStyle(styleGreenFeature(feature));
                 }
-            }
+            }).addTo(map);
+            
+        }
+        // Attach event listeners to checkboxes to update map when changed
+        document.querySelectorAll('#map-legend input').forEach(function (checkbox) {
+            checkbox.addEventListener('change', updateMapPoints);
         });
-        // Listen for changes to the visible layers
-        document.getElementById('layer0c').addEventListener('change', function() {
-            if (this.checked) {
-                // If checked, add the pointCanvas layer to the map
-                if (con) {
-                    document.getElementById('layer0').checked = true;
-                    con.addTo(map);
-                } else {
-                    // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
-                    getmapdata();
-                }
-            } else {
-                // If unchecked, remove the pointCanvas layer from the map
-                if (con) {
-                    document.getElementById('layer0').checked = false;
-                    map.removeLayer(con);
-                }
-            }
-        });
-        // Function to handle checkbox change events for pointCanvas layer
-        document.getElementById('layer1').addEventListener('change', function() {
-            if (this.checked) {
-                // If checked, add the pointCanvas layer to the map
-                if (unc) {
-                    document.getElementById('layer1c').checked = true;
-                    unc.addTo(map);
-                } else {
-                    // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
-                    getmapdata();
-                }
-            } else {
-                // If unchecked, remove the pointCanvas layer from the map
-                if (unc) {
-                    document.getElementById('layer1c').checked = false;
-                    map.removeLayer(unc);
-                }
-            }
-        });
-        // Function to handle checkbox change events for pointCanvas layer
-        document.getElementById('layer1c').addEventListener('change', function() {
-            if (this.checked) {
-                // If checked, add the pointCanvas layer to the map
-                if (unc) {
-                    document.getElementById('layer1').checked = true;
-                    unc.addTo(map);
-                } else {
-                    // If pointCanvas is not initialized or data not fetched yet, call the function to get the data
-                    getmapdata();
-                }
-            } else {
-                // If unchecked, remove the pointCanvas layer from the map
-                if (unc) {
-                    document.getElementById('layer1').checked = false;
-                    map.removeLayer(unc);
-                }
-            }
-        });
+    
         // Function to handle checkbox change events for layer2 (polygon)
         document.getElementById('layer2').addEventListener('change', function() {
             if (this.checked) {
