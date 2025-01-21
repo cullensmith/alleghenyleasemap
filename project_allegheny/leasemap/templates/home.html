@@ -164,10 +164,11 @@
         }
 
         .leaflet-control-geocoder {
+            width:100%;
             {% comment %} margin-bottom: 25px !important; {% endcomment %}
          }
         .leaflet-control-geocoder-form input{
-            width: 100% !important;
+            width: 100%;
             font-family: Arial;
             font-size: 12px;
          }
@@ -649,7 +650,12 @@
             color: #31322e;
         } 
 
-
+        .search-content {
+            width: 100%;
+        }
+        .search-container {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -669,15 +675,15 @@
                     <button>Layers + More</button>
                     <div class="dropdown-content" id="ddbtns">
                         <label><button class="hdrop-btn" id="all-consh" onclick="toggleallcons()"><strong>Conventional Wells</button></strong></label></br>
-                        <label><img src="../static/images/point_green.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwah" checked>Active</label><br>
+                        <label><img src="../static/images/point_darkblue.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwah" checked>Active</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend blue" width="15" height="15"><input type="checkbox" id="layer_cwph" checked>Plugged</label><br>
-                        <label><img src="../static/images/point_green.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwoh" checked>Other</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwnh" checked>Never Materialized</label><br><br>
+                        <label><img src="../static/images/point_medblue.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwoh" checked>Other</label><br>
+                        <label><img src="../static/images/point_lightblue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwnh" checked>Never Materialized</label><br><br>
                         <label><button class="hdrop-btn" id="all-uncsh" onclick="togglealluncs()"><strong>Unconventional Wells</button></strong></label></br>
-                        <label><img src="../static/images/point_green.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwah" checked>Active</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwph" checked>Plugged</label><br>
-                        <label><img src="../static/images/point_green.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwoh" checked>Other</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwnh" checked>Never Materialized</label><br><br>
+                        <label><img src="../static/images/point_darkgreen.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwah" checked>Active</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwph" checked>Plugged</label><br>
+                        <label><img src="../static/images/point_medgreen.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwoh" checked>Other</label><br>
+                        <label><img src="../static/images/point_lightgreen.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwnh" checked>Never Materialized</label><br><br>
                         <!--<label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer_cwa" checked>Conventional Wells</label><br>-->
                         <!--<label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>-->
                         <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" unchecked>Filtered Parcels</label><br>
@@ -690,7 +696,7 @@
                 <div class="dropdownright">
                     <button>Legal Disclaimer</button>
                     <div class="dropdownright-content">
-                        <p>The FracTracker Alliance (“FracTracker”) has collected the information in this lease records database and produced the resulting maps for informational purposes only. FracTracker cannot provide any assurance that the information provided in this lease records database or the resulting maps is accurate, reliable, or up-to-date. In addition, the information in this lease records database and the resulting maps should not be considered an assessment of property rights nor should anyone consider the content within this database and the resulting maps as legal advice. If you have questions about property rights or the legal status of property or a person’s property rights, you should consult an attorney and/or official records. As such, FracTracker is not responsible for errors contained in the maps or lease records database, nor is FracTracker in any way responsible for the use of the information provided in this lease records database. FracTracker assumes no liability for any errors, omissions, or inaccuracies in the information provided regardless of the cause of such or for any decision made, action taken, or action not taken by the user in reliance on any maps or data provided herein. <a href="http://www.fairshake-els.org/" target="_blank" >(Source: Fair Shake Environmental Legal Services)</a></p>
+                        <p>The FracTracker Alliance (“FracTracker”) has collected the information in this lease records database and produced the resulting maps for informational purposes only. FracTracker cannot provide any assurance that the information provided in this lease records database or the resulting maps is accurate, reliable, or up-to-date. In addition, the information in this lease records database and the resulting maps should not be considered an assessment of property rights nor should anyone consider the content within this database and the resulting maps as legal advice. If you have questions about property rights or the legal status of property or a person’s property rights, you should consult an attorney and/or official records. As such, FracTracker is not responsible for errors contained in the maps or lease records database, nor is FracTracker in any way responsible for the use of the information provided in this lease records database. FracTracker assumes no liability for any errors, omissions, or inaccuracies in the information provided regardless of the cause of such or for any decision made, action taken, or action not taken by the user in reliance on any maps or data provided herein. <a href="http://www.fairshake-els.org/" target="_blank" >(Source: Fair Shake Environmental Legal Services)</a><br> © Copyright 2022 FracTracker Alliance<br><a href="https://www.fractracker.org/terms-of-service/" target="_blank" >FracTracker Alliance Terms of Service</a></p>
                     </div>
                 </div>
             </header>
@@ -1102,15 +1108,15 @@
                 <div id="map">
                     <div id="map-legend">
                         <label><button class="allpoints-btn" id="all-cons" onclick="toggleallcons()"><strong>Conventional Wells</strong></button></label></br>
-                        <label><img src="../static/images/point_green.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwa" checked>Active</label><br>
+                        <label><img src="../static/images/point_darkblue.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwa" checked>Active</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend blue" width="15" height="15"><input type="checkbox" id="layer_cwp" checked>Plugged</label><br>
-                        <label><img src="../static/images/point_green.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwo" checked>Other</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwn" checked>Never Materialized</label><br><br>
+                        <label><img src="../static/images/point_medblue.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwo" checked>Other</label><br>
+                        <label><img src="../static/images/point_lightblue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwn" checked>Never Materialized</label><br><br>
                         <label><button class="allpoints-btn" id="all-uncs" onclick="togglealluncs()"><strong>Unconventional Wells</strong></button></label></br>
-                        <label><img src="../static/images/point_green.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwa" checked>Active</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwp" checked>Plugged</label><br>
-                        <label><img src="../static/images/point_green.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwo" checked>Other</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwn" checked>Never Materialized</label><br><br>
+                        <label><img src="../static/images/point_darkgreen.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwa" checked>Active</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwp" checked>Plugged</label><br>
+                        <label><img src="../static/images/point_medgreen.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwo" checked>Other</label><br>
+                        <label><img src="../static/images/point_lightgreen.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwn" checked>Never Materialized</label><br><br>
                         <label><button class="allpoints-btn" id="all-pars"><strong>Parcel Layers</strong></button></label></br>
                         <label><img src="../static/images/parcel_filtered.png" alt="legend blue poly" width="15" height="15"><input type="checkbox" id="layer2c" >Filtered Parcels</label><br>
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange poly" width="15" height="15"><input type="checkbox" id="layer3c" checked>Oil & Gas Parcels</label><br>
@@ -1493,7 +1499,7 @@
                 return createCircleMarker(latlng).setStyle(styleBlueFeature(feature));
             },
             onEachFeature: function (feature, layer) {
-                layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Conventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
+                layer.bindPopup("<strong>WELL INFORMATION</strong><br><br>Type: Conventional<br>Permit Num: "+feature.properties.permit_num+"<br>Well Name: "+feature.properties.well_name+"<br>Well Type: "+feature.properties.well_type+"<br>Well Status: "+feature.properties.well_status+"<br>Spud Date: "+feature.properties.spud_date+"<br>Plug Date: "+feature.properties.plug_date+"<br>Operator Num: "+feature.properties.operator_num+"<br>Operator: "+feature.properties.operatore);
             }
         }).addTo(map);
         spinner_con.style.display = 'none';
@@ -1533,7 +1539,7 @@
                 return createCircleMarker(latlng).setStyle(styleGreenFeature(feature));
             },
             onEachFeature: function (feature, layer) {
-                layer.bindPopup("<strong>WELL INFORMATION</strong><br>Type: Unconventional<br>Permit Num: "+feature.properties+"<br>More Details: <a href='https://wellwiki.org/wiki/37-"+feature.properties+"' target='_blank'>Visit the WellWiki Page</a>");
+                layer.bindPopup("<strong>WELL INFORMATION</strong><br><br>Type: Unconventional<br>Permit Num: "+feature.properties.permit_num+"<br>Well Name: "+feature.properties.well_name+"<br>Well Type: "+feature.properties.well_type+"<br>Well Status: "+feature.properties.well_status+"<br>Spud Date: "+feature.properties.spud_date+"<br>Plug Date: "+feature.properties.plug_date+"<br>Operator Num: "+feature.properties.operator_num+"<br>Operator: "+feature.properties.operatore);
             }
         }).addTo(map);
         spinner_unc.style.display = 'none';
