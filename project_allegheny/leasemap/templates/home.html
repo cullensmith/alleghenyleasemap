@@ -22,6 +22,9 @@
         {% comment %} Create the splash screen settings {% endcomment %}
         /* Splash screen styling */
         /* Makes it full screen, the main box is below */
+        body{
+            background-color:#31322e;
+        }
         #splashScreen {
             position: fixed;
             top: 0;
@@ -151,8 +154,11 @@
             margin-right: 0;
             box-sizing: border-box;
         )
-
-        #projectlogo { 
+        #deets { 
+            background-color: #eaeaea;
+        }
+        .deets { 
+            background-color: #eaeaea;
         }
         #logo { /* Style the logo container */
             padding-top: 3%;
@@ -161,6 +167,7 @@
             min-heigh: 50px;
             width: 100%;
             float: left;
+            
         }
 
         .leaflet-control-geocoder {
