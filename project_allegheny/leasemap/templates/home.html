@@ -530,7 +530,7 @@
         } 
 
         #map-legend {
-            width: 138px;
+            width: 151px;
             height: 297px;
             padding: 8px;
             color: black;
@@ -576,6 +576,80 @@
             width: 49%;
             font-size: 12px;
         }
+        #all-consh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #all-consh:hover {
+            color: #adadad;
+        } 
+        #all-uncsh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #all-uncsh:hover {
+            color: #adadad;
+        } 
+        #btn-maplegendh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #btn-maplegendh:hover {
+            color: #adadad;
+        } 
+        #btn-splashh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #btn-splashh:hover {
+            color: #adadad;
+        } 
+        #btn-projecthomeh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #btn-projecthomeh:hover {
+            color: #adadad;
+        } 
+        #all-consh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #all-consh:hover {
+            color: #adadad;
+        } 
+        #all-consh {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            color: black;
+            width:200px;
+        }
+        #all-consh:hover {
+            color: #adadad;
+        } 
+        .allpoints-btn {
+            background-color: #f9f9f9;
+            border-width: 0px;
+            width:151px;
+        }
+        .allpoints-btn:hover {
+            background-color: #c7c7c7;
+            color: #31322e;
+        } 
+
+
     </style>
 </head>
 <body>
@@ -593,14 +667,24 @@
                 </div>
                 <div class="dropdown">
                     <button>Layers + More</button>
-                    <div class="dropdown-content">
-                        <label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer0" checked>Conventional Wells</label><br>
-                        <label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>
+                    <div class="dropdown-content" id="ddbtns">
+                        <label><button class="hdrop-btn" id="all-consh" onclick="toggleallcons()"><strong>Conventional Wells</button></strong></label></br>
+                        <label><img src="../static/images/point_green.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwah" checked>Active</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend blue" width="15" height="15"><input type="checkbox" id="layer_cwph" checked>Plugged</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwoh" checked>Other</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwnh" checked>Never Materialized</label><br><br>
+                        <label><button class="hdrop-btn" id="all-uncsh" onclick="togglealluncs()"><strong>Unconventional Wells</button></strong></label></br>
+                        <label><img src="../static/images/point_green.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwah" checked>Active</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwph" checked>Plugged</label><br>
+                        <label><img src="../static/images/point_green.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwoh" checked>Other</label><br>
+                        <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwnh" checked>Never Materialized</label><br><br>
+                        <!--<label><img src="../static/images/point_green.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer_cwa" checked>Conventional Wells</label><br>-->
+                        <!--<label><img src="../static/images/point_blue.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer1" checked>Unconventional Wells</label><br>-->
                         <label><img src="../static/images/parcel_filtered.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer2" unchecked>Filtered Parcels</label><br>
-                        <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br>
-                        <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_" checked>Map Legend</label><br>
-                        <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_ss" unchecked>Splash Screen</label><br>
-                        <label><img src="../static/images/white_box.png" alt="legend white" width="15" height="15"><input type="checkbox" id="layer_h" unchecked>Project Home</label><br>
+                        <label><img src="../static/images/parcel_orange.png" alt="legend orange" width="15" height="15"><input type="checkbox" id="layer3" checked>Oil & Gas Parcels</label><br><br>
+                        <label><button class="hdrop-btn" id="btn-maplegendh" onclick="openlegend()"><strong>Map Legend</strong></button></label><br>
+                        <label><button class="hdrop-btn" id="btn-splashh" onclick="opensplash()"><strong>Splash Screen</strong></button></label><br>
+                        <label><button class="hdrop-btn" id="btn-projecthomeh" onclick="sendhome()"><strong>Project Home</strong></button></label><br>
                     </div>
                 </div>
                 <div class="dropdownright">
@@ -1017,17 +1101,17 @@
             <div class="middle">
                 <div id="map">
                     <div id="map-legend">
-                        <label><strong>Conventional Wells</strong></label></br>
+                        <label><button class="allpoints-btn" id="all-cons" onclick="toggleallcons()"><strong>Conventional Wells</strong></button></label></br>
                         <label><img src="../static/images/point_green.png" alt="legend dark blue" width="15" height="15"><input type="checkbox" id="layer_cwa" checked>Active</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend blue" width="15" height="15"><input type="checkbox" id="layer_cwp" checked>Plugged</label><br>
                         <label><img src="../static/images/point_green.png" alt="legend med blue" width="15" height="15"><input type="checkbox" id="layer_cwo" checked>Other</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_cwn" checked>Never Materialized</label><br><br>
-                        <label><strong>Unconventional Wells</strong></label></br>
+                        <label><button class="allpoints-btn" id="all-uncs" onclick="togglealluncs()"><strong>Unconventional Wells</strong></button></label></br>
                         <label><img src="../static/images/point_green.png" alt="legend dark green" width="15" height="15"><input type="checkbox" id="layer_uwa" checked>Active</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend green" width="15" height="15"><input type="checkbox" id="layer_uwp" checked>Plugged</label><br>
                         <label><img src="../static/images/point_green.png" alt="legend med green" width="15" height="15"><input type="checkbox" id="layer_uwo" checked>Other</label><br>
                         <label><img src="../static/images/point_blue.png" alt="legend light blue" width="15" height="15"><input type="checkbox" id="layer_uwn" checked>Never Materialized</label><br><br>
-                        <label><strong>Parcel Layers</strong></label></br>
+                        <label><button class="allpoints-btn" id="all-pars"><strong>Parcel Layers</strong></button></label></br>
                         <label><img src="../static/images/parcel_filtered.png" alt="legend blue poly" width="15" height="15"><input type="checkbox" id="layer2c" >Filtered Parcels</label><br>
                         <label><img src="../static/images/parcel_orange.png" alt="legend orange poly" width="15" height="15"><input type="checkbox" id="layer3c" checked>Oil & Gas Parcels</label><br>
                     </div>
@@ -1301,7 +1385,6 @@
                 url: '/leasemap/getMask', // Replace with your view URL
                 method: 'GET',
                 success: function(data) {
-                    console.log('Adding the mask:');
                     // Convert GeoJSON to vector tiles using leaflet-geojson-vt
                     var maskStyle = {
                         fillColor:"#000",
@@ -1492,8 +1575,7 @@
                         debug: 0,
                         style: filteredStyle
                     }; 
-                    console.log('added the filtered polygons');
-                    console.log()
+
                     // Fetch the GeoJSON data from GitHub
                     fetch(parcelGeojsonData)
                         .then(response => response.json())
@@ -1594,7 +1676,6 @@
                 },
                 success: function(data) {
                     document.getElementById('clear_sel').style.display = 'inline';
-                    console.log('returned the record details');
                     document.getElementById("parcelid").innerText = data.features[0]['pin'];
                     document.getElementById("bvp").innerText = data.features[0]['bk_vol_pg'];
                     document.getElementById("muni").innerText = data.features[0]['munidesc']; 
@@ -1649,41 +1730,205 @@
             });
         }
 
-        // Listen for changes - add or remove legend from the map
-        document.getElementById('layer_').addEventListener('change', function() {
-            if (this.checked) {
-                    document.getElementById('map-legend').style.display = 'inline';
-                } 
-            else {
-                document.getElementById('map-legend').style.display = 'none';
+        function openlegend() {
+            if (document.getElementById('map-legend').style.display === 'none') {
+                document.getElementById('map-legend').style.display = 'inline';
+            } else {
+            document.getElementById('map-legend').style.display = 'none';
             }
-        });
-        // Listen for changes - add or remove legend from the map
-        document.getElementById('layer_ss').addEventListener('change', function() {
-            if (this.checked) {
-                document.getElementById('layer_ss').checked = false;
-                document.getElementById('splashScreen').style.opacity = 1;
-                document.getElementById('splashScreen').style.display = 'flex';
-                } 
-            else {
-                {% comment %} document.getElementById('map-legend').style.display = 'none'; {% endcomment %}
-            }
-        });
-        // Listen for changes - add or remove legend from the map
-        document.getElementById('layer_h').addEventListener('change', function() {
-            if (this.checked) {
-                document.getElementById('layer_h').checked = false;
-                window.open('https://www.fractracker.org/resources/lease-mapping/', '_blank');
-                } 
-            else {
-                {% comment %} document.getElementById('map-legend').style.display = 'none'; {% endcomment %}
-            }
-        });
-        // This section should be rewritten to remove repitition
+        };
+
+        function opensplash() {
+            document.getElementById('btn-splashh').checked = false;
+            document.getElementById('splashScreen').style.opacity = 1;
+            document.getElementById('splashScreen').style.display = 'flex';
+        };
+
+        function sendhome() {
+            window.open('https://www.fractracker.org/resources/lease-mapping/', '_blank');
+        };
+
 
         // function to filter the points based on legend checkboxes 
         var newcon;
         var newunc;
+
+        function toggleallcons() {
+            var anyChecked = false;
+            cbarray = [
+                document.getElementById('layer_cwa'),
+                document.getElementById('layer_cwp'),
+                document.getElementById('layer_cwo'),
+                document.getElementById('layer_cwn'),
+                document.getElementById('layer_cwah'),
+                document.getElementById('layer_cwph'),
+                document.getElementById('layer_cwoh'),
+                document.getElementById('layer_cwnh')
+                ]
+            // Check if any checkbox is checked
+            cbarray.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    anyChecked = true;
+                }
+            });
+            
+            // If any checkbox is checked, uncheck all
+            if (anyChecked) {
+                cbarray.forEach(function(checkbox) {
+                    checkbox.checked = false;
+                    if (con) {
+                        map.removeLayer(con);  // Clear existing layers
+                    }  
+                    if (newcon) {
+                        map.removeLayer(newcon);  // Clear existing layers
+                    }  
+                });
+            } else {
+                // If all are unchecked, check all
+                cbarray.forEach(function(checkbox) {
+                    checkbox.checked = true;
+                    if (con) {
+                        con.addTo(map);  // Clear existing layers
+                    }
+                });
+            }
+        };
+
+        function togglealluncs() {
+            var anyChecked = false;
+            cbarray = [
+                document.getElementById('layer_uwa'),
+                document.getElementById('layer_uwp'),
+                document.getElementById('layer_uwo'),
+                document.getElementById('layer_uwn'),
+                document.getElementById('layer_uwah'),
+                document.getElementById('layer_uwph'),
+                document.getElementById('layer_uwoh'),
+                document.getElementById('layer_uwnh')
+                ]
+            // Check if any checkbox is checked
+            cbarray.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    anyChecked = true;
+                }
+            });
+            
+            // If any checkbox is checked, uncheck all
+            if (anyChecked) {
+                cbarray.forEach(function(checkbox) {
+                    checkbox.checked = false;
+                    if (unc) {
+                        map.removeLayer(unc);  // Clear existing layers
+                    }  
+                    if (newunc) {
+                        map.removeLayer(newunc);  // Clear existing layers
+                    }  
+                });
+            } else {
+                // If all are unchecked, check all
+                cbarray.forEach(function(checkbox) {
+                    checkbox.checked = true;
+                    if (unc) {
+                        unc.addTo(map);  // Clear existing layers
+                    }
+                });
+            }
+        };
+
+
+        // Function to update the map based on selected categories
+        function updateMapPointsh() {
+            if (con) {
+                map.removeLayer(con);  // Clear existing layers
+            }  
+            if (newcon) {
+                map.removeLayer(newcon);  // Clear existing layers
+            }    
+            // Get selected categories from checkboxes
+            var selectedCategoriescon = [];
+            if (document.getElementById('layer_cwah').checked) selectedCategoriescon.push('active');
+            if (document.getElementById('layer_cwph').checked) selectedCategoriescon.push('plugged');
+            if (document.getElementById('layer_cwoh').checked) selectedCategoriescon.push('other');
+            if (document.getElementById('layer_cwnh').checked) selectedCategoriescon.push('never materialized');
+            // Filter GeoJSON data based on selected categories
+            var filteredDataCon = {
+                type: 'FeatureCollection',
+                features: con.getLayers().filter(function (layer) {
+                    // Example filter: check the properties of the feature (if they exist)
+                    return selectedCategoriescon.includes(layer.feature.properties.secondary);
+                }).map(function (layer) {
+                    // Manually create a GeoJSON feature for each filtered layer
+                    var geojsonFeature = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',  // Assuming all layers are points (markers)
+                            coordinates: layer.getLatLng() ? [layer.getLatLng().lng, layer.getLatLng().lat] : [] // Get the lat/lng from the marker
+                        },
+                        properties: layer.feature ? layer.feature.properties : {} // Use the properties of the original feature
+                    };
+
+                    return geojsonFeature;
+                })
+            };
+
+            // Add filtered GeoJSON data to the map
+            newcon = L.geoJSON(filteredDataCon, {
+                pointToLayer: function (feature, latlng) {
+                    return createCircleMarker(latlng).setStyle(styleBlueFeature(feature));
+                }
+            }).addTo(map);
+
+            if (unc) {
+                map.removeLayer(unc);  // Clear existing layers
+            }  
+            if (newunc) {
+                map.removeLayer(newunc);  // Clear existing layers
+            }    
+            // Get selected categories from checkboxes
+            var selectedCategoriesunc = [];
+            if (document.getElementById('layer_uwah').checked) selectedCategoriesunc.push('active');
+            if (document.getElementById('layer_uwph').checked) selectedCategoriesunc.push('plugged');
+            if (document.getElementById('layer_uwoh').checked) selectedCategoriesunc.push('other');
+            if (document.getElementById('layer_uwnh').checked) selectedCategoriesunc.push('never materialized');
+            // Filter GeoJSON data based on selected categories
+            var filteredDataUnc = {
+                type: 'FeatureCollection',
+                features: unc.getLayers().filter(function (layer) {
+                    // Example filter: check the properties of the feature (if they exist)
+                    return selectedCategoriesunc.includes(layer.feature.properties.secondary);
+                }).map(function (layer) {
+                    // Manually create a GeoJSON feature for each filtered layer
+                    var geojsonFeatureu = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',  // Assuming all layers are points (markers)
+                            coordinates: layer.getLatLng() ? [layer.getLatLng().lng, layer.getLatLng().lat] : [] // Get the lat/lng from the marker
+                        },
+                        properties: layer.feature ? layer.feature.properties : {} // Use the properties of the original feature
+                    };
+
+                    return geojsonFeatureu;
+                })
+            };
+
+            // Add filtered GeoJSON data to the map
+            newunc = L.geoJSON(filteredDataUnc, {
+                pointToLayer: function (feature, latlng) {
+                    return createCircleMarker(latlng).setStyle(styleGreenFeature(feature));
+                }
+            }).addTo(map);
+            
+        }
+
+
+        // Attach event listeners to checkboxes to update map when changed
+        document.querySelectorAll('#ddbtns input').forEach(function (checkbox) {
+            checkbox.addEventListener('change', updateMapPointsh);
+        });
+
+
+        // legend section below
+
 
         // Function to update the map based on selected categories
         function updateMapPoints() {
@@ -1699,7 +1944,6 @@
             if (document.getElementById('layer_cwp').checked) selectedCategoriescon.push('plugged');
             if (document.getElementById('layer_cwo').checked) selectedCategoriescon.push('other');
             if (document.getElementById('layer_cwn').checked) selectedCategoriescon.push('never materialized');
-            console.log(selectedCategoriescon)
             // Filter GeoJSON data based on selected categories
             var filteredDataCon = {
                 type: 'FeatureCollection',
@@ -1740,7 +1984,6 @@
             if (document.getElementById('layer_uwp').checked) selectedCategoriesunc.push('plugged');
             if (document.getElementById('layer_uwo').checked) selectedCategoriesunc.push('other');
             if (document.getElementById('layer_uwn').checked) selectedCategoriesunc.push('never materialized');
-            console.log(selectedCategoriesunc)
             // Filter GeoJSON data based on selected categories
             var filteredDataUnc = {
                 type: 'FeatureCollection',
@@ -1774,21 +2017,165 @@
         document.querySelectorAll('#map-legend input').forEach(function (checkbox) {
             checkbox.addEventListener('change', updateMapPoints);
         });
-    
+
+        document.getElementById('layer_uwa').addEventListener('change',matchothera)
+        function matchothera() {
+            if (document.getElementById('layer_uwa').checked) {
+                document.getElementById('layer_uwah').checked = true
+            } else {
+                document.getElementById('layer_uwah').checked = false
+            }
+        }
+        document.getElementById('layer_uwah').addEventListener('change',matchotherah)
+        function matchotherah() {
+            if (document.getElementById('layer_uwah').checked) {
+                document.getElementById('layer_uwa').checked = true
+            } else {
+                document.getElementById('layer_uwa').checked = false
+            }
+        }
+        document.getElementById('layer_uwp').addEventListener('change',matchotherp)
+        function matchotherp() {
+            if (document.getElementById('layer_uwp').checked) {
+                document.getElementById('layer_uwph').checked = true
+            } else {
+                document.getElementById('layer_uwph').checked = false
+            }
+        }
+        document.getElementById('layer_uwph').addEventListener('change',matchotherph)
+        function matchotherph() {
+            if (document.getElementById('layer_uwph').checked) {
+                document.getElementById('layer_uwp').checked = true
+            } else {
+                document.getElementById('layer_uwp').checked = false
+            }
+        }
+        document.getElementById('layer_uwo').addEventListener('change',matchothero)
+        function matchothero() {
+            if (document.getElementById('layer_uwo').checked) {
+                document.getElementById('layer_uwoh').checked = true
+            } else {
+                document.getElementById('layer_uwoh').checked = false
+            }
+        }
+        document.getElementById('layer_uwoh').addEventListener('change',matchotheroh)
+        function matchotheroh() {
+            if (document.getElementById('layer_uwoh').checked) {
+                document.getElementById('layer_uwo').checked = true
+            } else {
+                document.getElementById('layer_uwo').checked = false
+            }
+        }
+        document.getElementById('layer_uwn').addEventListener('change',matchothern)
+        function matchothern() {
+            if (document.getElementById('layer_uwn').checked) {
+                document.getElementById('layer_uwnh').checked = true
+            } else {
+                document.getElementById('layer_uwnh').checked = false
+            }
+        }
+        document.getElementById('layer_uwnh').addEventListener('change',matchothernh)
+        function matchothernh() {
+            if (document.getElementById('layer_uwnh').checked) {
+                document.getElementById('layer_uwn').checked = true
+            } else {
+                document.getElementById('layer_uwn').checked = false
+            }
+        } 
+
+
+        // cons below
+
+        document.getElementById('layer_cwa').addEventListener('change',matchotherca)
+        function matchotherca() {
+            if (document.getElementById('layer_cwa').checked) {
+                document.getElementById('layer_cwah').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwah').checked = false
+            }
+        }
+        document.getElementById('layer_cwah').addEventListener('change',matchothercah)
+        function matchothercah() {
+            if (document.getElementById('layer_cwah').checked) {
+                document.getElementById('layer_cwa').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwa').checked = false
+            }
+        }
+        document.getElementById('layer_cwp').addEventListener('change',matchothecrp)
+        function matchothecrp() {
+            if (document.getElementById('layer_cwp').checked) {
+                document.getElementById('layer_cwph').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwph').checked = false
+            }
+        }
+        document.getElementById('layer_cwph').addEventListener('change',matchothercph)
+        function matchothercph() {
+            if (document.getElementById('layer_cwph').checked) {
+                document.getElementById('layer_cwp').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwp').checked = false
+            }
+        }
+        document.getElementById('layer_cwo').addEventListener('change',matchothecro)
+        function matchothecro() {
+            if (document.getElementById('layer_cwo').checked) {
+                document.getElementById('layer_cwoh').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwoh').checked = false
+            }
+        }
+        document.getElementById('layer_cwoh').addEventListener('change',matchothercoh)
+        function matchothercoh() {
+            if (document.getElementById('layer_cwoh').checked) {
+                document.getElementById('layer_cwo').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwo').checked = false
+            }
+        }
+        document.getElementById('layer_cwn').addEventListener('change',matchothecrn)
+        function matchothecrn() {
+            if (document.getElementById('layer_cwn').checked) {
+                document.getElementById('layer_cwnh').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwnh').checked = false
+            }
+        }
+        document.getElementById('layer_cwnh').addEventListener('change',matchothercnh)
+        function matchothercnh() {
+            if (document.getElementById('layer_cwnh').checked) {
+                document.getElementById('layer_cwn').checked = true
+            } else {
+                console.log('uncheckit')
+                document.getElementById('layer_cwn').checked = false
+            }
+        } 
+
+
+
+
         // Function to handle checkbox change events for layer2 (polygon)
         document.getElementById('layer2').addEventListener('change', function() {
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
                 filtvectorTileLayer.addTo(map);
-                if (document.getElementById('layer1').checked) {
-                    document.getElementById('layer2c').checked = true;
-                    map.removeLayer(unc);
-                    unc.addTo(map);
-                }
-                if (document.getElementById('layer0').checked) {
-                    map.removeLayer(con);
-                    con.addTo(map);
-                }
+                //if (document.getElementById('layer1').checked) {
+                document.getElementById('layer2c').checked = true;
+                //    map.removeLayer(unc);
+                //    unc.addTo(map);
+                //}
+                //if (document.getElementById('layer0').checked) {
+                //    map.removeLayer(con);
+                //    con.addTo(map);
+                //}
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
                 if (filtvectorTileLayer) {
@@ -1802,15 +2189,15 @@
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
                 filtvectorTileLayer.addTo(map);
-                if (document.getElementById('layer1').checked) {
-                    document.getElementById('layer2').checked = true;
-                    map.removeLayer(unc);
-                    unc.addTo(map);
-                }
-                if (document.getElementById('layer0').checked) {
-                    map.removeLayer(con);
-                    con.addTo(map);
-                }
+                //if (document.getElementById('layer1').checked) {
+                document.getElementById('layer2').checked = true;
+                //    map.removeLayer(unc);
+                //    unc.addTo(map);
+                //}
+                //if (document.getElementById('layer0').checked) {
+                //    map.removeLayer(con);
+                //    con.addTo(map);
+                //}
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
                 if (filtvectorTileLayer) {
@@ -1824,26 +2211,26 @@
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
                 vectorTileLayer.addTo(map);
-                if (document.getElementById('layer1').checked) {
-                    document.getElementById('layer3c').checked = true;
-                    map.removeLayer(unc);
-                    unc.addTo(map);
-                }
-                if (document.getElementById('layer0').checked) {
-                    map.removeLayer(con);
-                    con.addTo(map);
-                }
+                //if (document.getElementById('layer1').checked) {
+                document.getElementById('layer3c').checked = true;
+                //    map.removeLayer(unc);
+                //    unc.addTo(map);
+                //}
+                //if (document.getElementById('layer0').checked) {
+                //    map.removeLayer(con);
+                //    con.addTo(map);
+                //}
                 if (document.getElementById('layer2').checked && map.hasLayer(filtvectorTileLayer)) {
                     map.removeLayer(filtvectorTileLayer);
                     filtvectorTileLayer.addTo(map);
-                    if (document.getElementById('layer1').checked) {
-                        map.removeLayer(unc);
-                        unc.addTo(map);
-                    }
-                    if (document.getElementById('layer0').checked) {
-                        map.removeLayer(con);
-                        con.addTo(map);
-                    } 
+                    //if (document.getElementById('layer1').checked) {
+                    //    map.removeLayer(unc);
+                    //    unc.addTo(map);
+                    //}
+                    //if (document.getElementById('layer0').checked) {
+                    //    map.removeLayer(con);
+                    //    con.addTo(map);
+                    //} 
                 }
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
@@ -1859,26 +2246,27 @@
             if (this.checked) {
                 // If checked, call the function to get and update the polygon layer
                 vectorTileLayer.addTo(map);
-                if (document.getElementById('layer1').checked) {
-                    document.getElementById('layer3').checked = true;
-                    map.removeLayer(unc);
-                    unc.addTo(map);
-                }
-                if (document.getElementById('layer0').checked) {
-                    map.removeLayer(con);
-                    con.addTo(map);
-                }
+                // come back and fix
+                //if (document.getElementById('layer1').checked) {
+                document.getElementById('layer3').checked = true;
+                //    map.removeLayer(unc);
+                //    unc.addTo(map);
+                //}
+                //if (document.getElementById('layer0').checked) {
+                //    map.removeLayer(con);
+                //    con.addTo(map);
+                //}
                 if (document.getElementById('layer2').checked && map.hasLayer(filtvectorTileLayer)) {
                     map.removeLayer(filtvectorTileLayer);
                     filtvectorTileLayer.addTo(map);
-                    if (document.getElementById('layer1').checked) {
-                        map.removeLayer(unc);
-                        unc.addTo(map);
-                    }
-                    if (document.getElementById('layer0').checked) {
-                        map.removeLayer(con);
-                        con.addTo(map);
-                    } 
+                    //if (document.getElementById('layer1').checked) {
+                    //    map.removeLayer(unc);
+                    //    unc.addTo(map);
+                    //}
+                    //if (document.getElementById('layer0').checked) {
+                    //    map.removeLayer(con);
+                    //    con.addTo(map);
+                    //} 
                 }
             } else {
                 // If unchecked, remove the polygon layer from the map using the canvasLayer variable
@@ -1890,7 +2278,6 @@
             }
         });
         document.getElementById('clear_sel').addEventListener('click', function() {
-            console.log('clicked to clear');
             document.getElementById('clear_sel').style.display = 'none';
             map.removeLayer(geojsonLayer_sel);
             clearDetails();
