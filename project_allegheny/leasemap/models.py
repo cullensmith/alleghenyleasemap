@@ -14,12 +14,14 @@ class Parcels(models.Model):
     usedesc = models.CharField(max_length=100)
     calcacreag = models.CharField(max_length=100)
     fairmarkettotal = models.CharField(max_length=100)
+    filedate = models.CharField(max_length=100)
+
     # geomjson = models.TextField()
 
     # class Meta:
-        # if managed = False then the model/table will not be added to the sqlite db 
-        # managed = False
-        # db_table = 'parcel_details'
+    #     # if managed = False then the model/table will not be added to the sqlite db 
+    #     managed = False
+    #     db_table = 'leasemap_parcels_wd'
     
     def __str__(self) -> str:
         return self.pin

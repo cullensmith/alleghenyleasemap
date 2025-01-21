@@ -30,15 +30,31 @@ def filteredparcels(request):
     # print(request)
     # print(request.GET.getlist('zoning'))
     # print(request.GET.getlist('schools'))
-    # print(f"here is the start date -> {request.GET.getlist('startdate')[0]}")
-    # sd_in = request.GET.getlist('startdate')[0]
-
+    print(f"here is the start date -> {request.GET.getlist('startdate')[0]}")
+    sd_in = request.GET.getlist('startdate')[0]
+    print(f'start date in: {sd_in}')
     # try:
-    #     sd_in = datetime.strptime(sd_in, '%Y-%m-%d')
+    #     sd_in = datetime.strptime(sd_in, '%m-%d-%Y')
+    #     print(f'sd in 2: {sd_in}')
     # except ValueError:
-    #     sd_in = datetime.strptime(sd_in, '2000-04-26')
-    # sd_in = '12/01/2016'
-    # ed_in = request.GET.getlist('enddate')[0].split(',')
+    #     print('value error with the start date')
+
+    ed_in = request.GET.getlist('enddate')[0]
+    print(f'end date in: {ed_in}')
+    if sd_in == '':
+        sd_in = '2000-01-01'
+        sd_in = datetime.strptime(sd_in, '%Y-%m-%d').date()
+    else:
+        sd_in = datetime.strptime(sd_in, '%Y-%m-%d').date()
+    if ed_in == '':
+        ed_in = '2025-01-01'
+        ed_in = datetime.strptime(ed_in, '%Y-%m-%d').date()
+    else:
+        ed_in = datetime.strptime(ed_in, '%Y-%m-%d').date()
+
+    print(f'start at: {sd_in}')
+    print(f'end at: {sd_in}') 
+
     agmt_in = request.GET.getlist('agmt')[0].split(',')
     company_in = request.GET.getlist('company')[0].split(',')
     # ncompany_in = request.GET.getlist('notcompany')[0].split(',')
@@ -70,8 +86,10 @@ def filteredparcels(request):
     filter_kwargs = dict()
     exclude_kwargs = dict()
         # Add the date filter to the kwargs
-    # filter_kwargs.update({
-    #     'file_date__gte': sd_in})
+    print(f"converted start: {sd_in.strftime('%Y%m%d')}")
+
+    filter_kwargs.update({'filedate__gte': sd_in.strftime('%Y%m%d')})
+    filter_kwargs.update({'filedate__lte': ed_in.strftime('%Y%m%d')})
 
     # for i in [na,ncl,nmd,nsd,nzoning]:
     #     if len(i) <= 5:

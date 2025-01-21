@@ -724,7 +724,7 @@
                                 <label for="from-date">From:</label>
                                 <input type="date" id="from-date"><br>
                                 <label for="to-date">To:</label>
-                                <input type="date" id="to-date">
+                                <input type="date" id="to-date" onchange="showdate()">
                             </div> 
                         </div>
                         <!-- Company filter -->
@@ -2288,6 +2288,13 @@
             map.removeLayer(geojsonLayer_sel);
             clearDetails();
         });
+
+
+        function showdate() {
+            console.log(document.getElementById('to-date').value);
+        };
+
+
         document.getElementById('applyButton').addEventListener('click', function() {
             document.body.style.cursor = "wait";
             document.getElementById('applyButton').innerHTML = 'Please Wait...'
@@ -2297,11 +2304,14 @@
                 map.removeLayer(filtvectorTileLayer);
             }
             map.removeLayer(vectorTileLayer);
+
             var startdate = document.getElementById('from-date').value;
             var enddate = document.getElementById('to-date').value;
 
             console.log('start date:');
-            console.log(startdate.value)
+            console.log(startdate)
+            console.log('to date:');
+            console.log(enddate)
             // Get the checkbox element
             a=''
             for (let cba = 0; cba <= 62; cba++) {
