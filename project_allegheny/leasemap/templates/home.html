@@ -663,6 +663,59 @@
         .search-container {
             width: 100%;
         }
+        /* Sidebar styles */
+        .sidebarsearch {
+            {% comment %} width: 250px; {% endcomment %}
+            display: grid;
+            grid-template-rows: 30px 30px;
+            height: 60px;
+            {% comment %} background-color: red; {% endcomment %}
+            color: white;
+            {% comment %} padding: 10px; {% endcomment %}
+        }
+
+        .sidebarsearch > div {
+            {% comment %} padding: 10px;
+            background-color: blue;
+            border: 1px solid #555; {% endcomment %}
+        }
+
+        .sidebarsearchtop {
+            display: grid;
+            grid-template-columns: 26% 37% 37%;
+            {% comment %} gap: 10px; {% endcomment %}
+            padding-bottom: 10px;
+        }
+        .goto {
+            font-weight: bold;
+        }
+        .sidebarsearchtop button {
+            border:none;
+            color: white;
+            width: 100%;
+            background-color:#3b3c38;
+
+        }
+        .sidebarsearchtop button:hover {
+            border:none;
+            background-color:#025687;
+        }
+        .sidebarsearchtop button.selected {
+            border:none;
+            color: #31322e;
+            background-color:#eaeaea;
+        }
+        #sb {
+            display: none;
+            {% comment %} position: absolute; {% endcomment %}
+            width: 100%;
+            {% comment %} padding: 10px; {% endcomment %}
+            font-size: 16px;
+            {% comment %} border-radius: 5px; {% endcomment %}
+            {% comment %} border: 1px solid #ccc; {% endcomment %}
+            {% comment %} background-color: red; {% endcomment %}
+        }
+
     </style>
 </head>
 <body>
@@ -715,12 +768,43 @@
                 </div> 
                 <div class="sidebar">
                     <div id="sidebar-content">
-                        <div id="search-content">
-                            <br>
-                            <div id="search-container">
+                        <br>
+                        <div class="sidebarsearch">
+                            <!-- Top Section divided into 3 columns -->
+                            <div class="sidebarsearchtop">
+                                <div class="goto">Go To:</div>
+                                <div><button id="addbtn" class="selected">Address</button></div>
+                                <div><button id="parbtn">Parcel</button></div>
+                            </div>
+                            
+                            <!-- Bottom Section left alone -->
+                            <div id="search-content">
+                                <div id="search-container"></div>
+                                <div id="sb" class="input-box-p">
+                                    <input style="width:96%;height:20px;border-radius:4px" type="text" placeholder="Parcel ID: 0118B00100000000" id="userInput">
+                                </div>
                             </div>
                         </div>
-                        <br>
+                        {% comment %} <div id="searchgrid">
+                            <div id="searchgridtop">
+                                <p>words</p->
+                            </div>
+                            <div id="searchgridtop">
+                                <p>words</p->
+                            </div>
+                            <div id="searchgridtop">
+                                <p>words</p->
+                            </div>
+                            <div id="searchgridtop">
+                                <p>words</p->
+                            </div>
+
+                            <div id="search-content">
+                                <div id="search-container">
+                                </div>
+                            </div>
+                        </div> {% endcomment %}
+                        {% comment %} <br> {% endcomment %}
                         <div id="centertitle">
                             <h2>Filters</h2>
                         </div>
@@ -1281,7 +1365,6 @@
         let vectorTileLayerF = L.layerGroup().addTo(map);
         let geojsonLayer = L.layerGroup().addTo(map) ;
 
-
         // Functions for the map
         // Function to switch basemaps
         function switchBasemap(e) {
@@ -1324,12 +1407,23 @@
         }
   
         var control = L.Control.geocoder({
+          defaultMarkGeocode: false,
           collapsed: false,
           placeholder: 'Go to Location...',
           position:'topleft',
           geocoder: geocoder
         }).addTo(map);
-  
+          // Overriding the default marker to make it transparent
+        control.on('markgeocode', function(event) {
+            var latlng = event.geocode.center;
+            var marker = L.marker(latlng, {
+                icon: L.divIcon({
+                    className: 'transparent-marker', // Use custom class for the marker
+                    iconSize: [0, 0]  // Set the size of the marker to 0 (invisible)
+                })
+            }).addTo(map);
+            map.setView(latlng, 14);  // Center map on the result
+        });
         var dots;
   
         // Call the getContainer routine.
@@ -1343,6 +1437,59 @@
             newParent.appendChild(el);
         }
         setParent(htmlObject, a);
+
+        // Go To buttons
+        // Get the buttons
+        const button2 = document.getElementById('addbtn');
+        const button3 = document.getElementById('parbtn');
+        const sb = document.getElementById('sb');
+
+        // Function to toggle the 'selected' class
+        function toggleButtonSelection(button) {
+            // Remove 'selected' class from all buttons
+            button2.classList.remove('selected');
+            button3.classList.remove('selected');
+
+            // Add 'selected' class to the clicked button
+            button.classList.add('selected');
+        }
+
+
+        // Show input box over Column 4 when Button 3 is selected
+        function toggleInputBox() {
+            if (button3.classList.contains('selected')) {
+                sb.style.display = 'block'; // Show the input box
+                a.style.display='none';
+            } else {
+                a.style.display='block';
+                sb.style.display = 'none';  // Hide the input box
+            }
+        }
+
+        // Event listeners for button clicks
+        button2.addEventListener('click', function() {
+            toggleButtonSelection(button2);
+            toggleInputBox();
+        });
+
+        button3.addEventListener('click', function() {
+            toggleButtonSelection(button3);
+            toggleInputBox();
+        });
+
+        // Set the initial state for input box (Button 2 is selected by default)
+        toggleInputBox(); // Call this to hide the input box when the page loads with Button 2 selected
+
+
+        // Event listener for the "Enter" key press in the input box
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const inputValue = userInput.value;
+                getMatches2(inputValue)
+                {% comment %} alert('Could not locate parcel: ' + inputValue); {% endcomment %}
+                userInput.value = ''; // Clear the input field after submitting
+            }
+        });
 
         // Functions for the left side panel
         // Function to toggle filter visibility
@@ -1557,6 +1704,54 @@
 
         let filtvectorTileLayer = L.layerGroup().addTo(map) ;
 
+        function getMatches2(p) {
+            // Fetch the GeoJSON data from GitHub
+            fetch(parcelGeojsonData)
+                .then(response => response.json())
+                .then(filtgeojsonData => {
+                // Filter the GeoJSON data based on the selected categories
+                var filteredGeojsonData = {
+                    type: 'FeatureCollection',
+                    features: filtgeojsonData.features.filter(function(feature) {
+                    return feature.properties.pin === p;
+                    })
+                };
+                var gotoStyle = {
+                    fillColor: 'yellow',
+                    color: 'yellow',
+                    weight: 1,
+                    opacity: 0,
+                    fillOpacity: 0,
+                  };
+                let featureSelected = false;  // Track whether any feature is selected
+
+                // Add the filtered GeoJSON data to the map
+                filtvectorTileLayer = L.geoJSON(filteredGeojsonData, { 
+                    style: gotoStyle,
+                    onEachFeature: function (feature, layer) {
+                        featureSelected = true;
+                        layer.on('click', function() {
+                            
+                            getMatches(p);
+                            showSelection(feature);
+                            
+                            });
+                    }
+                }).addTo(map); 
+                // Check if no feature is selected after a short delay (e.g., after 1 second)
+                
+                if (!featureSelected) {
+                    alert("Parcel ID Not Found");  // Show a popup if no feature has been selected
+                } else {
+                    map.fitBounds(filtvectorTileLayer.getBounds());
+                }
+                 
+            })
+            .catch(error => {
+                console.error('Error fetching GeoJSON data:', error);
+            });
+        }
+
         // Function to fetch GeoJSON data from a view
         function getFilteredGeoJSONData(startdate,enddate,a,c,md,sd,zs) {
             z = zs
@@ -1706,7 +1901,7 @@
                 }
             });
         }
-
+        
         function clearDetails() {
             document.getElementById('parcelid').innerText = '----------'
             document.getElementById('bvp').innerText = '----------'
